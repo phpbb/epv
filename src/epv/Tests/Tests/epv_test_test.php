@@ -14,9 +14,9 @@ use epv\Tests\BaseTest;
 
 class epv_test_test extends BaseTest{
 
-    public function __construct($debug, OutputInterface $output)
+    public function __construct($debug, OutputInterface $output, $basedir)
     {
-        parent::__construct($debug, $output);
+        parent::__construct($debug, $output, $basedir);
 
         $this->fileTypeLine = Type::TYPE_PLAIN | Type::TYPE_SERVICE;
     }

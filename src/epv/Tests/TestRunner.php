@@ -26,6 +26,7 @@ class TestRunner
     private $output;
     private $directory;
     private $debug;
+    private $basedir;
 
     /**
      * @param InputInterface $input
@@ -40,6 +41,7 @@ class TestRunner
         $this->directory = $directory;
         $this->debug = $debug;
 
+        $this->setBasedir();
         $this->loadTests();
         $this->loadFiles();
     }
@@ -108,15 +110,16 @@ class TestRunner
     }
 
     /**
-     * Load all files from the extension.
+     * Set the base directory for the extension.
+     * @throws Exception\TestException
      */
-    private function loadFiles()
+    private function setBasedir()
     {
-        // First find ext.php.
-        // ext.php is required, so should always be there.
-        // We use it to find the basedirectory of all files.
         $finder = new Finder();
 
+        // First find ext.php.
+        // ext.php is required, so should always be there.
+        // We use it to find the base directory of all files.
         $iterator = $finder
             ->files()
             ->name('ext.php')
@@ -130,14 +133,27 @@ class TestRunner
         {
             $ext = $file;
         }
-        $ext = str_replace('ext.php', '', $ext);
+        $this->basedir = str_replace('ext.php', '', $ext);
+    }
+
+    /**
+     * Load all files from the extension.
+     */
+    private function loadFiles()
+    {
+        $finder = new Finder();
 
         $iterator = $finder
-            ->files()
-            ->name('*')
-            ->in($this->directory);
 
-        $loader = new FileLoader($this->output, $this->debug, $ext);
+            ->ignoreDotFiles(false)
+            ->files()
+            ->sortByName()
+            //->name('*')
+            ->ignoreVCS(true)
+            ->in($this->directory)
+        ;
+
+        $loader = new FileLoader($this->output, $this->debug, $this->basedir);
         foreach ($iterator as $file)
         {
             $this->files[] = $loader->loadFile($file->getRealPath());
@@ -177,7 +193,7 @@ class TestRunner
 
         $class = '\\epv\\Tests\\Tests\\' . $file;
 
-        $filetest = new $class($this->debug, $this->output);
+        $filetest = new $class($this->debug, $this->output, $this->basedir);
 
         if (!$filetest instanceof TestInterface)
         {

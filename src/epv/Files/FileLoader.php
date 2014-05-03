@@ -13,6 +13,7 @@ use epv\Files\Exception\FileException;
 use epv\Files\Type\ComposerFile;
 use epv\Files\Type\CssFile;
 use epv\Files\Type\HTMLFile;
+use epv\Files\Type\ImageFile;
 use epv\Files\Type\JavascriptFile;
 use epv\Files\Type\JsonFile;
 use epv\Files\Type\LangFile;
@@ -25,7 +26,8 @@ use epv\Files\Type\BinairFile;
 use epv\Output\Messages;
 use epv\Output\OutputInterface;
 
-class FileLoader {
+class FileLoader
+{
     /**
      * @var \epv\Output\OutputInterface
      */
@@ -56,7 +58,7 @@ class FileLoader {
             {
                 Messages::addMessage(Messages::NOTICE, sprintf("The file %s has no valid extension.", basename($fileName)));
             }
-            $file = new PlainFixle($this->debug, $fileName);
+            $file = new PlainFile($this->debug, $fileName);
         }
         else if ($size == 2)
         {
@@ -78,6 +80,8 @@ class FileLoader {
         }
         else if ($size >= 4) // Files with 3 ore more dots should not happen.
         {
+            Messages::addMessage(Messages::ERROR, sprintf("File (%s) seems to have many dots. Using the last part as extension.", $fileName));
+            $file = self::tryLoadFile($fileName, $split[sizeof($split) - 1]);
 
         }
         else // Blank filename?
@@ -85,10 +89,9 @@ class FileLoader {
             throw new FileException("Filename was empty");
         }
 
-
         if ($file == null)
         {
-            throw new FileException("Tried loading a unknown file");
+            throw new FileException("Tried loading a unknown file: $fileName");
         }
 
         return $file;
@@ -102,7 +105,7 @@ class FileLoader {
      * @param $fileName
      * @param $extension
      * @param $returnNull boolean Return null in case of then file is not reconised.
-     * @return BinairFile|ComposerFile|CssFile|HTMLFile|JavascriptFile|JsonFile|PHPFile|PlainFile|XmlFile|YmlFile|null
+     * @return BinairFile|ComposerFile|CssFile|HTMLFile|JavascriptFile|JsonFile|PHPFile|PlainFile|XmlFile|YmlFile|ImageFile|null
      */
     private function tryLoadFile($fileName, $extension, $returnNull = false)
     {
@@ -124,6 +127,7 @@ class FileLoader {
 
                 return new PHPFile($this->debug, $fileName);
             case 'html':
+            case 'htm':
                 return new HTMLFile($this->debug, $fileName);
             case 'json':
                 if (strtolower(basename($fileName)) == 'composer.json')
@@ -132,7 +136,7 @@ class FileLoader {
                 }
                 else
                 {
-                    return new JsonFile($this->debug, $fileName );
+                    return new JsonFile($this->debug, $fileName);
                 }
             case 'yml':
                 if (strtolower(basename($fileName)) == 'services.yml')
@@ -142,6 +146,7 @@ class FileLoader {
                 return new YmlFile($this->debug, $fileName);
             case 'txt':
             case 'md':
+            case 'htaccess':
                 return new PlainFile($this->debug, $fileName);
             case 'xml':
                 return new XmlFile($this->debug, $fileName);
@@ -149,6 +154,15 @@ class FileLoader {
                 return new JavascriptFile($this->debug, $fileName);
             case 'css':
                 return new CssFile($this->debug, $fileName);
+            case 'gif':
+            case 'png':
+            case 'jpg':
+            case 'jpeg':
+                return new ImageFile($this->debug, $fileName);
+
+            case 'swf':
+                Messages::addMessage(Messages::NOTICE, sprintf("Found a swf file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)));
+                return new BinairFile($this->debug, $fileName);
             default:
                 if ($returnNull)
                 {

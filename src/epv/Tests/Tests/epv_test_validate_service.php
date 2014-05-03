@@ -19,9 +19,9 @@ use epv\Tests\Exception\TestException;
 class epv_test_validate_service extends BaseTest {
 
 
-    public function __construct($debug, OutputInterface $output)
+    public function __construct($debug, OutputInterface $output, $basedir)
     {
-        parent::__construct($debug, $output);
+        parent::__construct($debug, $output, $basedir);
 
         $this->fileTypeFull = Type::TYPE_SERVICE;
     }
@@ -42,11 +42,6 @@ class epv_test_validate_service extends BaseTest {
     private function validate(ServiceFileInterface $file)
     {
         $yml = $file->getYaml();
-
-        if (sizeof($yml) > 1)
-        {
-            Messages::addMessage(Messages::NOTICE, "Service contains more as 1 key on root level");
-        }
 
         if (!isset ($yml['services']))
         {

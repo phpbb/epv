@@ -28,15 +28,21 @@ abstract class BaseTest implements TestInterface {
      * @var \epv\Output\OutputInterface
      */
     protected  $output;
+    /**
+     * @var
+     */
+    private $basedir;
 
     /**
      * @param $debug
      * @param \epv\Output\OutputInterface $output
+     * @param $basedir
      */
-    public function __construct($debug, OutputInterface $output)
+    public function __construct($debug, OutputInterface $output, $basedir)
     {
         $this->debug = $debug;
         $this->output = $output;
+        $this->basedir = $basedir;
     }
 
     /**

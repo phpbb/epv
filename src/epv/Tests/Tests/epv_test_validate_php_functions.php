@@ -26,9 +26,9 @@ class epv_test_validate_php_functions extends BaseTest {
     private $file;
 
 
-    public function __construct($debug, OutputInterface $output)
+    public function __construct($debug, OutputInterface $output, $basedir)
     {
-        parent::__construct($debug, $output);
+        parent::__construct($debug, $output, $basedir);
 
         $this->fileTypeFull = Type::TYPE_PHP;
         $this->parser = new Parser(new Emulative());
@@ -117,5 +117,4 @@ class epv_test_validate_php_functions extends BaseTest {
     {
         return "Validate disallowed php functions";
     }
-
 } 

@@ -13,9 +13,9 @@ use epv\Output\OutputInterface;
 use epv\Tests\BaseTest;
 
 class epv_test_validate_directory_structure  extends BaseTest{
-    public function __construct($debug, OutputInterface $output)
+    public function __construct($debug, OutputInterface $output, $basedir)
     {
-        parent::__construct($debug, $output);
+        parent::__construct($debug, $output, $basedir);
 
         $this->directory = true;
 
