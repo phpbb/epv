@@ -31,7 +31,7 @@ abstract class BaseTest implements TestInterface {
     /**
      * @var
      */
-    private $basedir;
+    protected  $basedir;
 
     /**
      * @param $debug
