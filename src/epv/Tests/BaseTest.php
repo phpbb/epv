@@ -19,6 +19,9 @@ abstract class BaseTest implements TestInterface {
     protected  $fileTypeLine;
     protected  $fileTypeFull;
 
+    // Current file. Used in some tests.
+    protected  $file;
+
     /**
      * If this is set to true, tests are run on full directory listings.
      * @var bool
@@ -122,5 +125,23 @@ abstract class BaseTest implements TestInterface {
         $string = 'Test: ' . $this->testName() . '. ';
 
         return $string;
+    }
+
+    /**
+     * Checks to see if the current file is for tests.
+     * @param FileInterface $file
+     * @return bool
+     */
+    protected  function isTest(FileInterface $file = null)
+    {
+        if ($file == null)
+        {
+            $file = $this->file;
+        }
+
+        $dir = str_replace($this->basedir, '', $file->getFilename());
+        $dir = explode("/", $dir);
+
+        return $dir[0] == 'test' || $dir[0] == 'tests';
     }
 }

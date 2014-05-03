@@ -22,17 +22,20 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Int;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Print_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Parser;
 
-class epv_test_validate_php_functions extends BaseTest {
+class epv_test_validate_php_functions extends BaseTest
+{
     private $parser;
-    private $file;
 
+    private $in_phpbb = false;
 
     public function __construct($debug, OutputInterface $output, $basedir)
     {
@@ -42,6 +45,10 @@ class epv_test_validate_php_functions extends BaseTest {
         $this->parser = new Parser(new Emulative());
     }
 
+    /**
+     * @param FileInterface $file
+     * @throws \epv\Tests\Exception\TestException
+     */
     public function validateFile(FileInterface $file)
     {
         if (!$file instanceof PHPFileInterface)
@@ -96,10 +103,8 @@ class epv_test_validate_php_functions extends BaseTest {
                 {
                     $ok = false;
                 }
-                $dir = str_replace($this->basedir, '', $file->getFilename());
-                $dir = explode("/", $dir);
 
-                if ($dir[0] == 'test' || $dir[0] == 'tests')
+                if ($this->isTest())
                 {
                     // We skip tests.
                     $this->output->writelnIfDebug(sprintf("Skipped %s because of test file.", $file->getFilename()));
@@ -116,11 +121,12 @@ class epv_test_validate_php_functions extends BaseTest {
                 }
             }
         }
-        catch (Error $e)// Catch PhpParser error.
+        catch (Error $e) // Catch PhpParser error.
         {
             Messages::addMessage(Messages::FATAL, "PHP parse error in file " . $file->getFilename() . '. Message: ' . $e->getMessage());
         }
     }
+
 
     /**
      * Validate the structure of a php file.
@@ -135,6 +141,10 @@ class epv_test_validate_php_functions extends BaseTest {
             {
                 // Check if there is a class.
                 // If there is a class, there should be a namespace.
+                if ($node instanceof Class_ || $node instanceof Interface_)
+                {
+                    $this->addMessage($this->isTest() ? Messages::NOTICE : Messages::ERROR, "All files with a class or a interface should have a namespace");
+                }
             }
 
             $this->parseNode($nodes);
@@ -143,18 +153,15 @@ class epv_test_validate_php_functions extends BaseTest {
         }
         else
         {
-            $this->parseNodes($nodes[0]->stmts);
+            $this->parseNode($nodes[0]->stmts);
 
             if (sizeof($nodes) > 1)
             {
-                $this->addMessage(Messages::WARNING, "Besides the namespace, there should be no other statements in your fimle");
+                $this->addMessage(Messages::WARNING, "Besides the namespace, there should be no other statements");
             }
         }
-
     }
 
-
-    private $in_phpbb = false;
     /**
      * Validate the structure in a namespace, or in the full file if it is a non namespaced file.
      * @param array $nodes
@@ -170,6 +177,26 @@ class epv_test_validate_php_functions extends BaseTest {
                 {
                     // IN_PHPBB was found, we continue.
                     continue;
+                }
+            }
+            if ($node instanceof Exit_)
+            {
+                $this->addMessage(Messages::WARNING, sprintf('Using exit on line %s', $node->getAttribute("startLine")));
+            }
+            if ($node instanceof Print_ || $node instanceof Echo_)
+            {
+                $this->addMessage(Messages::ERROR, sprintf('The template system should be used instead of echo or print on line %s', $node->getAttribute("startLine")));
+            }
+            $warn_array = array(
+                'die',
+                'md5',
+                'eval'
+            );
+            foreach ($warn_array as $err)
+            {
+                if ($node instanceof FuncCall && $node->name == $err)
+                {
+                    $this->addMessage(Messages::WARNING, sprintf('Using %s on line %s', $err, $node->getAttribute("startLine")));
                 }
             }
 
@@ -209,9 +236,9 @@ class epv_test_validate_php_functions extends BaseTest {
             }
             if (sizeof($node->stmts) > 1)
             {
-                $this->addMessage(Messages::NOTICE, "There should be no other statements as exit in the IN_PHPBB check");
+                $this->addMessage(Messages::WARNING, "There should be no other statements as exit in the IN_PHPBB check");
                 unset($node->stmts[0]);
-                $this->parseNode($node->stmts[0]);
+                $this->parseNode($node->stmts);
             }
         }
     }

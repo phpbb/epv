@@ -27,7 +27,7 @@ abstract class BaseFile implements FileInterface {
     {
         if (!file_exists($fileName))
         {
-            throw new FileException("File ({$fileName}) couldn't be found");
+            throw new FileException(sprintf("File (%s) couldn't be found", $fileName));
         }
         $this->debug = $debug;
         $this->fileName = $fileName;

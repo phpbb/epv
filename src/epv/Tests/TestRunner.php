@@ -156,6 +156,13 @@ class TestRunner
         $loader = new FileLoader($this->output, $this->debug, $this->basedir);
         foreach ($iterator as $file)
         {
+            if (!$file->getRealPath())
+            {
+                $fl = $this->directory . '/' . $file->getRelativePathname();
+                $this->output->write("<info>Finder found a file, but doesnt seem to be readable or doesnt actually exists.</info>");
+                continue;
+            }
+
             $this->files[] = $loader->loadFile($file->getRealPath());
             $this->dirList[] = str_replace($this->directory, '', $file->getRealPath());
         }
