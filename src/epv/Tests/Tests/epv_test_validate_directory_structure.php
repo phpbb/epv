@@ -9,12 +9,13 @@
 namespace epv\Tests\Tests;
 
 use epv\Output\Messages;
+use epv\Output\OutputInterface;
 use epv\Tests\BaseTest;
 
 class epv_test_validate_directory_structure  extends BaseTest{
-    public function __construct($debug)
+    public function __construct($debug, OutputInterface $output)
     {
-        parent::__construct($debug);
+        parent::__construct($debug, $output);
 
         $this->directory = true;
 

@@ -112,14 +112,32 @@ class TestRunner
      */
     private function loadFiles()
     {
+        // First find ext.php.
+        // ext.php is required, so should always be there.
+        // We use it to find the basedirectory of all files.
         $finder = new Finder();
+
+        $iterator = $finder
+            ->files()
+            ->name('ext.php')
+            ->in($this->directory);
+
+        if (sizeof($iterator) != 1)
+        {
+            throw new TestException("Can't find required ext.php");
+        }
+        foreach ($iterator as $file)
+        {
+            $ext = $file;
+        }
+        $ext = str_replace('ext.php', '', $ext);
 
         $iterator = $finder
             ->files()
             ->name('*')
             ->in($this->directory);
 
-        $loader = new FileLoader($this->output, $this->debug);
+        $loader = new FileLoader($this->output, $this->debug, $ext);
         foreach ($iterator as $file)
         {
             $this->files[] = $loader->loadFile($file->getRealPath());
@@ -159,7 +177,7 @@ class TestRunner
 
         $class = '\\epv\\Tests\\Tests\\' . $file;
 
-        $filetest = new $class($this->debug);
+        $filetest = new $class($this->debug, $this->output);
 
         if (!$filetest instanceof TestInterface)
         {

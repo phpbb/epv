@@ -9,13 +9,14 @@
 namespace epv\Tests\Tests;
 
 use epv\Files\LineInterface;
+use epv\Output\OutputInterface;
 use epv\Tests\BaseTest;
 
 class epv_test_test extends BaseTest{
 
-    public function __construct($debug)
+    public function __construct($debug, OutputInterface $output)
     {
-        parent::__construct($debug);
+        parent::__construct($debug, $output);
 
         $this->fileTypeLine = Type::TYPE_PLAIN | Type::TYPE_SERVICE;
     }

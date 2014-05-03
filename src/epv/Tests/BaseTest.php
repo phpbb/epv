@@ -11,6 +11,7 @@ namespace epv\Tests;
 
 use epv\Files\FileInterface;
 use epv\Files\LineInterface;
+use epv\Output\OutputInterface;
 use epv\Tests\Exception\TestException;
 
 abstract class BaseTest implements TestInterface {
@@ -23,13 +24,19 @@ abstract class BaseTest implements TestInterface {
      * @var bool
      */
     protected  $directory = false;
+    /**
+     * @var \epv\Output\OutputInterface
+     */
+    protected  $output;
 
     /**
      * @param $debug
+     * @param \epv\Output\OutputInterface $output
      */
-    public function __construct($debug)
+    public function __construct($debug, OutputInterface $output)
     {
         $this->debug = $debug;
+        $this->output = $output;
     }
 
     /**

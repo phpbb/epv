@@ -27,4 +27,11 @@ interface FileInterface {
      * @return string
      */
     function getFilename();
+
+    /**
+     * Get the full file for this specific file.
+     * @return string
+     */
+    function getFile();
+
 } 

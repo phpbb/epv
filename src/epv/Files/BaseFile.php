@@ -56,4 +56,13 @@ abstract class BaseFile implements FileInterface {
     {
         return $this->fileName;
     }
+
+    /**
+     * Get the filedata
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->fileData;
+    }
 } 

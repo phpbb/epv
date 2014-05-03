@@ -12,15 +12,16 @@ namespace epv\Tests\Tests;
 use epv\Files\FileInterface;
 use epv\Files\Type\ServiceFileInterface;
 use epv\Output\Messages;
+use epv\Output\OutputInterface;
 use epv\Tests\BaseTest;
 use epv\Tests\Exception\TestException;
 
 class epv_test_validate_service extends BaseTest {
 
 
-    public function __construct($debug)
+    public function __construct($debug, OutputInterface $output)
     {
-        parent::__construct($debug);
+        parent::__construct($debug, $output);
 
         $this->fileTypeFull = Type::TYPE_SERVICE;
     }

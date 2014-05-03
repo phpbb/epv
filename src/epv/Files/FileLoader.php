@@ -15,6 +15,7 @@ use epv\Files\Type\CssFile;
 use epv\Files\Type\HTMLFile;
 use epv\Files\Type\JavascriptFile;
 use epv\Files\Type\JsonFile;
+use epv\Files\Type\LangFile;
 use epv\Files\Type\PHPFile;
 use epv\Files\Type\PlainFile;
 use epv\Files\Type\ServiceFile;
@@ -30,12 +31,14 @@ class FileLoader {
      */
     private $output;
     private $debug;
+    private $basedir;
 
-    public function __construct(OutputInterface $output, $debug)
+    public function __construct(OutputInterface $output, $debug, $basedir)
     {
 
         $this->output = $output;
         $this->debug = $debug;
+        $this->basedir = $basedir;
     }
 
     public function loadFile($fileName)
@@ -108,6 +111,17 @@ class FileLoader {
         switch (strtolower($extension))
         {
             case 'php':
+                // First, check if this file is a lang file.
+                $file = basename($fileName);
+                $dir = str_replace($file, '', $fileName);
+                $dir = str_replace($this->basedir, '', $fileName);
+                $dir = explode('/', $dir);
+
+                if (trim(strtolower($dir[0])) == 'language')
+                {
+                    return new LangFile($this->debug, $fileName);
+                }
+
                 return new PHPFile($this->debug, $fileName);
             case 'html':
                 return new HTMLFile($this->debug, $fileName);
@@ -123,7 +137,6 @@ class FileLoader {
             case 'yml':
                 if (strtolower(basename($fileName)) == 'services.yml')
                 {
-                    $this->output->writelnIfDebug("Srvices");
                     return new ServiceFile($this->debug, $fileName);
                 }
                 return new YmlFile($this->debug, $fileName);
