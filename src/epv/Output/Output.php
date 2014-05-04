@@ -9,10 +9,17 @@
 namespace epv\Output;
 
 
+use epv\Files\FileInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Output implements \epv\Output\OutputInterface {
+    private $messages = array();
+    private $fatal;
+    private $error;
+    private $warning;
+    private $notice;
+
 
     private $output;
     private $debug;
@@ -138,5 +145,52 @@ class Output implements \epv\Output\OutputInterface {
         {
             $this->writeln($message);
         }
+    }
+
+    /**
+     * Add a new message to the output of the validator.
+     *
+     * @param $type int message type
+     * @param $message string message.
+     * @param \epv\Files\FileInterface $file
+     */
+    public function addMessage($type, $message, FileInterface $file = null)
+    {
+        switch ($type)
+        {
+            case Output::FATAL:
+                $this->fatal++;
+                break;
+            case Output::ERROR:
+                $this->error++;
+                break;
+            case Output::WARNING:
+                $this->warning++;
+                break;
+            case Output::NOTICE:
+                $this->notice++;
+                break;
+            default:
+                // TODO: Decide on this?
+        }
+        $this->messages[] = new Message($type, $message, $file);
+    }
+
+    /**
+     * Get all messages saved into the message queue.
+     * @return array Array with messages
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
+    /**
+     * Get the amount of messages that were fatal.
+     * @return int
+     */
+    public function getFatalCount()
+    {
+        return $this->fatal;
     }
 }

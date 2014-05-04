@@ -8,7 +8,7 @@
  */
 namespace epv\Tests\Tests;
 
-use epv\Output\Messages;
+use epv\Output\Output;
 use epv\Output\OutputInterface;
 use epv\Tests\BaseTest;
 
@@ -44,7 +44,7 @@ class epv_test_validate_directory_structure  extends BaseTest{
             }
             if (!$found)
             {
-                Messages::addMessage(Messages::ERROR, sprintf("The required file %s is missing in the extension package.", $file));
+                $this->output->addMessage(Output::ERROR, sprintf("The required file %s is missing in the extension package.", $file));
             }
         }
     }

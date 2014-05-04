@@ -9,7 +9,13 @@
 namespace epv\Output;
 
 
+use epv\Files\FileInterface;
+
 interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterface {
+    const FATAL = 4;
+    const WARNING = 3;
+    const ERROR = 2;
+    const NOTICE = 1;
 
     /**
      * Write a message to the output, but only if Debug is enabled.
@@ -19,4 +25,25 @@ interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterf
      * @throws \InvalidArgumentException When unknown output type is given
      */
     public function writelnIfDebug($message);
+
+    /**
+     * Add a new message to the output of the validator.
+     *
+     * @param $type int message type
+     * @param $message string message.
+     * @param \epv\Files\FileInterface $file
+     */
+    public function addMessage($type, $message, FileInterface $file = null);
+
+    /**
+     * Get all messages saved into the message queue.
+     * @return array Array with messages
+     */
+    public function getMessages();
+
+    /**
+     * Get the amount of messages that were fatal.
+     * @return int
+     */
+    public function getFatalCount();
 }

@@ -12,14 +12,13 @@ namespace epv\Tests\Tests;
 use epv\Files\FileInterface;
 use epv\Files\Type\LangFile;
 use epv\Files\Type\PHPFileInterface;
-use epv\Output\Messages;
+use epv\Output\Output;
 use epv\Output\OutputInterface;
 use epv\Tests\BaseTest;
 use epv\Tests\Exception\TestException;
 use PhpParser\Error;
 use PhpParser\Lexer\Emulative;
 use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Cast\Int;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Print_;
@@ -113,7 +112,7 @@ class epv_test_validate_php_functions extends BaseTest
 
                 if (!$ok)
                 {
-                    $this->addMessage(Messages::WARNING, "IN_PHPBB is not defined");
+                    $this->addMessage(Output::WARNING, "IN_PHPBB is not defined");
                 }
                 else
                 {
@@ -123,7 +122,7 @@ class epv_test_validate_php_functions extends BaseTest
         }
         catch (Error $e) // Catch PhpParser error.
         {
-            Messages::addMessage(Messages::FATAL, "PHP parse error in file " . $file->getFilename() . '. Message: ' . $e->getMessage());
+            $this->output->addMessage(Output::FATAL, "PHP parse error in file " . $file->getFilename() . '. Message: ' . $e->getMessage());
         }
     }
 
@@ -143,7 +142,7 @@ class epv_test_validate_php_functions extends BaseTest
                 // If there is a class, there should be a namespace.
                 if ($node instanceof Class_ || $node instanceof Interface_)
                 {
-                    $this->addMessage($this->isTest() ? Messages::NOTICE : Messages::ERROR, "All files with a class or a interface should have a namespace");
+                    $this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, "All files with a class or a interface should have a namespace");
                 }
             }
 
@@ -157,7 +156,7 @@ class epv_test_validate_php_functions extends BaseTest
 
             if (sizeof($nodes) > 1)
             {
-                $this->addMessage(Messages::WARNING, "Besides the namespace, there should be no other statements");
+                $this->addMessage(Output::WARNING, "Besides the namespace, there should be no other statements");
             }
         }
     }
@@ -181,11 +180,11 @@ class epv_test_validate_php_functions extends BaseTest
             }
             if ($node instanceof Exit_)
             {
-                $this->addMessage(Messages::WARNING, sprintf('Using exit on line %s', $node->getAttribute("startLine")));
+                $this->addMessage(Output::WARNING, sprintf('Using exit on line %s', $node->getAttribute("startLine")));
             }
             if ($node instanceof Print_ || $node instanceof Echo_)
             {
-                $this->addMessage(Messages::ERROR, sprintf('The template system should be used instead of echo or print on line %s', $node->getAttribute("startLine")));
+                $this->addMessage(Output::ERROR, sprintf('The template system should be used instead of echo or print on line %s', $node->getAttribute("startLine")));
             }
             $warn_array = array(
                 'die',
@@ -196,7 +195,7 @@ class epv_test_validate_php_functions extends BaseTest
             {
                 if ($node instanceof FuncCall && $node->name == $err)
                 {
-                    $this->addMessage(Messages::WARNING, sprintf('Using %s on line %s', $err, $node->getAttribute("startLine")));
+                    $this->addMessage(Output::WARNING, sprintf('Using %s on line %s', $err, $node->getAttribute("startLine")));
                 }
             }
 
@@ -232,11 +231,11 @@ class epv_test_validate_php_functions extends BaseTest
                 // Found IN_PHPBB, but it didn't exists?
                 // We dont set $this->in_phpbb, so parseNode continue running on this node.
                 // Also include a notice.
-                $this->addMessage(Messages::NOTICE, "IN_PHPBB check should exit if it not defined.");
+                $this->addMessage(Output::NOTICE, "IN_PHPBB check should exit if it not defined.");
             }
             if (sizeof($node->stmts) > 1)
             {
-                $this->addMessage(Messages::WARNING, "There should be no other statements as exit in the IN_PHPBB check");
+                $this->addMessage(Output::WARNING, "There should be no other statements as exit in the IN_PHPBB check");
                 unset($node->stmts[0]);
                 $this->parseNode($node->stmts);
             }
@@ -261,7 +260,7 @@ class epv_test_validate_php_functions extends BaseTest
      */
     private function addMessage($type, $message)
     {
-        Messages::addMessage($type, sprintf("%s in %s", $message, $this->file->getFilename()));
+        $this->output->addMessage($type, sprintf("%s in %s", $message, $this->file->getFilename()));
     }
 
     /**

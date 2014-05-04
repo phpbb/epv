@@ -8,7 +8,6 @@
  */
 namespace epv\Command;
 
-use epv\Output\Messages;
 use epv\Output\Output;
 use epv\Tests\TestRunner;
 use Symfony\Component\Console\Command\Command;
@@ -53,12 +52,12 @@ class ValidateCommand extends  Command{
 
         $output->writeln("<info>Test results for extension</info>");
 
-        foreach (Messages::getMessages() as $msg)
+        foreach ($output->getMessages() as $msg)
         {
             $output->writeln((string)$msg);
         }
 
-        if (Messages::getFatalCount() > 0)
+        if ($output->getFatalCount() > 0)
         {
             return 1;
         }

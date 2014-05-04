@@ -11,7 +11,7 @@ namespace epv\Tests\Tests;
 
 use epv\Files\FileInterface;
 use epv\Files\Type\ServiceFileInterface;
-use epv\Output\Messages;
+use epv\Output\Output;
 use epv\Output\OutputInterface;
 use epv\Tests\BaseTest;
 use epv\Tests\Exception\TestException;
@@ -45,7 +45,7 @@ class epv_test_validate_service extends BaseTest {
 
         if (!isset ($yml['services']))
         {
-            Messages::addMessage(Messages::WARNING, "Service doesn't contain 'services' key");
+            $this->output->addMessage(Output::WARNING, "Service doesn't contain 'services' key");
         }
     }
 

@@ -42,13 +42,13 @@ class Message {
 
         switch ($this->type)
         {
-            case Messages::NOTICE:
+            case Output::NOTICE:
                 return "<info>Notice{$file}: $this->message</info>";
-            case Messages::WARNING:
+            case Output::WARNING:
                 return "<comment>Warning{$file}: $this->message</comment>";
-            case Messages::ERROR:
+            case Output::ERROR:
                 return "<question>Error{$file}: $this->message</question>";
-            case Messages::FATAL:
+            case Output::FATAL:
                 return "<error>Fatal{$file}: $this->message</error>";
         }
     }

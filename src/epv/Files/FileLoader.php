@@ -23,7 +23,7 @@ use epv\Files\Type\ServiceFile;
 use epv\Files\Type\XmlFile;
 use epv\Files\Type\YmlFile;
 use epv\Files\Type\BinairFile;
-use epv\Output\Messages;
+use epv\Output\Output;
 use epv\Output\OutputInterface;
 
 class FileLoader
@@ -56,7 +56,7 @@ class FileLoader
             // Otherwise add notice.
             if (strtolower($fileName) !== 'readme')
             {
-                Messages::addMessage(Messages::NOTICE, sprintf("The file %s has no valid extension.", basename($fileName)));
+                $this->output->addMessage(Output::NOTICE, sprintf("The file %s has no valid extension.", basename($fileName)));
             }
             $file = new PlainFile($this->debug, $fileName);
         }
@@ -80,7 +80,7 @@ class FileLoader
         }
         else if ($size >= 4) // Files with 3 ore more dots should not happen.
         {
-            Messages::addMessage(Messages::ERROR, sprintf("File (%s) seems to have many dots. Using the last part as extension.", $fileName));
+            $this->output->addMessage(Output::ERROR, sprintf("File (%s) seems to have many dots. Using the last part as extension.", $fileName));
             $file = self::tryLoadFile($fileName, $split[sizeof($split) - 1]);
 
         }
@@ -161,7 +161,7 @@ class FileLoader
                 return new ImageFile($this->debug, $fileName);
 
             case 'swf':
-                Messages::addMessage(Messages::NOTICE, sprintf("Found a swf file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)));
+                $this->output->addMessage(Output::NOTICE, sprintf("Found a swf file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)));
                 return new BinairFile($this->debug, $fileName);
             default:
                 if ($returnNull)
@@ -170,7 +170,7 @@ class FileLoader
                 }
 
                 $file = basename($fileName);
-                Messages::addMessage(Messages::WARNING, "Can't detect type for file $file, handling it as binair file");
+                $this->output->addMessage(Output::WARNING, "Can't detect type for file $file, handling it as binair file");
                 return new BinairFile($this->debug, $fileName);
         }
     }
