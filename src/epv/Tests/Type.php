@@ -24,4 +24,4 @@ class Type {
     const TYPE_CSS = 1024;
     const TYPE_JS = 2048;
 
-} 
+}

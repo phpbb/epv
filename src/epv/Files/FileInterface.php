@@ -33,5 +33,4 @@ interface FileInterface {
      * @return string
      */
     function getFile();
-
 }

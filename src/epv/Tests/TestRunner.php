@@ -209,4 +209,4 @@ class TestRunner
         $this->tests[] = $filetest;
 
     }
-} 
+}

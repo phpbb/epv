@@ -52,4 +52,4 @@ class Line implements LineInterface {
     {
         return $this->getLine();
     }
-} 
+}

@@ -21,4 +21,4 @@ class ImageFile extends BaseFile implements ImageFileInterface{
     {
         return Type::TYPE_BINARY;
     }
-} 
+}

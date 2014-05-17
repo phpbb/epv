@@ -18,4 +18,4 @@ interface YmlFileInterface extends FileInterface{
      * @return array parsed yaml file
      */
     public function getYaml();
-} 
+}

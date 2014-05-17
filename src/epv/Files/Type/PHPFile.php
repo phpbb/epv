@@ -20,4 +20,4 @@ class PHPFile extends BaseFile implements PHPFileInterface{
     {
         return Type::TYPE_PHP;
     }
-} 
+}

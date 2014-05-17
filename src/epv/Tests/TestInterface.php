@@ -63,4 +63,4 @@ interface TestInterface {
      * @return bool
      */
     public function testName();
-} 
+}
