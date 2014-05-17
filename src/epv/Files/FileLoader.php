@@ -170,7 +170,7 @@ class FileLoader
                 }
 
                 $file = basename($fileName);
-                $this->output->addMessage(Output::WARNING, "Can not detect the file type for $file, handling it as a binary file");
+                $this->output->addMessage(Output::WARNING, "Can't detect the file type for $file, handling it as a binary file.");
                 return new BinaryFile($this->debug, $fileName);
         }
     }

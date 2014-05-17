@@ -50,7 +50,7 @@ class ValidateCommand extends  Command{
         }
         $runner->runTests();
 
-        $output->writeln("<info>Test results for extension</info>");
+        $output->writeln("<info>Test results for extension:</info>");
 
         foreach ($output->getMessages() as $msg)
         {

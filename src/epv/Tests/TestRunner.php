@@ -55,9 +55,9 @@ class TestRunner
     {
         if (sizeof($this->tests) == 0)
         {
-            throw new TestException("TestRunner not initialised");
+            throw new TestException("TestRunner not initialised.");
         }
-        $this->output->writeln("Running tests");
+        $this->output->writeln("Running tests.");
 
         // First, do all tests that want a directory listing.
         // All other tests are specific to files.
@@ -127,7 +127,7 @@ class TestRunner
 
         if (sizeof($iterator) != 1)
         {
-            throw new TestException("Can not find the required ext.php file.");
+            throw new TestException("Can't find the required ext.php file.");
         }
         foreach ($iterator as $file)
         {
@@ -195,7 +195,7 @@ class TestRunner
      */
     private function tryToLoadTest(SplFileInfo $test)
     {
-        $this->output->writelnIfDebug("<info>Got {$test->getRealpath()}.</info>");
+        $this->output->writelnIfDebug("<info>Found {$test->getRealpath()}.</info>");
         $file = str_replace('.php', '', basename($test->getRealPath()));
 
         $class = '\\epv\\Tests\\Tests\\' . $file;

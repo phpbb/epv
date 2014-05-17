@@ -112,7 +112,7 @@ class epv_test_validate_php_functions extends BaseTest
 
                 if (!$ok)
                 {
-                    $this->addMessage(Output::WARNING, "IN_PHPBB is not defined.");
+                    $this->addMessage(Output::WARNING, "IN_PHPBB is not defined");
                 }
                 else
                 {
@@ -142,7 +142,7 @@ class epv_test_validate_php_functions extends BaseTest
                 // If there is a class, there should be a namespace.
                 if ($node instanceof Class_ || $node instanceof Interface_)
                 {
-                    $this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, "All files with a class or an interface should have a namespace.");
+                    $this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, "All files with a class or an interface should have a namespace");
                 }
             }
 
@@ -156,7 +156,7 @@ class epv_test_validate_php_functions extends BaseTest
 
             if (sizeof($nodes) > 1)
             {
-                $this->addMessage(Output::WARNING, "Besides the namespace, there should be no other statements.");
+                $this->addMessage(Output::WARNING, "Besides the namespace, there should be no other statements");
             }
         }
     }
@@ -180,11 +180,11 @@ class epv_test_validate_php_functions extends BaseTest
             }
             if ($node instanceof Exit_)
             {
-                $this->addMessage(Output::WARNING, sprintf('Using exit on line %s.', $node->getAttribute("startLine")));
+                $this->addMessage(Output::WARNING, sprintf('Using exit on line %s', $node->getAttribute("startLine")));
             }
             if ($node instanceof Print_ || $node instanceof Echo_)
             {
-                $this->addMessage(Output::ERROR, sprintf('The template system should be used instead of echo or print on line %s.', $node->getAttribute("startLine")));
+                $this->addMessage(Output::ERROR, sprintf('The template system should be used instead of echo or print on line %s', $node->getAttribute("startLine")));
             }
             $warn_array = array(
                 'die',
@@ -195,7 +195,7 @@ class epv_test_validate_php_functions extends BaseTest
             {
                 if ($node instanceof FuncCall && $node->name == $err)
                 {
-                    $this->addMessage(Output::WARNING, sprintf('Using %s on line %s.', $err, $node->getAttribute("startLine")));
+                    $this->addMessage(Output::WARNING, sprintf('Using %s on line %s', $err, $node->getAttribute("startLine")));
                 }
             }
 
@@ -235,7 +235,7 @@ class epv_test_validate_php_functions extends BaseTest
             }
             if (sizeof($node->stmts) > 1)
             {
-                $this->addMessage(Output::WARNING, "There should be no other statements, such as exit, in the IN_PHPBB check.");
+                $this->addMessage(Output::WARNING, "There should be no statements other than exit in the IN_PHPBB check");
                 unset($node->stmts[0]);
                 $this->parseNode($node->stmts);
             }
