@@ -22,7 +22,7 @@ class ValidateCommand extends  Command{
     {
         $this
             ->setName('run')
-            ->setDescription('Run the extension validator on your extension.')
+            ->setDescription('Run the Extension Pre Validator on your extension.')
             ->addArgument('dir', InputArgument::REQUIRED, 'The directory the extension is in.')
             ->addOption('debug', null, InputOption::VALUE_NONE, "Run in debug")
 
@@ -35,7 +35,7 @@ class ValidateCommand extends  Command{
 
         $output = new Output($output, $this->debug);
 
-        $output->writeln("Running Extension pre validator on directory <info>$dir</info>.");
+        $output->writeln("Running Extension Pre Validator on directory <info>$dir</info>.");
         $runner = new TestRunner($input, $output, $dir, $this->debug);
 
 

@@ -30,7 +30,7 @@ class epv_test_validate_service extends BaseTest {
     {
         if (!$file instanceof ServiceFileInterface)
         {
-            throw new TestException("This tests except a service type, but got something else?");
+            throw new TestException("This test expects a service type, but found something else.");
         }
         $this->validate($file);
     }
@@ -45,7 +45,7 @@ class epv_test_validate_service extends BaseTest {
 
         if (!isset ($yml['services']))
         {
-            $this->output->addMessage(Output::WARNING, "Service doesn't contain 'services' key");
+            $this->output->addMessage(Output::WARNING, "Service does not contain a 'services' key.");
         }
     }
 

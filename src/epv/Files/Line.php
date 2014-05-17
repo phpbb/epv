@@ -27,7 +27,7 @@ class Line implements LineInterface {
     }
 
     /**
-     * Get the file for this specific line
+     * Get the file for this specific line.
      * @return FileInterface
      */
     public function getFile()
@@ -36,7 +36,7 @@ class Line implements LineInterface {
     }
 
     /**
-     * Get the line number
+     * Get the line number.
      * @return int
      */
     public function getLineNr()

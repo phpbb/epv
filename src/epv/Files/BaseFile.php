@@ -27,7 +27,7 @@ abstract class BaseFile implements FileInterface {
     {
         if (!file_exists($fileName))
         {
-            throw new FileException(sprintf("File (%s) couldn't be found", $fileName));
+            throw new FileException(sprintf("File (%s) could not be found", $fileName));
         }
         $this->debug = $debug;
         $this->fileName = $fileName;
@@ -65,4 +65,4 @@ abstract class BaseFile implements FileInterface {
     {
         return $this->fileData;
     }
-} 
+}

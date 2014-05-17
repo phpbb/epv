@@ -56,7 +56,7 @@ abstract class BaseTest implements TestInterface {
      */
     public function validateLine(LineInterface $line)
     {
-        throw new TestException("Test declared to be a line test, but doesn't implement validateLine");
+        throw new TestException("Test declared to be a line test, but doesn't implement validateLine.");
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class BaseTest implements TestInterface {
      */
     public function validateFile(FileInterface $file)
     {
-        throw new TestException("Test declared to be a file test, but doesn't implement validateFile");
+        throw new TestException("Test declared to be a file test, but doesn't implement validateFile.");
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class BaseTest implements TestInterface {
      */
     public function validateDirectory(array $dirList)
     {
-        throw new TestException("Test declared to be a directory listing test, but doesn't implement validateDirectory");
+        throw new TestException("Test declared to be a directory listing test, but doesn't implement validateDirectory.");
     }
 
     /**

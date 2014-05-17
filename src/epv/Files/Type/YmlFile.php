@@ -34,7 +34,7 @@ class YmlFile extends BaseFile implements YmlFileInterface
     }
 
     /**
-     * Get a array with the data in the yaml file.
+     * Get an array with the data in the yaml file.
      *
      * @return array
      */

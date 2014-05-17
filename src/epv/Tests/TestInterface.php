@@ -38,20 +38,20 @@ interface TestInterface {
     public function validateDirectory(array $dirListing);
 
     /**
-     * Check if this test should be runned for the directory listing.
+     * Check if this test should be run for the directory listing.
      * @return boolean
      */
     public function doValidateDirectory();
 
     /**
-     * Check if this test should be runned for each line.
+     * Check if this test should be run for each line.
      * @param $type int Filetype
      * @return boolean
      */
     public function doValidateLine($type);
 
     /**
-     * Check if this test should be runned for the complete file
+     * Check if this test should be run for the complete file
      * @param $type int Filetype
      * @return boolean
      */

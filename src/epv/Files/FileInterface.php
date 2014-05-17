@@ -11,27 +11,27 @@ namespace epv\Files;
 
 interface FileInterface {
     /**
-     * Get the file type for the specific file.
+     * Get the file type for a specific file.
      * @return int
      */
     function getFileType();
 
     /**
-     * Get a array of lines for this specific file.
+     * Get an array of lines for a specific file.
      * @return array
      */
     function getLines();
 
     /**
-     * Get the filename for this file.
+     * Get the filename for a file.
      * @return string
      */
     function getFilename();
 
     /**
-     * Get the full file for this specific file.
+     * Get the full file for a specific file.
      * @return string
      */
     function getFile();
 
-} 
+}
