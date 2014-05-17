@@ -11,13 +11,13 @@ namespace epv\Files\Type;
 use epv\Tests\Tests\Type;
 use epv\Files\BaseFile;
 
-class BinairFile extends BaseFile implements BinairFileInterface{
+class BinaryFile extends BaseFile implements BinaryFileInterface{
     /**
      * Get the file type for the specific file.
      * @return int
      */
     function getFileType()
     {
-        return Type::TYPE_BINAIR;
+        return Type::TYPE_BINARY;
     }
-} 
+}
