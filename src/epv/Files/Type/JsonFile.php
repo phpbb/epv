@@ -20,4 +20,4 @@ class JsonFile extends BaseFile implements JsonFileInterface{
     {
         return Type::TYPE_JSON;
     }
-} 
+}

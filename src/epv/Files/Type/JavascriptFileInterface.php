@@ -13,4 +13,4 @@ use epv\Files\FileInterface;
 
 interface JavascriptFileInterface  extends FileInterface{
 
-} 
+}

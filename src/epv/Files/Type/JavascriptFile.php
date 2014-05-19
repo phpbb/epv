@@ -20,4 +20,4 @@ class JavascriptFile extends BaseFile implements JavascriptFileInterface{
     {
         return Type::TYPE_JS;
     }
-} 
+}

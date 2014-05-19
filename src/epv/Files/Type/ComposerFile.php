@@ -19,4 +19,4 @@ class ComposerFile extends JsonFile implements ComposerFileInterface{
     {
         return Type::TYPE_COMPOSER | Type::TYPE_JSON;
     }
-} 
+}

@@ -19,4 +19,4 @@ class ServiceFile extends YmlFile implements ServiceFileInterface{
     {
         return Type::TYPE_YML | Type::TYPE_SERVICE;
     }
-} 
+}

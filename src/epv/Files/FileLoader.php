@@ -22,7 +22,7 @@ use epv\Files\Type\PlainFile;
 use epv\Files\Type\ServiceFile;
 use epv\Files\Type\XmlFile;
 use epv\Files\Type\YmlFile;
-use epv\Files\Type\BinairFile;
+use epv\Files\Type\BinaryFile;
 use epv\Output\Output;
 use epv\Output\OutputInterface;
 
@@ -80,7 +80,7 @@ class FileLoader
         }
         else if ($size >= 4) // Files with 3 ore more dots should not happen.
         {
-            $this->output->addMessage(Output::ERROR, sprintf("File (%s) seems to have many dots. Using the last part as extension.", $fileName));
+            $this->output->addMessage(Output::ERROR, sprintf("File (%s) seems to have too many dots. Using the last part as extension.", $fileName));
             $file = self::tryLoadFile($fileName, $split[sizeof($split) - 1]);
 
         }
@@ -91,25 +91,25 @@ class FileLoader
 
         if ($file == null)
         {
-            throw new FileException("Tried loading a unknown file: $fileName");
+            throw new FileException("Attempted to load an unknown file: $fileName");
         }
 
         return $file;
     }
 
     /**
-     * Tries to load a file based on extension.
+     * Attempts to load a file based on extension.
      *
-     * In case of plaintext files, the contents is checked as well to see if it isn't a php file.
+     * In case of plaintext files, contents are also checked to see if it isn't a php file.
      *
      * @param $fileName
      * @param $extension
-     * @param $returnNull boolean Return null in case of then file is not reconised.
-     * @return BinairFile|ComposerFile|CssFile|HTMLFile|JavascriptFile|JsonFile|PHPFile|PlainFile|XmlFile|YmlFile|ImageFile|null
+     * @param $returnNull boolean Return null in cases where file is not reconised.
+     * @return BinaryFile|ComposerFile|CssFile|HTMLFile|JavascriptFile|JsonFile|PHPFile|PlainFile|XmlFile|YmlFile|ImageFile|null
      */
     private function tryLoadFile($fileName, $extension, $returnNull = false)
     {
-        $this->output->writelnIfDebug("<info>Trying to load $fileName with extension $extension</info>");
+        $this->output->writelnIfDebug("<info>Attempting to load $fileName with extension $extension</info>");
 
         switch (strtolower($extension))
         {
@@ -161,8 +161,8 @@ class FileLoader
                 return new ImageFile($this->debug, $fileName);
 
             case 'swf':
-                $this->output->addMessage(Output::NOTICE, sprintf("Found a swf file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)));
-                return new BinairFile($this->debug, $fileName);
+                $this->output->addMessage(Output::NOTICE, sprintf("Found an SWF file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)));
+                return new BinaryFile($this->debug, $fileName);
             default:
                 if ($returnNull)
                 {
@@ -170,8 +170,8 @@ class FileLoader
                 }
 
                 $file = basename($fileName);
-                $this->output->addMessage(Output::WARNING, "Can't detect type for file $file, handling it as binair file");
-                return new BinairFile($this->debug, $fileName);
+                $this->output->addMessage(Output::WARNING, "Can't detect the file type for $file, handling it as a binary file.");
+                return new BinaryFile($this->debug, $fileName);
         }
     }
-} 
+}

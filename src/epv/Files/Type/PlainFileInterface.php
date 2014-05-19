@@ -13,4 +13,4 @@ use epv\Files\FileInterface;
 
 interface PlainFileInterface extends FileInterface {
 
-} 
+}

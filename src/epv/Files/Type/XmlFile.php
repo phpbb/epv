@@ -20,4 +20,4 @@ class XmlFile extends BaseFile implements XmlFileInterface{
     {
         return Type::TYPE_XML;
     }
-} 
+}

@@ -20,4 +20,4 @@ class PlainFile extends BaseFile implements PlainFileInterface{
     {
         return Type::TYPE_PLAIN;
     }
-} 
+}
