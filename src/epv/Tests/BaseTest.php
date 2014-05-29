@@ -22,6 +22,10 @@ abstract class BaseTest implements TestInterface {
     // Current file. Used in some tests.
     protected  $file;
 
+    protected $totalLineTests = 0;
+    protected $totalFileTests = 0;
+    protected $totalDirectoryTests = 0;
+
     /**
      * If this is set to true, tests are run on full directory listings.
      * @var bool
@@ -105,6 +109,29 @@ abstract class BaseTest implements TestInterface {
         return $this->directory;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getTotalDirectoryTests()
+    {
+        return $this->totalDirectoryTests;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotalFileTests()
+    {
+        return $this->totalFileTests;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotalLineTests()
+    {
+        return $this->totalLineTests;
+    }
 
     /**
      * Convert a boolean to Yes or No.

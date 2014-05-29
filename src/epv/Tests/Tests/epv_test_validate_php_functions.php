@@ -10,6 +10,7 @@ namespace epv\Tests\Tests;
 
 
 use epv\Files\FileInterface;
+use epv\Files\LineInterface;
 use epv\Files\Type\LangFile;
 use epv\Files\Type\PHPFileInterface;
 use epv\Output\Output;
@@ -34,7 +35,7 @@ class epv_test_validate_php_functions extends BaseTest
 {
     private $parser;
 
-    private $in_phpbb = false;
+    private $in_phpbb = true;
 
     public function __construct($debug, OutputInterface $output, $basedir)
     {
@@ -42,6 +43,7 @@ class epv_test_validate_php_functions extends BaseTest
 
         $this->fileTypeFull = Type::TYPE_PHP;
         $this->parser = new Parser(new Emulative());
+        $this->totalFileTests = 2;
     }
 
     /**
@@ -120,8 +122,13 @@ class epv_test_validate_php_functions extends BaseTest
                 }
                 else
                 {
+                    $this->output->printErrorLevel();
                     $this->output->writelnIfDebug(sprintf("Did not find IN_PHPBB, but file (%s) only contains classes or interfaces.", $file->getFilename()));
                 }
+            }
+            else
+            {
+                $this->output->printErrorLevel();
             }
         }
         catch (Error $e) // Catch PhpParser error.
@@ -140,6 +147,7 @@ class epv_test_validate_php_functions extends BaseTest
     {
         if (!($nodes[0] instanceof Namespace_))
         {
+            $err = false;
             foreach ($nodes as $node)
             {
                 // Check if there is a class.
@@ -147,7 +155,14 @@ class epv_test_validate_php_functions extends BaseTest
                 if ($node instanceof Class_ || $node instanceof Interface_)
                 {
                     $this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, "All files with a class or an interface should have a namespace");
+                    $err = true;
+                    break;
                 }
+            }
+
+            if (!$err)
+            {
+                $this->output->printErrorLevel();
             }
 
             $this->parseNode($nodes);
@@ -162,6 +177,10 @@ class epv_test_validate_php_functions extends BaseTest
             {
                 $this->addMessage(Output::WARNING, "Besides the namespace, there should be no other statements");
             }
+            else
+            {
+                $this->output->printErrorLevel();
+            }
         }
     }
 
@@ -173,6 +192,10 @@ class epv_test_validate_php_functions extends BaseTest
     {
         foreach ($nodes as $node)
         {
+            $test = 5; // There are 5 tests here
+
+            $this->output->inMaxPogress($test); // There are 7 tests.
+
             if ($node instanceof If_ && !$this->in_phpbb)
             {
                 $this->checkInDefined($node);
@@ -186,9 +209,17 @@ class epv_test_validate_php_functions extends BaseTest
             {
                 $this->addMessage(Output::WARNING, sprintf('Using exit on line %s', $node->getAttribute("startLine")));
             }
+            else
+            {
+                $this->output->printErrorLevel();
+            }
             if ($node instanceof Print_ || $node instanceof Echo_)
             {
                 $this->addMessage(Output::ERROR, sprintf('The template system should be used instead of echo or print on line %s', $node->getAttribute("startLine")));
+            }
+            else
+            {
+                $this->output->printErrorLevel();
             }
             $warn_array = array(
                 'die',
@@ -200,6 +231,10 @@ class epv_test_validate_php_functions extends BaseTest
                 if ($node instanceof FuncCall && $node->name == $err)
                 {
                     $this->addMessage(Output::WARNING, sprintf('Using %s on line %s', $err, $node->getAttribute("startLine")));
+                }
+                else
+                {
+                    $this->output->printErrorLevel();
                 }
             }
 
@@ -225,10 +260,13 @@ class epv_test_validate_php_functions extends BaseTest
 
         if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name == 'defined' && $cond->expr->args[0]->value->value == 'IN_PHPBB')
         {
+            $this->output->inMaxPogress(2);
+
             if ($node->stmts[0] instanceof Exit_)
             {
                 // Found IN_PHPBB
                 $this->in_phpbb = true;
+                $this->output->printErrorLevel();
             }
             else
             {
@@ -242,6 +280,10 @@ class epv_test_validate_php_functions extends BaseTest
                 $this->addMessage(Output::WARNING, "There should be no statements other than exit in the IN_PHPBB check");
                 unset($node->stmts[0]);
                 $this->parseNode($node->stmts);
+            }
+            else
+            {
+                $this->output->printErrorLevel();
             }
         }
     }

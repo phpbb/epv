@@ -11,6 +11,7 @@ namespace epv\Tests;
 
 use epv\Files\FileLoader;
 use epv\Files\Line;
+use epv\Output\Output;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -19,9 +20,13 @@ use epv\Output\OutputInterface;
 
 class TestRunner
 {
+    /** @var array  */
     public $tests = array();
+    /** @var array  */
     private $files = array();
+    /** @var array  */
     private $dirList = array();
+
     private $input;
     private $output;
     private $directory;
@@ -59,7 +64,39 @@ class TestRunner
         }
         $this->output->writeln("Running tests.");
 
-        // First, do all tests that want a directory listing.
+        // We start with calculating the total number of tests we are doing.
+        $maxProgress = 0;
+
+        foreach ($this->tests as $test)
+        {
+            if ($test->doValidateDirectory())
+            {
+                $maxProgress += ($test->getTotalDirectoryTests());
+            }
+        }
+
+        foreach ($this->files as $file)
+        {
+            // Get the number of lines;
+            $lines = sizeof($file->getLines());
+            foreach ($this->tests as $test)
+            {
+
+                if ($test->doValidateFile($file->getFileType()))
+                {
+                    $maxProgress += ($test->getTotalFileTests());
+                }
+                if ($test->doValidateLine($file->getFileType()))
+                {var_dump($test->doValidateLine($file->getFileType()), $test->getTotalLineTests(), $lines, $file->getFileName());
+                    $maxProgress += ($test->getTotalLineTests() * $lines);
+                }
+            }
+        }
+        var_dump($maxProgress);
+
+        $this->output->setMaxProgress($maxProgress);
+
+        // Now, we basicly do the same as above, but we do really run the tests.
         // All other tests are specific to files.
 
         foreach ($this->tests as $test)

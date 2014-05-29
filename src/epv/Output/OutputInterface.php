@@ -12,6 +12,7 @@ namespace epv\Output;
 use epv\Files\FileInterface;
 
 interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterface {
+    const DEBUG = 5;
     const FATAL = 4;
     const WARNING = 3;
     const ERROR = 2;
@@ -32,8 +33,10 @@ interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterf
      * @param $type int message type
      * @param $message string message
      * @param \epv\Files\FileInterface $file
+     * @param bool $skipError
+     * @return
      */
-    public function addMessage($type, $message, FileInterface $file = null);
+    public function addMessage($type, $message, FileInterface $file = null, $skipError = false);
 
     /**
      * Get all messages saved into the message queue.
@@ -46,4 +49,26 @@ interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterf
      * @return int
      */
     public function getFatalCount();
+
+    /**
+     * Set the max progress (Number of tests) for this run.
+     *
+     *
+     * @param $maxProgress int
+     */
+    public function setMaxProgress($maxProgress);
+
+    /**
+     * Increase the max progress during the run.
+     *
+     * @param $inc
+     */
+    public function inMaxPogress($inc);
+
+    /**
+     * Print the status of this specific test.
+     *
+     * @param $result The result for this specific test.
+     */
+    public function printErrorLevel($result = null);
 }

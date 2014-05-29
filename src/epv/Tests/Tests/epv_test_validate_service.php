@@ -24,6 +24,7 @@ class epv_test_validate_service extends BaseTest {
         parent::__construct($debug, $output, $basedir);
 
         $this->fileTypeFull = Type::TYPE_SERVICE;
+        $this->totalFileTests = 1;
     }
 
     public function validateFile(FileInterface $file)
@@ -47,6 +48,10 @@ class epv_test_validate_service extends BaseTest {
         {
             $this->output->addMessage(Output::WARNING, "Service does not contain a 'services' key.");
         }
+        else
+        {
+            $this->output->printErrorLevel();
+        }
     }
 
     /**
@@ -57,5 +62,4 @@ class epv_test_validate_service extends BaseTest {
     {
         return "Validate service";
     }
-
 }

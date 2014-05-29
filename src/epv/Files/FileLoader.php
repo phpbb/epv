@@ -34,6 +34,7 @@ class FileLoader
     private $output;
     private $debug;
     private $basedir;
+    private $loadError;
 
     public function __construct(OutputInterface $output, $debug, $basedir)
     {
@@ -49,6 +50,7 @@ class FileLoader
 
         $split = explode('.', basename($fileName));
         $size = sizeof($split);
+        $error = false;
 
         if ($size == 1)
         {
@@ -56,7 +58,11 @@ class FileLoader
             // Otherwise add notice.
             if (strtolower($fileName) !== 'readme')
             {
-                $this->output->addMessage(Output::NOTICE, sprintf("The file %s has no valid extension.", basename($fileName)));
+                $this->output->addMessage(Output::NOTICE, sprintf("The file %s has no valid extension.", basename($fileName)), null, true);
+            }
+            else
+            {
+                $this->output->printErrorLevel();
             }
             $file = new PlainFile($this->debug, $fileName);
         }
@@ -80,7 +86,8 @@ class FileLoader
         }
         else if ($size >= 4) // Files with 3 ore more dots should not happen.
         {
-            $this->output->addMessage(Output::ERROR, sprintf("File (%s) seems to have too many dots. Using the last part as extension.", $fileName));
+            $error = true;
+            $this->output->addMessage(Output::ERROR, sprintf("File (%s) seems to have too many dots. Using the last part as extension.", $fileName), null, true);
             $file = self::tryLoadFile($fileName, $split[sizeof($split) - 1]);
 
         }
@@ -110,6 +117,7 @@ class FileLoader
     private function tryLoadFile($fileName, $extension, $returnNull = false)
     {
         $this->output->writelnIfDebug("<info>Attempting to load $fileName with extension $extension</info>");
+        $this->loadError = false;
 
         switch (strtolower($extension))
         {
@@ -161,7 +169,7 @@ class FileLoader
                 return new ImageFile($this->debug, $fileName);
 
             case 'swf':
-                $this->output->addMessage(Output::NOTICE, sprintf("Found an SWF file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)));
+                $this->output->addMessage(Output::NOTICE, sprintf("Found an SWF file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)), null, true);
                 return new BinaryFile($this->debug, $fileName);
             default:
                 if ($returnNull)
@@ -170,7 +178,7 @@ class FileLoader
                 }
 
                 $file = basename($fileName);
-                $this->output->addMessage(Output::WARNING, "Can't detect the file type for $file, handling it as a binary file.");
+                $this->output->addMessage(Output::WARNING, "Can't detect the file type for $file, handling it as a binary file.", null,true);
                 return new BinaryFile($this->debug, $fileName);
         }
     }

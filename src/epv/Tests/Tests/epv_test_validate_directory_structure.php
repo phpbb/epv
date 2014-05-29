@@ -13,23 +13,25 @@ use epv\Output\OutputInterface;
 use epv\Tests\BaseTest;
 
 class epv_test_validate_directory_structure  extends BaseTest{
+    // $this->totalDirectoryTests is sizeof this.
+    private $requiredFiles = array(
+        'license.txt',
+        'composer.json',
+        'ext.php',
+    );
+
     public function __construct($debug, OutputInterface $output, $basedir)
     {
         parent::__construct($debug, $output, $basedir);
 
         $this->directory = true;
 
+        $this->totalDirectoryTests = sizeof($this->requiredFiles);
     }
 
     public function validateDirectory(array $dirList)
     {
-        $requiredFiles = array(
-            'license.txt',
-            'composer.json',
-            'ext.php',
-        );
-
-        foreach ($requiredFiles as $file)
+        foreach ($this->requiredFiles as $file)
         {
             // TODO: Depending on the specs for extensions.
             $found = false;
@@ -45,6 +47,10 @@ class epv_test_validate_directory_structure  extends BaseTest{
             if (!$found)
             {
                 $this->output->addMessage(Output::ERROR, sprintf("The required file %s is missing from the extension package.", $file));
+            }
+            else
+            {
+                $this->output->printErrorLevel();
             }
         }
     }

@@ -50,6 +50,8 @@ class Message {
                 return "<question>Error{$file}: $this->message</question>";
             case Output::FATAL:
                 return "<error>Fatal{$file}: $this->message</error>";
+            case Output::DEBUG:
+                return $this->message;
         }
     }
 }
