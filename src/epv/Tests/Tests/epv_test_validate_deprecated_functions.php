@@ -194,6 +194,6 @@ class epv_test_validate_deprecated_functions extends BaseTest
      */
     public function testName()
     {
-        return "Validate disallowed php functions";
+        return "Validate deprecated php functions";
     }
 }
