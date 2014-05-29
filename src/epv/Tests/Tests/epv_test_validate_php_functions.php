@@ -194,7 +194,7 @@ class epv_test_validate_php_functions extends BaseTest
         {
             $test = 5; // There are 5 tests here
 
-            $this->output->inMaxPogress($test); // There are 7 tests.
+            $this->output->inMaxPogress($test);
 
             if ($node instanceof If_ && !$this->in_phpbb)
             {

@@ -87,7 +87,7 @@ class TestRunner
                     $maxProgress += ($test->getTotalFileTests());
                 }
                 if ($test->doValidateLine($file->getFileType()))
-                {var_dump($test->doValidateLine($file->getFileType()), $test->getTotalLineTests(), $lines, $file->getFileName());
+                {
                     $maxProgress += ($test->getTotalLineTests() * $lines);
                 }
             }
