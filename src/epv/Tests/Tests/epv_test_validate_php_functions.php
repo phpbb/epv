@@ -54,7 +54,7 @@ class epv_test_validate_php_functions extends BaseTest
     {
         if (!$file instanceof PHPFileInterface)
         {
-            throw new TestException("This test expects a service type, but found something else.");
+            throw new TestException("This test expects a php type, but found something else.");
         }
         $this->validate($file);
     }
