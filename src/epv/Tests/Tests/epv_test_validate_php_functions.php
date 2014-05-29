@@ -109,6 +109,10 @@ class epv_test_validate_php_functions extends BaseTest
                     $this->output->writelnIfDebug(sprintf("Skipped %s because of test file.", $file->getFilename()));
                     $ok = true;
                 }
+                else
+                {
+                    $this->output->writelnIfDebug(sprintf("File %s is not a test file.", $file->getFilename()));
+                }
 
                 if (!$ok)
                 {
