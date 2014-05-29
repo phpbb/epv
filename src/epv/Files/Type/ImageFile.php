@@ -19,6 +19,6 @@ class ImageFile extends BaseFile implements ImageFileInterface{
      */
     function getFileType()
     {
-        return Type::TYPE_BINAIR;
+        return Type::TYPE_BINARY;
     }
-} 
+}

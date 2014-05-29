@@ -44,7 +44,7 @@ class epv_test_validate_directory_structure  extends BaseTest{
             }
             if (!$found)
             {
-                $this->output->addMessage(Output::ERROR, sprintf("The required file %s is missing in the extension package.", $file));
+                $this->output->addMessage(Output::ERROR, sprintf("The required file %s is missing from the extension package.", $file));
             }
         }
     }

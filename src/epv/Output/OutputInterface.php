@@ -30,7 +30,7 @@ interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterf
      * Add a new message to the output of the validator.
      *
      * @param $type int message type
-     * @param $message string message.
+     * @param $message string message
      * @param \epv\Files\FileInterface $file
      */
     public function addMessage($type, $message, FileInterface $file = null);

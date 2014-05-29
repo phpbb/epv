@@ -13,4 +13,4 @@ use epv\Files\FileInterface;
 
 interface JsonFileInterface extends FileInterface{
 
-} 
+}

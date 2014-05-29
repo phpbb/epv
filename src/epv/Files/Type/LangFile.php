@@ -20,4 +20,4 @@ class LangFile extends BaseFile implements LangFileInterface{
     {
         return Type::TYPE_LANG | Type::TYPE_PHP;
     }
-} 
+}

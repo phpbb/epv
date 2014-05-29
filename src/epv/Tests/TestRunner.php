@@ -31,8 +31,8 @@ class TestRunner
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @param $directory The directory where the extension is located.
-     * @param $debug Debug mode.
+     * @param $directory The directory where the extension is located
+     * @param $debug Debug mode
      */
     public function __construct(InputInterface $input, OutputInterface $output, $directory, $debug)
     {
@@ -55,9 +55,9 @@ class TestRunner
     {
         if (sizeof($this->tests) == 0)
         {
-            throw new TestException("TestRunner not initialised");
+            throw new TestException("TestRunner not initialised.");
         }
-        $this->output->writeln("Running tests");
+        $this->output->writeln("Running tests.");
 
         // First, do all tests that want a directory listing.
         // All other tests are specific to files.
@@ -118,7 +118,7 @@ class TestRunner
         $finder = new Finder();
 
         // First find ext.php.
-        // ext.php is required, so should always be there.
+        // ext.php is required, so it should always be there.
         // We use it to find the base directory of all files.
         $iterator = $finder
             ->files()
@@ -127,7 +127,7 @@ class TestRunner
 
         if (sizeof($iterator) != 1)
         {
-            throw new TestException("Can't find required ext.php");
+            throw new TestException("Can't find the required ext.php file.");
         }
         foreach ($iterator as $file)
         {
@@ -159,7 +159,7 @@ class TestRunner
             if (!$file->getRealPath())
             {
                 $fl = $this->directory . '/' . $file->getRelativePathname();
-                $this->output->write("<info>Finder found a file, but doesnt seem to be readable or doesnt actually exists.</info>");
+                $this->output->write("<info>Finder found a file, but it does not seem to be readable or does not actually exist.</info>");
                 continue;
             }
 
@@ -195,7 +195,7 @@ class TestRunner
      */
     private function tryToLoadTest(SplFileInfo $test)
     {
-        $this->output->writelnIfDebug("<info>Got {$test->getRealpath()}.</info>");
+        $this->output->writelnIfDebug("<info>Found {$test->getRealpath()}.</info>");
         $file = str_replace('.php', '', basename($test->getRealPath()));
 
         $class = '\\epv\\Tests\\Tests\\' . $file;
@@ -204,9 +204,9 @@ class TestRunner
 
         if (!$filetest instanceof TestInterface)
         {
-            throw new TestException("$class doesn't implement the TestInterface, but matches the test expression");
+            throw new TestException("$class does not implement the TestInterface, but matches the test expression.");
         }
         $this->tests[] = $filetest;
 
     }
-} 
+}

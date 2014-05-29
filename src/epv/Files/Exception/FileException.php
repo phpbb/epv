@@ -11,4 +11,4 @@ namespace epv\Files\Exception;
 
 class FileException extends \Exception{
 
-} 
+}

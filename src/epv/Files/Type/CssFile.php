@@ -20,4 +20,4 @@ class CssFile extends BaseFile implements CssFileInterface{
     {
         return Type::TYPE_CSS;
     }
-} 
+}

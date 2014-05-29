@@ -19,4 +19,4 @@ interface LineInterface {
     public function getLineNr();
 
     public function getLine();
-} 
+}

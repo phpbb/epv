@@ -20,4 +20,4 @@ class HTMLFile extends BaseFile implements HTMLFileInterface{
     {
         return Type::TYPE_HTML;
     }
-} 
+}

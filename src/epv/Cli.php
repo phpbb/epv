@@ -19,4 +19,4 @@ class Cli extends Application {
         $commands[] = new ValidateCommand();
         return $commands;
     }
-} 
+}

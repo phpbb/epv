@@ -52,4 +52,4 @@ class Message {
                 return "<error>Fatal{$file}: $this->message</error>";
         }
     }
-} 
+}
