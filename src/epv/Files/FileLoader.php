@@ -155,6 +155,8 @@ class FileLoader
             case 'txt':
             case 'md':
             case 'htaccess':
+            case 'gitattributes':
+            case 'gitignore':
                 return new PlainFile($this->debug, $fileName);
             case 'xml':
                 return new XmlFile($this->debug, $fileName);

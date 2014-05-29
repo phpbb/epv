@@ -92,13 +92,11 @@ class TestRunner
                 }
             }
         }
-        var_dump($maxProgress);
 
         $this->output->setMaxProgress($maxProgress);
 
         // Now, we basicly do the same as above, but we do really run the tests.
         // All other tests are specific to files.
-
         foreach ($this->tests as $test)
         {
             if ($test->doValidateDirectory())
@@ -129,7 +127,6 @@ class TestRunner
                     $linetest[] = $test;
                 }
             }
-
             if (sizeof ($linetest))
             {
                 $linenr = 1;

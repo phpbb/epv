@@ -238,9 +238,19 @@ class epv_test_validate_php_functions extends BaseTest
                 }
             }
 
-            if (sizeof($node->stmts))
+            if (is_array($node) || is_object($node))
             {
-                $this->parseNode($node->stmts);
+                foreach ($node as $nr)
+                {
+                    if (is_array($nr))
+                    {
+                        $this->parseNode($nr);
+                    }
+                    else
+                    {
+                        $this->parseNode(array($nr));
+                    }
+                }
             }
         }
     }

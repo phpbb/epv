@@ -89,55 +89,73 @@ class epv_test_validate_deprecated_functions extends BaseTest
     {
         foreach ($nodes as $node)
         {
-            if (!$node instanceof Node && $node instanceof Stmt)
+            if ($node instanceof Node || $node instanceof Stmt)
             {
-                var_dump($node);
-                exit;
-                continue;
-            }
-            $name = null;
-            if ($node instanceof FuncCall)
-            {
-                $name = (string)$node->name;
-            }
 
-            else if (isset($node->expr) && $node->expr instanceof FuncCall)
-            {
-                $name = (string)$node->expr->name->subNodes[0];
-            }
-
-            if ($name != null)
-            {
-                $this->output->inMaxPogress(1);
-
-                $this->output->writelnIfDebug("Found func call");
-
-                $deprecated = array(
-                    'gen_email_hash',
-                    'cache_moderators',
-                    'update_foes',
-                    'get_user_avatar',
-                    'phpbb_hash',
-                    'phpbb_check_hash',
-                    'phpbb_clean_path',
-                    'set_config',
-                    'request_var',
-                    'set_config_count',
-                    'tz_select',
-                    'add_log',
-
-                    'set_var',
-                    'get_table',
-
-                );
-
-                if (in_array($name, $deprecated))
+                $name = null;
+                if ($node instanceof FuncCall)
                 {
-                    $this->addMessage(Output::WARNING, sprintf("Found a deprecated function call to %s on line %s", $name, $node->getAttribute("startLine")));
+                    $name = (string)$node->name;
                 }
-                else
+
+                else if (isset($node->expr) && $node->expr instanceof FuncCall)
                 {
-                    $this->output->printErrorLevel();
+                    $name = (string)$node->expr->name->subNodes[0];
+                }
+
+                if ($name != null)
+                {
+                    $this->output->inMaxPogress(1);
+
+                    // Key: old function name (Which is deprecated/removed)
+                    // Value: If available, new function name
+                    $deprecated = array(
+                        'gen_email_hash' => 'phpbb_email_hash($email)',
+                        'cache_moderators' => 'phpbb_cache_moderators($db, $cache, $auth)',
+                        'update_foes' => 'phpbb_update_foes($db, $auth, $group_id, $user_id)',
+                        'get_user_avatar' => 'phpbb_get_avatar($row, $alt, $ignore_config)',
+                        'phpbb_hash' => '$passwords_manager->hash($password)',
+                        'phpbb_check_hash' => '$passwords_manager->check($password, $hash)',
+                        'phpbb_clean_path' => '$phpbb_path_helper->clean_path($path)',
+                        'set_config' => '$config->set($key, $value, $cache = true)',
+                        'request_var' => '$request->variable()',
+                        'set_config_count' => '$config->increment()',
+                        'tz_select' => 'phpbb_timezone_select($user, $default, $truncate)',
+                        'add_log' => '$phpbb_log->add()',
+
+                        'set_var' => '$type_cast_helper->set_var()',
+                        'get_tables' => '$db_tools->sql_list_tables()',
+
+                        // Removed, Not deprecated
+                        'topic_generate_pagination' => 'phpbb_generate_template_pagination($template, $base_url, $block_var_name, $num_items, $per_page, $start_item = 1, $reverse_count = false, $ignore_on_page = false)',
+                        'generate_pagination' => 'phpbb_generate_template_pagination($template, $base_url, $block_var_name, $num_items, $per_page, $start_item = 1, $reverse_count = false, $ignore_on_page = false)',
+                        'on_page' => 'phpbb_on_page($template, $user, $num_items, $per_page, $start)',
+                        'remove_comments' => 'phpbb_remove_comments($input)',
+                        'remove_remarks' => 'phpbb_remove_comments($input)',
+                    );
+                    $foundDep = false;
+                    foreach ($deprecated as $depName => $dep)
+                    {
+                        if ($name == $depName)
+                        {
+                            $useInstead = '';
+
+                            if ($deprecated[$name])
+                            {
+                                $useInstead = sprintf(', you can use %s instead', $deprecated[$name]);
+                            }
+
+                            $this->addMessage(Output::WARNING, sprintf("Found a deprecated or removed function call to %s on line %s%s", $name, $node->getAttribute("startLine"), $useInstead));
+
+                            $foundDep = true;
+                            break;
+                        }
+                    }
+
+                    if (!$foundDep)
+                    {
+                        $this->output->printErrorLevel();
+                    }
                 }
             }
 

@@ -89,6 +89,11 @@ class ValidateCommand extends  Command{
             $output->writeln((string)$msg);
         }
 
+        if (sizeof($output->getMessages()) == 0)
+        {
+            $output->writeln("<success>No issues found </success>");
+        }
+
         if ($output->getFatalCount() > 0)
         {
             return 1;
