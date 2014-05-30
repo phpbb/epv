@@ -20,6 +20,7 @@ abstract class BaseTest implements TestInterface {
     protected  $fileTypeFull;
 
     // Current file. Used in some tests.
+    /** @var  \epv\Files\FileInterface **/
     protected  $file;
 
     protected $totalLineTests = 0;
