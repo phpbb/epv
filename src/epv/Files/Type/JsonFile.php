@@ -12,6 +12,15 @@ use epv\Tests\Tests\Type;
 use epv\Files\BaseFile;
 
 class JsonFile extends BaseFile implements JsonFileInterface{
+    /** @var array  */
+    private $json;
+
+    public function __construct($debug, $filename)
+    {
+        parent::__construct($debug, $filename);
+        $this->json = json_decode($this->fileData);
+    }
+
     /**
      * Get the file type for the specific file.
      * @return int
@@ -19,5 +28,13 @@ class JsonFile extends BaseFile implements JsonFileInterface{
     function getFileType()
     {
         return Type::TYPE_JSON;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJson()
+    {
+        return $this->json;
     }
 }

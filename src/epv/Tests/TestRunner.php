@@ -151,23 +151,32 @@ class TestRunner
     {
         $finder = new Finder();
 
-        // First find ext.php.
-        // ext.php is required, so it should always be there.
+        // First find composer.json.
+        // composer.json is required, so it should always be there.
         // We use it to find the base directory of all files.
         $iterator = $finder
             ->files()
-            ->name('ext.php')
+            ->name('composer.json')
             ->in($this->directory);
 
         if (sizeof($iterator) != 1)
         {
-            throw new TestException("Can't find the required ext.php file.");
+            throw new TestException("Can't find the required composer.json file.");
         }
+
+        $composer = '';
+
         foreach ($iterator as $file)
         {
-            $ext = $file;
+            $composer = $file;
         }
-        $this->basedir = str_replace('ext.php', '', $ext);
+
+        if (empty($composer))
+        {
+            throw new TestException('Iterator did result a empty filename');
+        }
+
+        $this->basedir = str_replace('composer.json', '', $composer);
     }
 
     /**

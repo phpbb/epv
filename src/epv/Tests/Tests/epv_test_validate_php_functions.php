@@ -10,8 +10,6 @@ namespace epv\Tests\Tests;
 
 
 use epv\Files\FileInterface;
-use epv\Files\LineInterface;
-use epv\Files\Type\LangFile;
 use epv\Files\Type\LangFileInterface;
 use epv\Files\Type\PHPFileInterface;
 use epv\Output\Output;
@@ -407,7 +405,7 @@ class epv_test_validate_php_functions extends BaseTest
 
     /**
      * Validate the use of non dbal names.
-     * @param $name function name
+     * @param string $name function name
      * @param \PhpParser\Node $node
      */
     private function validateDbal($name, Node $node)
