@@ -16,8 +16,8 @@
         "symfony/yaml": "2.5.*",
         "symfony/console": "2.5.*",
         "symfony/finder": "2.5.*",
-        "nikic/php-parser": "dev-master",
-        "gitonomy/gitlib": "dev-master"
+        "nikic/php-parser": "dev-master@dev",
+        "gitonomy/gitlib": "0.1.*@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*"
