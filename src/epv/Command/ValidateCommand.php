@@ -9,6 +9,7 @@
 namespace epv\Command;
 
 use epv\Output\Output;
+use epv\Tests\Exception\TestException;
 use epv\Tests\TestRunner;
 use Phpbb\epv\Output\OutputFormatter;
 use Symfony\Component\Console\Command\Command;
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Tests\Input\InputOptionTest;
 
 class ValidateCommand extends  Command{
     protected $debug;
@@ -24,18 +26,56 @@ class ValidateCommand extends  Command{
         $this
             ->setName('run')
             ->setDescription('Run the Extension Pre Validator on your extension.')
-            ->addArgument('dir', InputArgument::REQUIRED, 'The directory the extension is in.')
+            //->addArgument('dir', InputArgument::OPTIONAL, 'The directory the extension is in.')
+            //->addArgument('git', InputArgument::OPTIONAL, 'A git repository with the extension.')
+            ->addOption('dir', null, InputOption::VALUE_OPTIONAL, 'The directory the extension is in.')
+            ->addOption('git', null, InputOption::VALUE_OPTIONAL, 'A git repository with the extension.')
+            ->addOption('github', null, InputOption::VALUE_OPTIONAL, 'Shortname (like phpbb/phpbb) to github with the extension.')
+
             ->addOption('debug', null, InputOption::VALUE_NONE, "Run in debug")
 
         ;
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dir = $input->getArgument("dir");
+        $dir = $input->getOption("dir");
+        $git = $input->getOption('git');
+        $github = $input->getOption('github');
+
+        if (empty($dir) && empty($git) && empty('github'))
+        {
+            throw new TestException("Or the git or the dir parameter are required");
+        }
+
+        if (!empty($github))
+        {
+            $git = 'https://github.com/' . $github;
+        }
+
         $this->debug = $input->getOption("debug");
 
         $output = new Output($output, $this->debug);
         $output->setFormatter(new OutputFormatter(true));
+
+        // Going to see if we need to checkout a GIT repo.
+        if (!empty($git))
+        {
+            $output->writeln(sprintf("Checkout out %s from git", $git));
+            $tmpdir = sys_get_temp_dir();
+            $uniq = $tmpdir . DIRECTORY_SEPARATOR . uniqid();
+
+            @mkdir($uniq);
+
+            if (!file_exists($uniq))
+            {
+                throw new TestException('Unable to create tmp directory');
+            }
+
+            $repository = \Gitonomy\Git\Admin::cloneTo($uniq, $git, false);
+
+            $dir = $uniq;
+        }
+
 
         $output->writeln("Running Extension Pre Validator on directory <info>$dir</info>.");
         $runner = new TestRunner($input, $output, $dir, $this->debug);
@@ -50,6 +90,11 @@ class ValidateCommand extends  Command{
             }
         }
         $runner->runTests();
+
+        if (!empty ($git) && isset($uniq))
+        {
+            $this->rrmdir($uniq);
+        }
 
         // Write a empty line
         $output->writeLn('');
@@ -99,5 +144,35 @@ class ValidateCommand extends  Command{
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * Remove a directory including the contents
+     *
+     * @param $dir string Directory to remove
+     */
+    private function rrmdir($dir)
+    {
+        if (is_dir($dir))
+        {
+            $objects = scandir($dir);
+
+            foreach ($objects as $object)
+            {
+                if ($object != "." && $object != "..")
+                {
+                    if (filetype($dir . "/" . $object) == "dir")
+                    {
+                        $this->rrmdir($dir . "/" . $object);
+                    }
+                    else
+                    {
+                        @unlink($dir . "/" . $object);
+                    }
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+        }
     }
 }

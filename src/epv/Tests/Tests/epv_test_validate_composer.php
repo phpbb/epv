@@ -48,7 +48,7 @@ class epv_test_validate_composer  extends BaseTest{
     {
         $json = $file->getJson();
         $this->addMessageIfBooleanTrue(!isset($json['name']), Output::FATAL, 'The name key is missing');
-        $this->addMessageIfBooleanTrue(strpos('_', $json['name']) !== false, Output::FATAL, 'The namespace should not contain underscores');
+        $this->addMessageIfBooleanTrue(strpos($json['name'], '_') !== false, Output::ERROR, 'The namespace should not contain underscores');
 
     }
 
