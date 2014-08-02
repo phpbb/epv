@@ -32,7 +32,7 @@ interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterf
      *
      * @param $type int message type
      * @param $message string message
-     * @param \epv\Files\FileInterface $file
+     * @param \epv\Files\FileInterface $file File the error happened in. When provided, this is displayed to the user
      * @param bool $skipError
      * @return
      */

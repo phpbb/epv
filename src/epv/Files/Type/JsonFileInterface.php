@@ -12,5 +12,5 @@ namespace epv\Files\Type;
 use epv\Files\FileInterface;
 
 interface JsonFileInterface extends FileInterface{
-
+    public function getJson();
 }

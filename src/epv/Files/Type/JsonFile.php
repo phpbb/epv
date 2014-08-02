@@ -18,7 +18,7 @@ class JsonFile extends BaseFile implements JsonFileInterface{
     public function __construct($debug, $filename)
     {
         parent::__construct($debug, $filename);
-        $this->json = json_decode($this->fileData);
+        $this->json = json_decode($this->fileData, true);
     }
 
     /**

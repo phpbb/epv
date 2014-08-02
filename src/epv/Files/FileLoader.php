@@ -157,6 +157,7 @@ class FileLoader
             case 'htaccess':
             case 'gitattributes':
             case 'gitignore':
+            case 'sh': // Decide if we want a special file type for shell files!
                 return new PlainFile($this->debug, $fileName);
             case 'xml':
                 return new XmlFile($this->debug, $fileName);
@@ -173,6 +174,11 @@ class FileLoader
             case 'swf':
                 $this->output->addMessage(Output::NOTICE, sprintf("Found an SWF file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)), null, true);
                 return new BinaryFile($this->debug, $fileName);
+            case 'ds_store':
+                $this->output->addMessage(Output::ERROR, sprintf("Found an OS X specific file at %s, please make sure to remove it prior to submission.", $fileName), null, true);
+
+                return new BinaryFile($this->debug, $fileName);
+
             default:
                 if ($returnNull)
                 {

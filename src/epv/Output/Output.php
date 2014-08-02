@@ -159,7 +159,7 @@ class Output implements \epv\Output\OutputInterface {
      *
      * @param $type int message type
      * @param $message string message
-     * @param \epv\Files\FileInterface $file
+     * @param \epv\Files\FileInterface $file File the error happened in. When provided, this is displayed to the user
      * @param bool $skipError skip the printErrorLevel call (Default false)
      */
     public function addMessage($type, $message, FileInterface $file = null, $skipError = false)
