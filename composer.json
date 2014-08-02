@@ -13,9 +13,9 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.3.3",
-        "symfony/yaml": "2.5.*",
-        "symfony/console": "2.5.*",
-        "symfony/finder": "2.5.*",
+        "symfony/yaml": ">=2.3.0|>=2.4.0|>=2.5.0",
+        "symfony/console": ">=2.3.0",
+        "symfony/finder": ">=2.3.0",
         "nikic/php-parser": "0.9.*@dev",
         "gitonomy/gitlib": "0.1.*@dev"
     },
