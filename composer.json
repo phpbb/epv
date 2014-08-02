@@ -23,7 +23,7 @@
         "phpunit/phpunit": "4.0.*"
     },
     "bin": [
-        "epv/EPV.php"
+        "src/epv/EPV.php"
     ],
     "config": {
         "bin-dir": "bin"

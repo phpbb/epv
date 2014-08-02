@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "a98e3b758a11adf74cf1f4a0d6fe17ce",
+    "hash": "a090d208425c202bc283b709b39b42a3",
     "packages": [
         {
             "name": "gitonomy/gitlib",
