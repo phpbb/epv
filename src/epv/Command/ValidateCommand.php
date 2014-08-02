@@ -10,7 +10,7 @@ namespace epv\Command;
 
 use epv\Output\Output;
 use epv\Tests\Exception\TestException;
-use epv\Tests\TestRunner;
+use epv\Tests\TestStartup;
 use Phpbb\epv\Output\OutputFormatter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,8 +19,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tests\Input\InputOptionTest;
 
+
 class ValidateCommand extends  Command{
-    protected $debug;
+
     protected function configure()
     {
         $this
@@ -41,138 +42,41 @@ class ValidateCommand extends  Command{
         $dir = $input->getOption("dir");
         $git = $input->getOption('git');
         $github = $input->getOption('github');
+        $type = null;
+        $loc = null;
 
-        if (empty($dir) && empty($git) && empty('github'))
+        if (!empty($github))
+        {
+            $type = TestStartup::TYPE_GITHUB;
+            $loc = $github;
+        }
+        else if (!empty($git))
+        {
+            $type = TestStartup::TYPE_GIT;
+            $loc = $git;
+        }
+        else if (!empty($dir))
+        {
+            $type = TestStartup::TYPE_DIRECTORY;
+            $loc = $dir;
+        }
+        else
         {
             throw new TestException("Or the git or the dir parameter are required");
         }
 
-        if (!empty($github))
-        {
-            $git = 'https://github.com/' . $github;
-        }
 
-        $this->debug = $input->getOption("debug");
+        $debug = $input->getOption("debug");
 
-        $output = new Output($output, $this->debug);
+        $output = new Output($output, $debug);
         $output->setFormatter(new OutputFormatter(true));
 
-        // Going to see if we need to checkout a GIT repo.
-        if (!empty($git))
-        {
-            $output->writeln(sprintf("Checkout out %s from git", $git));
-            $tmpdir = sys_get_temp_dir();
-            $uniq = $tmpdir . DIRECTORY_SEPARATOR . uniqid();
-
-            @mkdir($uniq);
-
-            if (!file_exists($uniq))
-            {
-                throw new TestException('Unable to create tmp directory');
-            }
-
-            $repository = \Gitonomy\Git\Admin::cloneTo($uniq, $git, false);
-
-            $dir = $uniq;
-        }
-
-
-        $output->writeln("Running Extension Pre Validator on directory <info>$dir</info>.");
-        $runner = new TestRunner($input, $output, $dir, $this->debug);
-
-        if ($this->debug)
-        {
-            $output->writelnIfDebug("tests to run:");
-
-            foreach ($runner->tests as $t => $test)
-            {
-                $output->writelnIfDebug("<info>$test</info>");
-            }
-        }
-        $runner->runTests();
-
-        if (!empty ($git) && isset($uniq))
-        {
-            $this->rrmdir($uniq);
-        }
-
-        // Write a empty line
-        $output->writeLn('');
-
-        $found_msg = '';
-        $found_msg .= 'Fatal: ' . $output->getMessageCount(Output::FATAL);
-        $found_msg .= ', Error: ' . $output->getMessageCount(Output::ERROR);
-        $found_msg .= ', Warning: ' . $output->getMessageCount(Output::WARNING);
-        $found_msg .= ', Notice: ' . $output->getMessageCount(Output::NOTICE);
-
-        if ($output->getMessageCount(Output::FATAL))
-        {
-            $output->writeln('<fatal>' . str_repeat(' ', strlen($found_msg)) . '</fatal>');
-            $output->writeln('<fatal>Validation: FAILED' . str_repeat(' ', strlen($found_msg) - 18) . '</fatal>');
-            $output->writeln('<fatal>' . $found_msg .  '</fatal>');
-            $output->writeln('');
-            $output->writeln('');
-        }
-        else
-        {
-            $output->writeln('<success>PASSED: ' . $found_msg . '</success>');
-        }
-
-        // Write debug messages.
-        if ($this->debug)
-        {
-            foreach ($output->getDebugMessages() as $msg)
-            {
-                $output->writeln((string)$msg);
-            }
-        }
-
-        $output->writeln("<info>Test results for extension:</info>");
-
-        foreach ($output->getMessages() as $msg)
-        {
-            $output->writeln((string)$msg);
-        }
-
-        if (sizeof($output->getMessages()) == 0)
-        {
-            $output->writeln("<success>No issues found </success>");
-        }
+        $test = new TestStartup($output, $type, $loc, $debug);
 
         if ($output->getFatalCount() > 0)
         {
             return 1;
         }
         return 0;
-    }
-
-    /**
-     * Remove a directory including the contents
-     *
-     * @param $dir string Directory to remove
-     */
-    private function rrmdir($dir)
-    {
-        if (is_dir($dir))
-        {
-            $objects = scandir($dir);
-
-            foreach ($objects as $object)
-            {
-                if ($object != "." && $object != "..")
-                {
-                    if (filetype($dir . "/" . $object) == "dir")
-                    {
-                        $this->rrmdir($dir . "/" . $object);
-                    }
-                    else
-                    {
-                        @unlink($dir . "/" . $object);
-                    }
-                }
-            }
-            reset($objects);
-            rmdir($dir);
-        }
     }
 }

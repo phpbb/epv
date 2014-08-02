@@ -12,7 +12,6 @@ namespace epv\Tests;
 use epv\Files\FileLoader;
 use epv\Files\Line;
 use epv\Output\Output;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use epv\Tests\Exception\TestException;
@@ -27,21 +26,18 @@ class TestRunner
     /** @var array  */
     private $dirList = array();
 
-    private $input;
     private $output;
     private $directory;
     private $debug;
     private $basedir;
 
     /**
-     * @param InputInterface $input
      * @param OutputInterface $output
      * @param $directory The directory where the extension is located
      * @param $debug Debug mode
      */
-    public function __construct(InputInterface $input, OutputInterface $output, $directory, $debug)
+    public function __construct(OutputInterface $output, $directory, $debug)
     {
-        $this->input = $input;
         $this->output = $output;
         $this->directory = $directory;
         $this->debug = $debug;
