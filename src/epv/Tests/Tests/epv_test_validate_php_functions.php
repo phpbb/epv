@@ -16,6 +16,7 @@ use epv\Output\Output;
 use epv\Output\OutputInterface;
 use epv\Tests\BaseTest;
 use epv\Tests\Exception\TestException;
+use PHPParser_Error;
 use PHPParser_Lexer_Emulative;
 use PHPParser_Node;
 use PHPParser_Node_Expr_Exit;
@@ -149,7 +150,7 @@ class epv_test_validate_php_functions extends BaseTest
                 $this->output->printErrorLevel();
             }
         }
-        catch (Error $e) // Catch PhpParser error.
+        catch (PHPParser_Error $e) // Catch PhpParser error.
         {
             $this->output->addMessage(Output::FATAL, 'PHP parse error in file ' . $file->getFilename() . '. Message: ' . $e->getMessage());
         }
