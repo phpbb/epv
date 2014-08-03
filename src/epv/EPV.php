@@ -17,6 +17,14 @@ else if (file_exists(__DIR__ . '/../../../../vendor/autoload.php'))
 {
     require __DIR__ . '/../../../../vendor/autoload.php';
 }
+else if (file_exists(__DIR__ . '/../../../../../vendor/autoload.php'))
+{
+    require __DIR__ . '/../../../../../vendor/autoload.php';
+}
+else
+{
+    exit('Composer autoloading seems to be missing. Did you run composer.phar install?');
+}
 
 $app = new Cli();
 $app->run();
