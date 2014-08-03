@@ -19,6 +19,7 @@ use epv\Files\Type\ImageFile;
 use epv\Files\Type\JavascriptFile;
 use epv\Files\Type\JsonFile;
 use epv\Files\Type\LangFile;
+use epv\Files\Type\LockFile;
 use epv\Files\Type\PHPFile;
 use epv\Files\Type\PlainFile;
 use epv\Files\Type\ServiceFile;
@@ -105,6 +106,7 @@ class FileLoader
 		catch (FileLoadException $e)
 		{
 			$this->output->addMessage(Output::FATAL, $e->getMessage());
+
 			return null;
 		}
 
@@ -142,9 +144,11 @@ class FileLoader
 				}
 
 				return new PHPFile($this->debug, $fileName);
+			
 			case 'html':
 			case 'htm':
 				return new HTMLFile($this->debug, $fileName);
+
 			case 'json':
 				if (strtolower(basename($fileName)) == 'composer.json')
 				{
@@ -154,6 +158,7 @@ class FileLoader
 				{
 					return new JsonFile($this->debug, $fileName);
 				}
+
 			case 'yml':
 				if (strtolower(basename($fileName)) == 'services.yml')
 				{
@@ -161,6 +166,7 @@ class FileLoader
 				}
 
 				return new YmlFile($this->debug, $fileName);
+
 			case 'txt':
 			case 'md':
 			case 'htaccess':
@@ -168,12 +174,16 @@ class FileLoader
 			case 'gitignore':
 			case 'sh': // Decide if we want a special file type for shell files!
 				return new PlainFile($this->debug, $fileName);
+
 			case 'xml':
 				return new XmlFile($this->debug, $fileName);
+
 			case 'js':
 				return new JavascriptFile($this->debug, $fileName);
+
 			case 'css':
 				return new CssFile($this->debug, $fileName);
+
 			case 'gif':
 			case 'png':
 			case 'jpg':
@@ -188,6 +198,9 @@ class FileLoader
 				$this->output->addMessage(Output::ERROR, sprintf("Found an OS X specific file at %s, please make sure to remove it prior to submission.", $fileName), null, true);
 
 				return new BinaryFile($this->debug, $fileName);
+
+			case 'lock':
+				return new LockFile($this->debug, $fileName);
 
 			default:
 				if ($returnNull)
