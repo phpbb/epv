@@ -190,6 +190,7 @@ class TestRunner
 			->sortByName()
 			//->name('*')
 			->ignoreVCS(true)
+			->exclude('vendor')
 			->in($this->directory);
 
 		$loader = new FileLoader($this->output, $this->debug, $this->basedir);

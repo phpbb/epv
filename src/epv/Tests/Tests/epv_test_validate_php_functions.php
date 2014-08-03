@@ -22,6 +22,7 @@ use PHPParser_Node;
 use PHPParser_Node_Expr_Exit;
 use PHPParser_Node_Expr_FuncCall;
 use PHPParser_Node_Expr_Print;
+use PHPParser_Node_Expr_Variable;
 use PHPParser_Node_Stmt_Class;
 use PHPParser_Node_Stmt_Echo;
 use PHPParser_Node_Stmt_If;
@@ -361,7 +362,15 @@ class epv_test_validate_php_functions extends BaseTest
         $name = null;
         if ($node instanceof PHPParser_Node_Expr_FuncCall)
         {
-            $name = (string)$node->name;
+	        if ($node->name instanceof PHPParser_Node_Expr_Variable)
+	        {
+		        // If function name is a variable.
+		        $name = (string)$node->name->name;
+	        }
+	        else
+	        {
+                $name = (string)$node->name;
+	        }
         }
         else if (isset($node->expr) && $node->expr instanceof PHPParser_Node_Expr_FuncCall)
         {
