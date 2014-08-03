@@ -423,7 +423,7 @@ class epv_test_validate_php_functions extends BaseTest
 
             if ($call == $dbal)
             {
-                $this->addMessage(Output::FATAL, sprintf('Found a disallowed call to %s on line %s. Please use the DBAL instead.', $name, $node->getAttribute('startLine')));
+                $this->addMessage(Output::ERROR, sprintf('Found a disallowed call to %s on line %s. Please use the DBAL instead.', $name, $node->getAttribute('startLine')));
                 return;
             }
         }

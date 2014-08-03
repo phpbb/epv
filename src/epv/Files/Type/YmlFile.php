@@ -10,6 +10,7 @@ namespace epv\Files\Type;
 
 
 use epv\Files\BaseFile;
+use epv\Files\Exception\FileLoadException;
 use epv\Output\Messages;
 use epv\Tests\Tests\Type;
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -29,7 +30,7 @@ class YmlFile extends BaseFile implements YmlFileInterface
         }
         catch (ParseException $ex)
         {
-            Messages::addMessage(Messages::WARNING, "Parsing yaml file ($filename) failed: " . $ex->getMessage());
+            throw new FileLoadException("Parsing yaml file ($filename) failed: " . $ex->getMessage());
         }
     }
 
