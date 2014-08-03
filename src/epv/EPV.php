@@ -9,7 +9,7 @@
  */
 namespace epv;
 
-require 'vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 $app = new Cli();
 $app->run();
