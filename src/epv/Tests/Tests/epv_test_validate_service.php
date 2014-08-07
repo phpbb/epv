@@ -19,9 +19,9 @@ use epv\Tests\Exception\TestException;
 class epv_test_validate_service extends BaseTest {
 
 
-    public function __construct($debug, OutputInterface $output, $basedir)
+    public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
     {
-        parent::__construct($debug, $output, $basedir);
+        parent::__construct($debug, $output, $basedir, $namespace, $titania);
 
         $this->fileTypeFull = Type::TYPE_SERVICE;
         $this->totalFileTests = 1;

@@ -89,14 +89,16 @@ class epv_test_validate_php_functions extends BaseTest
         'db2_',
     );
 
-    /**
-     * @param bool $debug if debug is enabled
-     * @param OutputInterface $output
-     * @param $basedir
-     */
-    public function __construct($debug, OutputInterface $output, $basedir)
+	/**
+	 * @param bool            $debug if debug is enabled
+	 * @param OutputInterface $output
+	 * @param string          $basedir
+	 * @param string          $namespace
+	 * @param boolean         $titania
+	 */
+    public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
     {
-        parent::__construct($debug, $output, $basedir);
+        parent::__construct($debug, $output, $basedir, $namespace, $titania);
 
         $this->fileTypeFull = Type::TYPE_PHP;
         $this->parser = new PHPParser_Parser(new PHPParser_Lexer_Emulative());

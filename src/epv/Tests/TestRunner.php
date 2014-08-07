@@ -30,17 +30,21 @@ class TestRunner
 	private $directory;
 	private $debug;
 	private $basedir;
+	private $namespace;
+	private $titania;
 
 	/**
 	 * @param OutputInterface $output
-	 * @param                 $directory The directory where the extension is located
-	 * @param                 $debug     Debug mode
+	 * @param string          $directory The directory where the extension is located
+	 * @param boolean         $debug      Debug mode
+	 * @param boolean         $isTitania If we run from titania or not
 	 */
-	public function __construct(OutputInterface $output, $directory, $debug)
+	public function __construct(OutputInterface $output, $directory, $debug, $isTitania = false)
 	{
 		$this->output    = $output;
 		$this->directory = $directory;
 		$this->debug     = $debug;
+		$this->titania   = $isTitania;
 
 		$this->setBasedir();
 		$this->loadTests();
@@ -174,6 +178,14 @@ class TestRunner
 		}
 
 		$this->basedir = str_replace('composer.json', '', $composer);
+
+		$composer = @json_decode(@file_get_contents($composer));
+
+		if (!$composer)
+		{
+			throw new TestException('composer.json is unreadable or invalid json');
+		}
+		$this->namespace = $composer->name;
 	}
 
 	/**
@@ -250,7 +262,7 @@ class TestRunner
 
 		$class = '\\epv\\Tests\\Tests\\' . $file;
 
-		$filetest = new $class($this->debug, $this->output, $this->basedir);
+		$filetest = new $class($this->debug, $this->output, $this->basedir, $this->namespace, $this->titania);
 
 		if (!$filetest instanceof TestInterface)
 		{
