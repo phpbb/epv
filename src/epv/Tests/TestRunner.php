@@ -219,7 +219,13 @@ class TestRunner
 			if ($loadedFile != null)
 			{
 				$this->files[]   = $loadedFile;
-				$this->dirList[] = str_replace($this->directory, '', $file->getRealPath());
+
+				// Some OSX symlinks are nub...
+				$tmpName = $file->getRealPath();
+				$tmpName = str_replace($this->directory, '', $tmpName);
+				$tmpName = str_replace('/private/', '', $tmpName);
+
+				$this->dirList[] = $tmpName;
 			}
 			else
 			{
