@@ -50,6 +50,13 @@ interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterf
      */
     public function getFatalCount();
 
+	/**
+	 * Get the count for a type;
+	 * @param $type
+	 * @return mixed
+	 */
+	public function getMessageCount($type);
+
     /**
      * Set the max progress (Number of tests) for this run.
      *

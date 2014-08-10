@@ -27,8 +27,8 @@ class epv_test_validate_event_names extends BaseTest
 
 	public function validateDirectory(array $dirList)
 	{
-		require('/Users/paulsohier/epv/vendor/phpbb/phpbb/phpbb/event/php_exporter.php');
-		require('/Users/paulsohier/epv/vendor/phpbb/phpbb/phpbb/event/recursive_event_filter_iterator.php');
+		require('./vendor/phpbb/phpbb/phpbb/event/php_exporter.php');
+		require('./vendor/phpbb/phpbb/phpbb/event/recursive_event_filter_iterator.php');
 		$exporter = new php_exporter($this->basedir);
 
 		try
