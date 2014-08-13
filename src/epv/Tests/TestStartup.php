@@ -114,7 +114,7 @@ class TestStartup
 		$found_msg .= ', Notice: ' . $this->output->getMessageCount(Output::NOTICE);
 		$found_msg .= ' ';
 
-		if ($this->output->getMessageCount(Output::FATAL) > 0 || $this->output->getMessageCount(Output::ERROR) > 0 || $this->output->getMesageCount(Output::WARNING) > 0)
+		if ($this->output->getMessageCount(Output::FATAL) > 0 || $this->output->getMessageCount(Output::ERROR) > 0 || $this->output->getMessageCount(Output::WARNING) > 0)
 		{
 			$this->output->writeln('<fatal>' . str_repeat(' ', strlen($found_msg)) . '</fatal>');
 			$this->output->writeln('<fatal> Validation: FAILED' . str_repeat(' ', strlen($found_msg) - 19) . '</fatal>');
