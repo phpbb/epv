@@ -29,8 +29,9 @@ class TestStartup
 	 * @param                 $type     int Type what the location is
 	 * @param                 $location string Location where the extension is
 	 * @param                 $debug    boolean if debug is enabled
+	 * @param string          $branch   When using GIT and GITHUB you can provide a brachname. When empty, defaults to master
 	 */
-	public function __construct(OutputInterface $output, $type, $location, $debug)
+	public function __construct(OutputInterface $output, $type, $location, $debug, $branch = '')
 	{
 		$this->output = $output;
 
@@ -42,7 +43,7 @@ class TestStartup
 
 		if ($type == self::TYPE_GIT)
 		{
-			$location = $this->initGit($location);
+			$location = $this->initGit($location, $branch);
 		}
 		$this->type  = $type;
 		$this->dir   = $location;
@@ -56,14 +57,21 @@ class TestStartup
 	/**
 	 * Init a git repository
 	 *
-	 * @param $git string Location of the git repo
+	 * @param string $git Location of the git repo
+	 * @param string $branch branch to checkout
 	 *
-	 * @return string local directory of the cloned repo
 	 * @throws Exception\TestException
+	 * @return string local directory of the cloned repo
 	 */
-	private function initGit($git)
+	private function initGit($git, $branch)
 	{
-		$this->output->writeln(sprintf("Checkout out %s from git", $git));
+		if (empty($branch))
+		{
+			$branch = 'master';
+		}
+
+
+		$this->output->writeln(sprintf("Checkout out %s from git from branch %s.", $git, $branch));
 		$tmpdir = sys_get_temp_dir();
 		$uniq   = $tmpdir . DIRECTORY_SEPARATOR . uniqid();
 
@@ -74,7 +82,7 @@ class TestStartup
 			throw new TestException('Unable to create tmp directory');
 		}
 
-		Admin::cloneTo($uniq, $git, false);
+		Admin::cloneBranchTo($uniq, $git, $branch, false);
 
 		return $uniq;
 	}
