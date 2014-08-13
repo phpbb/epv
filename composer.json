@@ -24,14 +24,14 @@
         "phpunit/phpunit": "4.0.*"
     },
     "bin": [
-        "src/epv/EPV.php"
+        "src/EPV.php"
     ],
     "config": {
         "bin-dir": "bin"
     },
     "autoload": {
-        "classmap": [
-            "src/"
-        ]
+        "psr-4": {
+            "Phpbb\\Epv\\": "src/"
+        }
     }
 }

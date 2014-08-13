@@ -14,9 +14,9 @@ Using EPV
     $ php composer.phar install
 
 1. You can run EPV on three different methods from the CLI:
-	* php src/Epv/EPV.php --git="GIT_REPO"
-	* php src/Epv/EPV.php --github="GITHUB_NAME"
-	* php src/Epv/EPV.php --dir="LOCAL DIRECTORY"
+	* php src/EPV.php --git="GIT_REPO"
+	* php src/EPV.php --github="GITHUB_NAME"
+	* php src/EPV.php --dir="LOCAL DIRECTORY"
 1. You can use the --debug option to get some debug information.
 1. You can also use EPV from soon [phpBB.com](https://www.phpbb.com/extensions/epv/)
 1. Titania will check when submitting to phpBB.com using EPV as well.
