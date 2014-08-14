@@ -11,7 +11,7 @@ install:
 
 script:
   - bin/phpunit
-  - src/epv/EPV.php run --debug --github="nickvergessen/phpbb-ext-acme-demo"
+  - src/EPV.php run --debug --github="nickvergessen/phpbb-ext-acme-demo"
 
 matrix:
   allow_failures:

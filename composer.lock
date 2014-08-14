@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f937c5470f4fa3d9774b934997ee2714",
+    "hash": "cabce856379ab86c6ae7d2c0262df977",
     "packages": [
         {
             "name": "gitonomy/gitlib",
@@ -1535,7 +1535,9 @@
             "time": "2014-03-07 15:35:33"
         }
     ],
-    "aliases": [],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "phpbb/phpbb": 5,
@@ -1545,5 +1547,7 @@
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": []
+    "platform-dev": [
+
+    ]
 }
