@@ -31,7 +31,7 @@ class epv_test_validate_routing extends BaseTest {
 
     public function validateFile(FileInterface $file)
     {
-        if (!$file instanceof ServiceFileInterface)
+        if (!$file instanceof RoutingFileInterface)
         {
             throw new TestException("This test expects a routing type, but found something else.");
         }
