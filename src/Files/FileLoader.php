@@ -8,7 +8,6 @@
  */
 namespace Phpbb\Epv\Files;
 
-
 use Phpbb\Epv\Files\Exception\FileException;
 use Phpbb\Epv\Files\Exception\FileLoadException;
 use Phpbb\Epv\Files\Type\BinaryFile;

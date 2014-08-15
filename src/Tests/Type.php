@@ -25,5 +25,5 @@ class Type
 	const TYPE_CSS      = 1024;
 	const TYPE_JS       = 2048;
 	const TYPE_LOCK     = 4096;
-
+	const TYPE_ROUTING  = 8192;
 }

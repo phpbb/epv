@@ -6,9 +6,9 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-namespace Phpbb\Epv\Files\Exception;
+namespace Phpbb\Epv\Files\Type;
 
 
-class FileLoadException extends \Exception {
+interface RoutingFileInterface extends YmlFileInterface {
 
 }

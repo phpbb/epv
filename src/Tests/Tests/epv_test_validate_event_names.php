@@ -46,7 +46,7 @@ class epv_test_validate_event_names extends BaseTest
 		}
 		$events = $exporter->get_events();
 		$this->output->inMaxPogress(sizeof($events) * 2);
-		$eventstart = str_replace('_', '.', $this->namespace);
+		$vendor = str_replace('/', '.', $this->namespace);
 
 		foreach ($events as $event)
 		{
@@ -62,7 +62,7 @@ class epv_test_validate_event_names extends BaseTest
 			{
 				$this->output->printErrorLevel();
 			}
-			if (strtolower(substr($event['name'], 0, strlen($eventstart))) != $eventstart)
+			if (strtolower(substr($event['name'], 0, strlen($vendor))) != $vendor)
 			{
 				$this->output->addMessage(Output::WARNING, sprintf('The event name should start with vendor.namespace but started with %s in %s', $event['event'], $event['file']));
 			}
