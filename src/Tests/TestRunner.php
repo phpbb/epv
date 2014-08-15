@@ -79,6 +79,7 @@ class TestRunner
 		{
 			// Get the number of lines;
 			$lines = sizeof($file->getLines());
+
 			foreach ($this->tests as $test)
 			{
 
@@ -203,6 +204,7 @@ class TestRunner
 			//->name('*')
 			->ignoreVCS(true)
 			->exclude('vendor')
+			->exclude('tests')
 			->in($this->directory);
 
 		$loader = new FileLoader($this->output, $this->debug, $this->basedir);
