@@ -9,10 +9,10 @@
 
 namespace Phpbb\Epv\Tests\Tests;
 
+use Phpbb\Epv\Events\php_exporter;
 use Phpbb\Epv\Output\Output;
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\BaseTest;
-use phpbb\event\php_exporter;
 
 class epv_test_validate_event_names extends BaseTest
 {
@@ -27,8 +27,6 @@ class epv_test_validate_event_names extends BaseTest
 
 	public function validateDirectory(array $dirList)
 	{
-		require('./vendor/phpbb/phpbb/phpbb/event/php_exporter.php');
-		require('./vendor/phpbb/phpbb/phpbb/event/recursive_event_filter_iterator.php');
 		$exporter = new php_exporter($this->basedir);
 
 		try
