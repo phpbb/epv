@@ -11,7 +11,6 @@ namespace Phpbb\Epv\Output;
 
 use Phpbb\Epv\Files\FileInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class Output implements \Phpbb\Epv\Output\OutputInterface {
     private $messages = array();
@@ -30,7 +29,7 @@ class Output implements \Phpbb\Epv\Output\OutputInterface {
     /** @var int */
     protected $maxProgress = 0;
 
-    public function __construct(OutputInterface $output, $debug)
+    public function __construct(\Symfony\Component\Console\Output\OutputInterface $output, $debug)
     {
         $this->output = $output;
         $this->debug = $debug;

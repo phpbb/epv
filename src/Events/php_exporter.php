@@ -12,6 +12,9 @@
  */
 
 namespace Phpbb\Epv\Events;
+use Phpbb\Epv\Output\Output;
+use Phpbb\Epv\Output\OutputInterface;
+use Phpbb\Events\recursive_event_filter_iterator;
 
 /**
  * Class php_exporter
@@ -19,12 +22,6 @@ namespace Phpbb\Epv\Events;
  */
 class php_exporter
 {
-	/** @var string Path where we look for files*/
-	protected $path;
-
-	/** @var string phpBB Root Path */
-	protected $root_path;
-
 	/** @var string */
 	protected $current_file;
 
@@ -40,23 +37,18 @@ class php_exporter
 	/** @var array */
 	protected $file_lines;
 
+	/** @var \Phpbb\Epv\Output\OutputInterface  */
+	protected $output;
+
 	/**
-	 * @param string $phpbb_root_path
-	 * @param mixed $extension	String 'vendor/ext' to filter, null for phpBB core
+	 * @param \Phpbb\Epv\Output\OutputInterface $output
 	 */
-	public function __construct($phpbb_root_path, $extension = null)
+	public function __construct(OutputInterface $output)
 	{
-		$this->root_path = $phpbb_root_path;
-		$this->path = $phpbb_root_path;
+		$this->output = $output;
 		$this->events = $this->file_lines = array();
 		$this->current_file = $this->current_event = '';
 		$this->current_event_line = 0;
-
-		$this->path = $this->root_path;
-		if ($extension)
-		{
-			$this->path .= 'ext/' . $extension . '/';
-		}
 	}
 
 	/**
@@ -94,78 +86,6 @@ class php_exporter
 	}
 
 	/**
-	 * Crawl the phpBB/ directory for php events
-	 * @return int	The number of events found
-	 */
-	public function crawl_phpbb_directory_php()
-	{
-		$files = $this->get_recursive_file_list();
-		$this->events = array();
-		foreach ($files as $file)
-		{
-			$this->crawl_php_file($file);
-		}
-		ksort($this->events);
-
-		return sizeof($this->events);
-	}
-
-	/**
-	 * Returns a list of files in $dir
-	 *
-	 * @return	array	List of files (including the path)
-	 */
-	public function get_recursive_file_list()
-	{
-		try
-		{
-			$iterator = new \RecursiveIteratorIterator(
-				new \phpbb\event\recursive_event_filter_iterator(
-					new \RecursiveDirectoryIterator(
-						$this->path,
-						\FilesystemIterator::SKIP_DOTS
-					),
-					$this->path
-				),
-				\RecursiveIteratorIterator::LEAVES_ONLY
-			);
-		}
-		catch (\Exception $e)
-		{
-			return array();
-		}
-
-		$files = array();
-		foreach ($iterator as $file_info)
-		{
-			/** @var \RecursiveDirectoryIterator $file_info */
-			$relative_path = $iterator->getInnerIterator()->getSubPathname();
-			$files[] = str_replace(DIRECTORY_SEPARATOR, '/', $relative_path);
-		}
-
-		return $files;
-	}
-
-	/**
-	 * Format the php events as a wiki table
-	 * @return string
-	 */
-	public function export_events_for_wiki()
-	{
-		$wiki_page = '= PHP Events (Hook Locations) =' . "\n";
-		$wiki_page .= '{| class="sortable zebra" cellspacing="0" cellpadding="5"' . "\n";
-		$wiki_page .= '! Identifier !! Placement !! Arguments !! Added in Release !! Explanation' . "\n";
-		foreach ($this->events as $event)
-		{
-			$wiki_page .= '|- id="' . $event['event'] . '"' . "\n";
-			$wiki_page .= '| [[#' . $event['event'] . '|' . $event['event'] . ']] || ' . $event['file'] . ' || ' . implode(', ', $event['arguments']) . ' || ' . $event['since'] . ' || ' . $event['description'] . "\n";
-		}
-		$wiki_page .= '|}' . "\n";
-
-		return $wiki_page;
-	}
-
-	/**
 	 * @param string $file
 	 * @return int Number of events found in this file
 	 * @throws \LogicException
@@ -174,7 +94,7 @@ class php_exporter
 	{
 		$this->current_file = $file;
 		$this->file_lines = array();
-		$content = file_get_contents($this->path . $this->current_file);
+		$content = file_get_contents($this->current_file);
 		$num_events_found = 0;
 
 		if (strpos($content, "dispatcher->trigger_event('") || strpos($content, "dispatcher->dispatch('"))
@@ -259,23 +179,34 @@ class php_exporter
 		{
 			$regex = '#\$([a-z](?:[a-z0-9_]|->)*)';
 			$regex .= '->dispatch\(';
-			$regex .= '\'' . $this->preg_match_event_name() . '\'';
+			$regex .= '\'%s\'';
 			$regex .= '\);#';
 		}
 		else
 		{
 			$regex = '#extract\(\$([a-z](?:[a-z0-9_]|->)*)';
 			$regex .= '->trigger_event\(';
-			$regex .= '\'' . $this->preg_match_event_name() . '\'';
+			$regex .= '\'%s\'';
 			$regex .= ', compact\(\$vars\)\)\);#';
 		}
 
 		$match = array();
-		preg_match($regex, $event_text_line, $match);
+		preg_match(sprintf($regex, $this->preg_match_event_name()), $event_text_line, $match);
 		if (!isset($match[2]))
 		{
-			throw new \LogicException("Can not find event name in line '{$event_text_line}' "
-				. "in file '{$this->current_file}:{$event_line}'", 1);
+			$match = array();
+			preg_match(sprintf($regex, $this->preg_match_event_name_uppercase()), $event_text_line, $match);
+
+			if (isset($match[2]))
+			{
+				$this->output->inMaxPogress(1);
+				$this->output->addMessage(Output::ERROR, sprintf('Event names should be all lowercase in %s for event %s', $this->current_file, $match[2]));
+			}
+			else
+			{
+				throw new \LogicException("Can not find event name in line '{$event_text_line}' "
+					. "in file '{$this->current_file}:{$event_line}'", 1);
+			}
 		}
 
 		return $match[2];
@@ -290,6 +221,12 @@ class php_exporter
 	{
 		return '([a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+)';
 	}
+
+	protected function preg_match_event_name_uppercase()
+	{
+		return '([a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+)';
+	}
+
 
 	/**
 	 * Find the $vars array

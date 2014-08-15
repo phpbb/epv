@@ -1,9 +1,9 @@
 <?php
 /**
  *
- * @package EPV
+ * @package       EPV
  * @copyright (c) 2014 phpBB Group
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @license       http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 namespace Phpbb\Epv\Tests\Tests;
@@ -11,52 +11,52 @@ namespace Phpbb\Epv\Tests\Tests;
 
 use Phpbb\Epv\Files\FileInterface;
 use Phpbb\Epv\Files\Type\RoutingFileInterface;
-use Phpbb\Epv\Files\Type\ServiceFileInterface;
 use Phpbb\Epv\Output\Output;
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\BaseTest;
-use Phpbb\Epv\Tests\Type;
 use Phpbb\Epv\Tests\Exception\TestException;
+use Phpbb\Epv\Tests\Type;
 
-class epv_test_validate_routing extends BaseTest {
+class epv_test_validate_routing extends BaseTest
+{
 
 
-    public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
-    {
-        parent::__construct($debug, $output, $basedir, $namespace, $titania);
+	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
+	{
+		parent::__construct($debug, $output, $basedir, $namespace, $titania);
 
-        $this->fileTypeFull = Type::TYPE_ROUTING;
-        $this->totalFileTests = 0;
-    }
+		$this->fileTypeFull   = Type::TYPE_ROUTING;
+		$this->totalFileTests = 0;
+	}
 
-    public function validateFile(FileInterface $file)
-    {
-        if (!$file instanceof RoutingFileInterface)
-        {
-            throw new TestException("This test expects a routing type, but found something else.");
-        }
-        $this->validate($file);
-    }
+	public function validateFile(FileInterface $file)
+	{
+		if (!$file instanceof RoutingFileInterface)
+		{
+			throw new TestException("This test expects a routing type, but found something else.");
+		}
+		$this->validate($file);
+	}
 
 	/**
 	 * Do the actual validation of the routing file.
 	 *
 	 * @param RoutingFileInterface $file
 	 */
-    private function validate(RoutingFileInterface $file)
-    {
-        $yml = $file->getYaml();
+	private function validate(RoutingFileInterface $file)
+	{
+		$yml = $file->getYaml();
 
-	    if (is_array($yml))
-	    {
-		    $this->output->inMaxPogress(sizeof(is_array($yml)));
+		if (is_array($yml))
+		{
+			$this->output->inMaxPogress(sizeof($yml) * 2);
 
-		    foreach ($yml as $key => $route)
-		    {
-			    $this->validateRoutingName($key, $file);
-		    }
-	    }
-    }
+			foreach ($yml as $key => $route)
+			{
+				$this->validateRoutingName($key, $file);
+			}
+		}
+	}
 
 	/**
 	 * Validate the route name to match the requirements for routes.
@@ -82,7 +82,7 @@ class epv_test_validate_routing extends BaseTest {
 		}
 		if (substr($route, 0, strlen($vendor)) != $vendor)
 		{
-			$this->output->addMessage(Output::WARNING, sprintf('The route name should start with vendor.namespace (which is %s) but started with %s in %s', $vendor, $route, $file->getFilename()));
+			$this->output->addMessage(Output::WARNING, sprintf('The route name should start with vendor_namespace (which is %s) but started with %s in %s', $vendor, $route, $file->getFilename()));
 		}
 		else
 		{
@@ -90,12 +90,12 @@ class epv_test_validate_routing extends BaseTest {
 		}
 	}
 
-    /**
-     *
-     * @return String
-     */
-    public function testName()
-    {
-        return "Validate route";
-    }
+	/**
+	 *
+	 * @return String
+	 */
+	public function testName()
+	{
+		return "Validate route";
+	}
 }

@@ -56,7 +56,7 @@ class epv_test_validate_service extends BaseTest {
 
 	    if (is_array($yml['services']))
 	    {
-		    $this->output->inMaxPogress(sizeof(is_array($yml['services'])));
+		    $this->output->inMaxPogress(sizeof($yml['services']) * 2);
 
 		    foreach ($yml['services'] as $key => $service)
 		    {

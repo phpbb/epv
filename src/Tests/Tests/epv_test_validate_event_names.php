@@ -11,12 +11,11 @@ namespace Phpbb\Epv\Tests\Tests;
 
 use Phpbb\Epv\Events\php_exporter;
 use Phpbb\Epv\Output\Output;
-use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\BaseTest;
 
 class epv_test_validate_event_names extends BaseTest
 {
-	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
+	public function __construct($debug, \Phpbb\Epv\Output\OutputInterface $output, $basedir, $namespace, $titania)
 	{
 		parent::__construct($debug, $output, $basedir, $namespace, $titania);
 
@@ -27,25 +26,27 @@ class epv_test_validate_event_names extends BaseTest
 
 	public function validateDirectory(array $dirList)
 	{
-		$exporter = new php_exporter('');
+		$exporter = new php_exporter($this->output);
 
-		try
+		foreach ($dirList as $file)
 		{
-			foreach ($dirList as $file)
+			try
 			{
 				if (substr($file, -4) === '.php')
 				{
 					$exporter->crawl_php_file($file);
 				}
 			}
+			catch
+			(\LogicException $e)
+			{
+				$this->output->inMaxPogress(1);
+				$this->output->addMessage(Output::FATAL, $e->getMessage());
+			}
 		}
-		catch (\LogicException $e)
-		{
-			$this->output->inMaxPogress(1);
-			$this->output->addMessage(Output::FATAL, $e->getMessage());
-		}
+
 		$events = $exporter->get_events();
-		$this->output->inMaxPogress(sizeof($events) * 2);
+		$this->output->inMaxPogress(sizeof($events) * 3);
 		$vendor = str_replace('/', '.', $this->namespace);
 
 		foreach ($events as $event)
@@ -62,9 +63,11 @@ class epv_test_validate_event_names extends BaseTest
 			{
 				$this->output->printErrorLevel();
 			}
-			if (substr($event['name'], 0, strlen($vendor)) != $vendor)
+
+			$substr = substr($event['event'], 0, strlen($vendor));
+			if ($substr != $vendor)
 			{
-				$this->output->addMessage(Output::WARNING, sprintf('The event name should start with vendor.namespace but started with %s in %s', $event['event'], $event['file']));
+				$this->output->addMessage(Output::WARNING, sprintf('The event name should start with vendor.namespace (Which is %s) but started with %s in %s', $vendor, $substr, $event['file']));
 			}
 			else
 			{
