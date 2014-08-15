@@ -21,6 +21,7 @@ use Phpbb\Epv\Files\Type\LangFile;
 use Phpbb\Epv\Files\Type\LockFile;
 use Phpbb\Epv\Files\Type\PHPFile;
 use Phpbb\Epv\Files\Type\PlainFile;
+use Phpbb\Epv\Files\Type\RoutingFile;
 use Phpbb\Epv\Files\Type\ServiceFile;
 use Phpbb\Epv\Files\Type\XmlFile;
 use Phpbb\Epv\Files\Type\YmlFile;
@@ -162,6 +163,10 @@ class FileLoader
 				if (strtolower(basename($fileName)) == 'services.yml')
 				{
 					return new ServiceFile($this->debug, $fileName);
+				}
+				if (strtolower(basename($fileName)) == 'routing.yml')
+				{
+					return new RoutingFile($this->debug, $fileName);
 				}
 
 				return new YmlFile($this->debug, $fileName);
