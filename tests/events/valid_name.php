@@ -2,7 +2,7 @@
 /**
  * Modify the data for post submitting
  *
- * @event rxu.PostsMerging.posts_merging_end
+ * @event rxu.postsmerging.posts_merging_end
  * @var	string	mode				Variable containing posting mode value
  * @var	string	subject				Variable containing post subject value
  * @var	string	username			Variable containing post author name
