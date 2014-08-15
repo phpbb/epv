@@ -69,6 +69,7 @@ class TestRunner
 
 		foreach ($this->tests as $test)
 		{
+			/** @var  \Phpbb\Epv\Tests\TestInterface $test */
 			if ($test->doValidateDirectory())
 			{
 				$maxProgress += ($test->getTotalDirectoryTests());
@@ -77,12 +78,13 @@ class TestRunner
 
 		foreach ($this->files as $file)
 		{
+			/** @var  \Phpbb\Epv\Files\FileInterface $file */
 			// Get the number of lines;
 			$lines = sizeof($file->getLines());
 
 			foreach ($this->tests as $test)
 			{
-
+				/** @var  \Phpbb\Epv\Tests\TestInterface $test */
 				if ($test->doValidateFile($file->getFileType()))
 				{
 					$maxProgress += ($test->getTotalFileTests());
@@ -205,11 +207,13 @@ class TestRunner
 			->ignoreVCS(true)
 			->exclude('vendor')
 			->exclude('tests')
+			->exclude('travis')
 			->in($this->directory);
 
 		$loader = new FileLoader($this->output, $this->debug, $this->basedir);
 		foreach ($iterator as $file)
 		{
+			/** @var \Symfony\Component\Finder\SplFileInfo $file */
 			if (!$file->getRealPath())
 			{
 				$fl = $this->directory . '/' . $file->getRelativePathname();
