@@ -27,7 +27,7 @@ class epv_test_validate_event_names extends BaseTest
 
 	public function validateDirectory(array $dirList)
 	{
-		$exporter = new php_exporter($this->basedir);
+		$exporter = new php_exporter('');
 
 		try
 		{
@@ -62,7 +62,7 @@ class epv_test_validate_event_names extends BaseTest
 			{
 				$this->output->printErrorLevel();
 			}
-			if (strtolower(substr($event['name'], 0, strlen($vendor))) != $vendor)
+			if (substr($event['name'], 0, strlen($vendor)) != $vendor)
 			{
 				$this->output->addMessage(Output::WARNING, sprintf('The event name should start with vendor.namespace but started with %s in %s', $event['event'], $event['file']));
 			}

@@ -87,7 +87,7 @@ class epv_test_validate_service extends BaseTest {
 		{
 			$this->output->printErrorLevel();
 		}
-		if (strtolower(substr($service, 0, strlen($vendor))) != $vendor)
+		if (substr($service, 0, strlen($vendor)) != $vendor)
 		{
 			$this->output->addMessage(Output::WARNING, sprintf('The service name should start with vendor.namespace (which is %s) but started with %s in %s', $vendor, $service, $file->getFilename()));
 		}

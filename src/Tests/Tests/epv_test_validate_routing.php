@@ -80,7 +80,7 @@ class epv_test_validate_routing extends BaseTest {
 		{
 			$this->output->printErrorLevel();
 		}
-		if (strtolower(substr($route, 0, strlen($vendor))) != $vendor)
+		if (substr($route, 0, strlen($vendor)) != $vendor)
 		{
 			$this->output->addMessage(Output::WARNING, sprintf('The route name should start with vendor.namespace (which is %s) but started with %s in %s', $vendor, $route, $file->getFilename()));
 		}

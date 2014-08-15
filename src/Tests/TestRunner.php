@@ -226,12 +226,7 @@ class TestRunner
 			{
 				$this->files[]   = $loadedFile;
 
-				// Some OSX symlinks are nub...
-				$tmpName = $file->getRealPath();
-				$tmpName = str_replace($this->directory, '', $tmpName);
-				$tmpName = str_replace('/private/', '', $tmpName);
-
-				$this->dirList[] = $tmpName;
+				$this->dirList[] = $file->getRealPath();
 			}
 			else
 			{
