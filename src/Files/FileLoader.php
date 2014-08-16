@@ -177,6 +177,7 @@ class FileLoader
 			case 'htaccess':
 			case 'gitattributes':
 			case 'gitignore':
+			case 'map':
 			case 'sh': // Decide if we want a special file type for shell files!
 				return new PlainFile($this->debug, $fileName);
 
