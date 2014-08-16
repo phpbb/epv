@@ -1,10 +1,10 @@
 <?php
-
 /**
  *
- * @package       EPV
- * @copyright (c) 2014 phpBB Group
- * @license       http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * EPV :: The phpBB Forum Extension Pre Validator.
+ *
+ * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
+ * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
 class php_exporter_test extends \PHPUnit_Framework_TestCase
@@ -52,4 +52,3 @@ class php_exporter_test extends \PHPUnit_Framework_TestCase
 		}
 	}
 }
- 
