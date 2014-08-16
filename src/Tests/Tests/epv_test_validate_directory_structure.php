@@ -27,7 +27,7 @@ class epv_test_validate_directory_structure  extends BaseTest{
 	    {
 		    $ns = ''; // Skip checking full directory structure on EPV.
 		    $this->output->inMaxPogress(1);
-		    $this->output->addMessage(Output::NOTICE, "Important: The full directory structure is not tested. See the Extension validation guidelines for the full directory structure");
+		    $this->output->addMessage(Output::NOTICE, "Important: The full directory structure is not tested. See the extension validation guidelines for the full directory structure.");
 	    }
 	    else
 	    {
