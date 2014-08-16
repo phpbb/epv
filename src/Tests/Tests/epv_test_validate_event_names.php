@@ -51,11 +51,11 @@ class epv_test_validate_event_names extends BaseTest
 
 		foreach ($events as $event)
 		{
-			if (strtolower(substr($event['name'], 0, 5)) == 'phpbb')
+			if (strtolower(substr($event['event'], 0, 5)) == 'phpbb')
 			{
 				$this->output->addMessage(Output::ERROR, sprintf('The phpbb vendorname should only be used for official extensions in event names in %s. Current event name: %s', $event['file'], $event['event']));
 			}
-			else if (strtolower(substr($event['name'], 0, 4)) == 'core')
+			else if (strtolower(substr($event['event'], 0, 4)) == 'core')
 			{
 				$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in event names in %s. Current event name: %s', $event['file'], $event['event']));
 			}
