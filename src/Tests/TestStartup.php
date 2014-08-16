@@ -41,6 +41,7 @@ class TestStartup
 	public function __construct(OutputInterface $output, $type, $location, $debug, $branch = '')
 	{
 		$this->output = $output;
+		$rundir = true;
 
 		if ($type == self::TYPE_GITHUB)
 		{
@@ -51,12 +52,14 @@ class TestStartup
 		if ($type == self::TYPE_GIT)
 		{
 			$location = $this->initGit($location, $branch);
+			$rundir = false;
 		}
+
 		$this->type  = $type;
 		$this->dir   = $location;
 		$this->debug = $debug;
 
-		$this->runTests();
+		$this->runTests($rundir);
 		$this->cleanUp();
 		$this->printResults();
 	}
@@ -96,10 +99,17 @@ class TestStartup
 
 	/**
 	 * Run the test suite with the current directory.
+	 * @param boolean $printDir print directory information
 	 */
-	private function runTests()
+	private function runTests($printDir = true)
 	{
-		$this->output->writeln("Running Extension Pre Validator on directory <info>$this->dir</info>.");
+		$dir = '';
+		if($printDir)
+		{
+			$dir = "on directory <info>$this->dir</info>";
+		}
+
+		$this->output->writeln("Running Extension Pre Validator{$dir}.");
 		$runner = new TestRunner($this->output, $this->dir, $this->debug);
 
 		if ($this->debug)
