@@ -37,7 +37,6 @@ class epv_test_validate_directory_structure  extends BaseTest{
 	    $this->requiredFiles = array(
 		    'license.txt' => Output::ERROR,
 		    $ns . 'composer.json' => Output::FATAL,
-		    $ns . 'ext.php' => Output::NOTICE,
 	    );
 
         $this->totalDirectoryTests = sizeof($this->requiredFiles);
@@ -48,15 +47,26 @@ class epv_test_validate_directory_structure  extends BaseTest{
         foreach ($this->requiredFiles as $file => $type)
         {
             $found = false;
+	        $lowercase = false;
+	        if ($file == 'license.txt')
+	        {
+		        $lowercase = true;
+	        }
 
             foreach ($dirList as $dir)
             {
+	            if ($lowercase)
+	            {
+		            $dir = strtolower($dir);
+	            }
+
                 if (basename($dir) == $file)
                 {
                     $found = true;
                     break;
                 }
             }
+
             if (!$found)
             {
                 if ($type == Output::NOTICE)
