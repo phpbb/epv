@@ -482,7 +482,6 @@ class epv_test_validate_php_functions extends BaseTest
 
     /**
      * Validate if a node uses certain functions that should not be used within phpBB.
-     * Validate if a node uses certain functions that should not be used within phpBB.
      *
      * @param $name
      * @param \PHPParser_Node $node Node to validate
@@ -501,8 +500,8 @@ class epv_test_validate_php_functions extends BaseTest
             'htmlspecialchars'	=> Output::ERROR,
             'include_once'	=> Output::WARNING,
             'require_once' 	=> Output::WARNING,
-            'md5'			=> Output::WARNING,
-            'sha1'			=> Output::WARNING,
+            'md5'			=> Output::NOTICE,
+            'sha1'			=> Output::NOTICE,
             'var_dump'      => Output::ERROR,
             'print_r'       => Output::ERROR,
             'printf'        => Output::ERROR,
@@ -530,7 +529,7 @@ class epv_test_validate_php_functions extends BaseTest
 
     /**
      * Add a new Message to Messages.
-     * The filename is automaticlly added.
+     * The filename is automatically added.
      *
      * @param $type
      * @param $message
