@@ -62,7 +62,7 @@ class epv_test_validate_event_names extends BaseTest
 			else
 			{
 				$this->output->printErrorLevel();
-			}var_dump($event);
+			}
 
 			$substr = substr($event['event'], 0, strlen($vendor));
 			if ($substr != $vendor)
