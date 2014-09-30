@@ -7,9 +7,8 @@
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
-namespace Phpbb\WebsiteInterfaceBundle\Extensions\EPV\Output;
+namespace Phpbb\Epv\Output;
 
-use Phpbb\Epv\Output\OutputFormatter;
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
