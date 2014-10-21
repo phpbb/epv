@@ -195,7 +195,7 @@ class php_exporter
 			preg_match(sprintf($regex, $this->preg_match_event_name_uppercase()), $event_text_line, $match);
 
 			if (isset($match[2]))
-			{;
+			{
 				$this->output->addMessage(Output::ERROR, sprintf('Event names should be all lowercase in %s for event %s', $this->current_file, $match[2]));
 			}
 			else
