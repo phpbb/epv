@@ -150,10 +150,6 @@ class epv_test_validate_php_functions extends BaseTest
             {
                 $this->checkInPhpBB($stmt);
             }
-            else
-            {
-                $this->output->printErrorLevel();
-            }
         }
         catch (PHPParser_Error $e) // Catch PhpParser error.
         {
@@ -208,7 +204,6 @@ class epv_test_validate_php_functions extends BaseTest
         }
         else
         {
-            $this->output->printErrorLevel();
             $this->output->writelnIfDebug(sprintf('Did not find IN_PHPBB, but php file contains a namespace with just classes or is a test file.', $this->file->getFilename()));
         }
     }
@@ -236,11 +231,6 @@ class epv_test_validate_php_functions extends BaseTest
                 }
             }
 
-            if (!$err)
-            {
-                $this->output->printErrorLevel();
-            }
-
             $this->parseNode($nodes);
 
             return;
@@ -252,10 +242,6 @@ class epv_test_validate_php_functions extends BaseTest
             if (sizeof($nodes) > 1)
             {
                 $this->addMessage(Output::WARNING, 'Besides the namespace, there should be no other statements');
-            }
-            else
-            {
-                $this->output->printErrorLevel();
             }
         }
     }
@@ -328,13 +314,11 @@ class epv_test_validate_php_functions extends BaseTest
 
         if ($cond instanceof \PHPParser_Node_Expr_BooleanNot && $cond->expr instanceof PHPParser_Node_Expr_FuncCall && $cond->expr->name == 'defined' && $cond->expr->args[0]->value->value == 'IN_PHPBB')
         {
-            $this->output->inMaxPogress(2);
 
             if ($node->stmts[0] instanceof PHPParser_Node_Expr_Exit)
             {
                 // Found IN_PHPBB
                 $this->in_phpbb = true;
-                $this->output->printErrorLevel();
             }
             else
             {
@@ -348,10 +332,6 @@ class epv_test_validate_php_functions extends BaseTest
                 $this->addMessage(Output::WARNING, 'There should be no statements other than exit in the IN_PHPBB check');
                 unset($node->stmts[0]);
                 $this->parseNode($node->stmts);
-            }
-            else
-            {
-                $this->output->printErrorLevel();
             }
         }
     }
@@ -396,8 +376,6 @@ class epv_test_validate_php_functions extends BaseTest
      */
     private function validateDeprecated($name, PHPParser_Node $node)
     {
-        $this->output->inMaxPogress(1);
-
         foreach ($this->deprecated as $depName => $dep)
         {
             if ($name == $depName)
@@ -413,7 +391,6 @@ class epv_test_validate_php_functions extends BaseTest
                 return;
             }
         }
-        $this->output->printErrorLevel();
     }
 
     /**
@@ -423,9 +400,7 @@ class epv_test_validate_php_functions extends BaseTest
      */
     private function validateDbal($name, PHPParser_Node $node)
     {
-        $this->output->inMaxPogress(1);
-
-        foreach ($this->dbal as $dbal)
+	    foreach ($this->dbal as $dbal)
         {
             $length = strlen($dbal);
 
@@ -441,7 +416,6 @@ class epv_test_validate_php_functions extends BaseTest
                 return;
             }
         }
-        $this->output->printErrorLevel();
     }
 
     /**
@@ -451,14 +425,9 @@ class epv_test_validate_php_functions extends BaseTest
      */
     private function validateExit(PHPParser_Node $node)
     {
-        $this->output->inMaxPogress(1);
         if ($node instanceof PHPParser_Node_Expr_Exit)
         {
             $this->addMessage(Output::WARNING, sprintf('Using exit on line %s', $node->getAttribute("startLine")));
-        }
-        else
-        {
-            $this->output->printErrorLevel();
         }
     }
 
@@ -469,14 +438,9 @@ class epv_test_validate_php_functions extends BaseTest
      */
     private function validatePrint(PHPParser_Node $node)
     {
-        $this->output->inMaxPogress(1);
         if ($node instanceof PHPParser_Node_Expr_Print || $node instanceof PHPParser_Node_Stmt_Echo)
         {
             $this->addMessage(Output::ERROR, sprintf('The template system should be used instead of echo or print on line %s', $node->getAttribute('startLine')));
-        }
-        else
-        {
-            $this->output->printErrorLevel();
         }
     }
 
@@ -515,7 +479,6 @@ class epv_test_validate_php_functions extends BaseTest
                 return;
             }
         }
-        $this->output->printErrorLevel();
     }
 
     /**

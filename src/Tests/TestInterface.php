@@ -65,18 +65,4 @@ interface TestInterface {
      */
     public function testName();
 
-	/**
-	 * @return int
-	 */
-	public function getTotalDirectoryTests();
-
-	/**
-	 * @return int
-	 */
-	public function getTotalFileTests();
-
-	/**
-	 * @return int
-	 */
-	public function getTotalLineTests();
 }

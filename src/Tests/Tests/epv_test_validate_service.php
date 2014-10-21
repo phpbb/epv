@@ -26,7 +26,6 @@ class epv_test_validate_service extends BaseTest {
         parent::__construct($debug, $output, $basedir, $namespace, $titania);
 
         $this->fileTypeFull = Type::TYPE_SERVICE;
-        $this->totalFileTests = 1;
     }
 
     public function validateFile(FileInterface $file)
@@ -50,15 +49,9 @@ class epv_test_validate_service extends BaseTest {
         {
             $this->output->addMessage(Output::WARNING, "Service does not contain a 'services' key.");
         }
-        else
-        {
-            $this->output->printErrorLevel();
-        }
 
 	    if (is_array($yml['services']))
 	    {
-		    $this->output->inMaxPogress(sizeof($yml['services']) * 2);
-
 		    foreach ($yml['services'] as $key => $service)
 		    {
 			    $this->validateServiceName($key, $file);
@@ -84,17 +77,9 @@ class epv_test_validate_service extends BaseTest {
 		{
 			$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in event names in %s. Current event name: %s', $file->getFilename(), $service));
 		}
-		else
-		{
-			$this->output->printErrorLevel();
-		}
 		if (substr($service, 0, strlen($vendor)) != $vendor)
 		{
 			$this->output->addMessage(Output::WARNING, sprintf('The service name should start with vendor.namespace (which is %s) but started with %s in %s', $vendor, $service, $file->getFilename()));
-		}
-		else
-		{
-			$this->output->printErrorLevel();
 		}
 	}
 
