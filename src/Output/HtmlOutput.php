@@ -4,7 +4,7 @@
  * EPV :: The phpBB Forum Extension Pre Validator.
  *
  * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
- * @license GNU General Public License, version 2 (GPL-2.0)
+ * @license       GNU General Public License, version 2 (GPL-2.0)
  *
  */
 namespace Phpbb\Epv\Output;
@@ -13,7 +13,8 @@ use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class HtmlOutput implements OutputInterface{
+class HtmlOutput implements OutputInterface
+{
 	const TYPE_HTML = 1;
 	const TYPE_BBCODE = 2;
 
@@ -32,8 +33,8 @@ class HtmlOutput implements OutputInterface{
 	 * Writes a message to the output.
 	 *
 	 * @param string|array $messages The message as an array of lines or a single string
-	 * @param bool $newline Whether to add a newline
-	 * @param int $type The type of output (one of the OUTPUT constants)
+	 * @param bool         $newline  Whether to add a newline
+	 * @param int          $type     The type of output (one of the OUTPUT constants)
 	 *
 	 * @throws \InvalidArgumentException When unknown output type is given
 	 *
@@ -46,7 +47,7 @@ class HtmlOutput implements OutputInterface{
 			$messages = array($messages);
 		}
 
-		foreach($messages as $message)
+		foreach ($messages as $message)
 		{
 			$this->buffer .= $this->parse($message);
 			if ($newline)
@@ -60,7 +61,7 @@ class HtmlOutput implements OutputInterface{
 	 * Writes a message to the output and adds a newline at the end.
 	 *
 	 * @param string|array $messages The message as an array of lines of a single string
-	 * @param int $type The type of output (one of the OUTPUT constants)
+	 * @param int          $type     The type of output (one of the OUTPUT constants)
 	 *
 	 * @throws \InvalidArgumentException When unknown output type is given
 	 *
@@ -150,14 +151,18 @@ class HtmlOutput implements OutputInterface{
 			$formatter = new OutputFormatter(true);
 
 			$convertor = new AnsiToHtmlConverter();
+
 			return nl2br($convertor->convert($formatter->format($this->buffer)));
 		}
+
 		return $this->buffer;
 	}
 
 	/**
 	 * Parse the code from the CLI to html.
+	 *
 	 * @param $message
+	 *
 	 * @return mixed Parsed message
 	 */
 	private function parse($message)

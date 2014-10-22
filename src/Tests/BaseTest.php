@@ -4,7 +4,7 @@
  * EPV :: The phpBB Forum Extension Pre Validator.
  *
  * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
- * @license GNU General Public License, version 2 (GPL-2.0)
+ * @license       GNU General Public License, version 2 (GPL-2.0)
  *
  */
 namespace Phpbb\Epv\Tests;
@@ -40,11 +40,21 @@ abstract class BaseTest implements TestInterface
 	protected $basedir;
 
 	/**
-	 * @param                             $debug
+	 * @var string
+	 */
+	protected $namespace;
+
+	/**
+	 * @var boolean
+	 */
+	protected $titania;
+
+	/**
+	 * @param                                   $debug
 	 * @param \Phpbb\Epv\Output\OutputInterface $output
-	 * @param                             $basedir   string Basedirectory of the extension
-	 * @param                             $namespace string Namespace of the extension
-	 * @param                             $titania
+	 * @param                                   $basedir   string Basedirectory of the extension
+	 * @param                                   $namespace string Namespace of the extension
+	 * @param                                   $titania
 	 */
 	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
 	{
