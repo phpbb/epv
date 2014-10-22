@@ -4,7 +4,7 @@
  * EPV :: The phpBB Forum Extension Pre Validator.
  *
  * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
- * @license GNU General Public License, version 2 (GPL-2.0)
+ * @license       GNU General Public License, version 2 (GPL-2.0)
  *
  */
 namespace Phpbb\Epv\Files\Type;
@@ -19,38 +19,38 @@ use Symfony\Component\Yaml\Yaml;
 
 class YmlFile extends BaseFile implements YmlFileInterface
 {
-    protected $yamlFile;
+	protected $yamlFile;
 
-    public function __construct($debug, $filename)
-    {
-        parent::__construct($debug, $filename);
+	public function __construct($debug, $filename)
+	{
+		parent::__construct($debug, $filename);
 
-        try
-        {
-            $this->yamlFile = Yaml::parse($this->fileData);
-        }
-        catch (ParseException $ex)
-        {
-            throw new FileLoadException("Parsing yaml file ($filename) failed: " . $ex->getMessage());
-        }
-    }
+		try
+		{
+			$this->yamlFile = Yaml::parse($this->fileData);
+		}
+		catch (ParseException $ex)
+		{
+			throw new FileLoadException("Parsing yaml file ($filename) failed: " . $ex->getMessage());
+		}
+	}
 
-    /**
-     * Get an array with the data in the yaml file.
-     *
-     * @return array
-     */
-    public function getYaml()
-    {
-        return $this->yamlFile;
-    }
+	/**
+	 * Get an array with the data in the yaml file.
+	 *
+	 * @return array
+	 */
+	public function getYaml()
+	{
+		return $this->yamlFile;
+	}
 
-    /**
-     * Get the file type for the specific file.
-     * @return int
-     */
-    function getFileType()
-    {
-        return Type::TYPE_YML;
-    }
+	/**
+	 * Get the file type for the specific file.
+	 * @return int
+	 */
+	function getFileType()
+	{
+		return Type::TYPE_YML;
+	}
 }

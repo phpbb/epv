@@ -4,15 +4,15 @@
  * EPV :: The phpBB Forum Extension Pre Validator.
  *
  * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
- * @license GNU General Public License, version 2 (GPL-2.0)
+ * @license       GNU General Public License, version 2 (GPL-2.0)
  *
  */
 namespace Phpbb\Epv\Tests;
 
+use Gitonomy\Git\Admin;
 use Phpbb\Epv\Output\Output;
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\Exception\TestException;
-use Gitonomy\Git\Admin;
 
 class TestStartup
 {
@@ -28,8 +28,8 @@ class TestStartup
 	private $output;
 
 	const TYPE_DIRECTORY = 1;
-	const TYPE_GIT       = 2;
-	const TYPE_GITHUB    = 3;
+	const TYPE_GIT = 2;
+	const TYPE_GITHUB = 3;
 
 	/**
 	 * @param OutputInterface $output   Output formatter
@@ -41,7 +41,7 @@ class TestStartup
 	public function __construct(OutputInterface $output, $type, $location, $debug, $branch = '')
 	{
 		$this->output = $output;
-		$rundir = true;
+		$rundir       = true;
 
 		if ($type == self::TYPE_GITHUB)
 		{
@@ -52,7 +52,7 @@ class TestStartup
 		if ($type == self::TYPE_GIT)
 		{
 			$location = $this->initGit($location, $branch);
-			$rundir = false;
+			$rundir   = false;
 		}
 
 		$this->type  = $type;
@@ -67,7 +67,7 @@ class TestStartup
 	/**
 	 * Init a git repository
 	 *
-	 * @param string $git Location of the git repo
+	 * @param string $git    Location of the git repo
 	 * @param string $branch branch to checkout
 	 *
 	 * @throws Exception\TestException
@@ -99,12 +99,13 @@ class TestStartup
 
 	/**
 	 * Run the test suite with the current directory.
+	 *
 	 * @param boolean $printDir print directory information
 	 */
 	private function runTests($printDir = true)
 	{
 		$dir = '';
-		if($printDir)
+		if ($printDir)
 		{
 			$dir = "on directory <info>$this->dir</info>";
 		}

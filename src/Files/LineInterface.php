@@ -4,20 +4,21 @@
  * EPV :: The phpBB Forum Extension Pre Validator.
  *
  * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
- * @license GNU General Public License, version 2 (GPL-2.0)
+ * @license       GNU General Public License, version 2 (GPL-2.0)
  *
  */
 namespace Phpbb\Epv\Files;
 
 
-interface LineInterface {
-    /**
-     * Get the file for this specific line
-     * @return FileInterface
-     */
-    public function getFile();
+interface LineInterface
+{
+	/**
+	 * Get the file for this specific line
+	 * @return FileInterface
+	 */
+	public function getFile();
 
-    public function getLineNr();
+	public function getLineNr();
 
-    public function getLine();
+	public function getLine();
 }

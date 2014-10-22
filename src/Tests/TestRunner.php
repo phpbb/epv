@@ -4,7 +4,7 @@
  * EPV :: The phpBB Forum Extension Pre Validator.
  *
  * @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
- * @license GNU General Public License, version 2 (GPL-2.0)
+ * @license       GNU General Public License, version 2 (GPL-2.0)
  *
  */
 namespace Phpbb\Epv\Tests;
@@ -38,7 +38,7 @@ class TestRunner
 	/**
 	 * @param OutputInterface $output
 	 * @param string          $directory The directory where the extension is located
-	 * @param boolean         $debug      Debug mode
+	 * @param boolean         $debug     Debug mode
 	 * @param boolean         $isTitania If we run from titania or not
 	 */
 	public function __construct(OutputInterface $output, $directory, $debug, $isTitania = false)
@@ -170,7 +170,6 @@ class TestRunner
 		$finder = new Finder();
 
 		$iterator = $finder
-
 			->ignoreDotFiles(false)
 			->files()
 			->sortByName()
@@ -195,7 +194,7 @@ class TestRunner
 
 			if ($loadedFile != null)
 			{
-				$this->files[]   = $loadedFile;
+				$this->files[] = $loadedFile;
 
 				$this->dirList[] = $file->getRealPath();
 			}
@@ -216,7 +215,6 @@ class TestRunner
 		$iterator = $finder
 			->files()
 			->name('epv_test_*.php')
-
 			->size(">= 0K")
 			->in(__DIR__ . '/Tests');
 
