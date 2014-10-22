@@ -15,65 +15,45 @@ use Phpbb\Epv\Tests\BaseTest;
 
 class epv_test_validate_directory_structure  extends BaseTest{
     private $requiredFiles;
+	private $rootFiles;
+	private $strict = false;
 
     public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
     {
         parent::__construct($debug, $output, $basedir, $namespace, $titania);
 
         $this->directory = true;
-
-	    if (!$titania)
-	    {
-		    $ns = ''; // Skip checking full directory structure on EPV.
-		    $this->output->addMessage(Output::NOTICE, "Important: The full directory structure is not tested. See the extension validation guidelines for the full directory structure.");
-	    }
-	    else
-	    {
-		    $ns = $namespace . '/';
-	    }
-
-	    $this->requiredFiles = array(
-		    'license.txt' => Output::ERROR,
-		    $ns . 'composer.json' => Output::FATAL,
-	    );
     }
 
     public function validateDirectory(array $dirList)
     {
-        foreach ($this->requiredFiles as $file => $type)
+		$files = array(
+			'license' => false,
+			'composer' => false,
+		);
+        foreach ($dirList as $dir)
         {
-            $found = false;
-	        $lowercase = false;
-	        if ($file == 'license.txt')
-	        {
-		        $lowercase = true;
+
+	        switch (strtolower(basename($dir))) {
+		        case 'license.txt':
+			        $files['license'] = true;
+			    break;
+
+		        case 'composer.json':
+					$files['composer'] = true;
+
+					if (basename($dir) != strtolower(basename($dir))) {
+						$this->output->addMessage(Output::WARNING, 'The name of composer.json should be completely lowercase.');
+					}
+					$sp = str_replace($dir, '\\', '/');
+					$split = explode($sp, '/');
+					$ns = $split[sizeof($split) - 3] . '\\' . $split[sizeof($split) - 2];
+
+					if ($this->namespace != $ns) {
+						$this->output->addMessage(Output::ERROR, 'Packaging structure doesn\'t meet the extension DB policies.');
+					}
+			    break;
 	        }
-
-            foreach ($dirList as $dir)
-            {
-	            if ($lowercase)
-	            {
-		            $dir = strtolower($dir);
-	            }
-
-                if (basename($dir) == $file)
-                {
-                    $found = true;
-                    break;
-                }
-            }
-
-            if (!$found)
-            {
-                if ($type == Output::NOTICE)
-                {
-                    $this->output->addMessage($type, sprintf("The suggested file %s is missing from the extension package.", $file));
-                }
-                else
-                {
-                    $this->output->addMessage($type, sprintf("The required file %s is missing from the extension package.", $file));
-                }
-            }
         }
     }
 
