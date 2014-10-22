@@ -19,14 +19,16 @@ abstract class BaseFile implements FileInterface
 	protected $fileData;
 	protected $fileArray;
 	protected $debug;
+	protected $basedir;
 
 	/**
-	 * @param $debug    Debug Mode
-	 * @param $fileName filename for this file
+	 * @param $debug     boolean Debug Mode
+	 * @param $fileName  string filename for this file
+	 * @param $basedir   string namespace for the extension.
 	 *
-	 * @throws Exception\FileException
+	 * @throws FileException
 	 */
-	public function __construct($debug, $fileName)
+	public function __construct($debug, $fileName, $basedir)
 	{
 		if (!file_exists($fileName))
 		{
@@ -35,6 +37,7 @@ abstract class BaseFile implements FileInterface
 		$this->debug    = $debug;
 		$this->fileName = $fileName;
 		$this->fileData = @file_get_contents($this->fileName);
+		$this->basedir  = $basedir;
 
 		if ($this->fileData === false)
 		{
@@ -58,6 +61,12 @@ abstract class BaseFile implements FileInterface
 	public function getFilename()
 	{
 		return $this->fileName;
+	}
+
+	public function getSaveFilename()
+	{
+
+
 	}
 
 	/**

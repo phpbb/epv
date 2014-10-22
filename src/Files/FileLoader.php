@@ -38,13 +38,21 @@ class FileLoader
 	private $debug;
 	private $basedir;
 	private $loadError;
+	private $rundir;
 
-	public function __construct(OutputInterface $output, $debug, $basedir)
+	/**
+	 * @param OutputInterface $output
+	 * @param                 $debug
+	 * @param                 $basedir
+	 * @param                 $rundir
+	 */
+	public function __construct(OutputInterface $output, $debug, $basedir, $rundir)
 	{
 
 		$this->output  = $output;
 		$this->debug   = $debug;
 		$this->basedir = $basedir;
+		$this->rundir  = $rundir;
 	}
 
 	public function loadFile($fileName)
@@ -65,7 +73,7 @@ class FileLoader
 				{
 					$this->output->addMessage(Output::NOTICE, sprintf("The file %s has no valid extension.", basename($fileName)));
 				}
-				$file = new PlainFile($this->debug, $fileName);
+				$file = new PlainFile($this->debug, $fileName, $this->rundir);
 			}
 			else if ($size == 2)
 			{
@@ -137,36 +145,36 @@ class FileLoader
 
 				if (trim(strtolower($dir[0])) == 'language')
 				{
-					return new LangFile($this->debug, $fileName);
+					return new LangFile($this->debug, $fileName, $this->rundir);
 				}
 
-				return new PHPFile($this->debug, $fileName);
+				return new PHPFile($this->debug, $fileName, $this->rundir);
 
 			case 'html':
 			case 'htm':
-				return new HTMLFile($this->debug, $fileName);
+				return new HTMLFile($this->debug, $fileName, $this->rundir);
 
 			case 'json':
 				if (strtolower(basename($fileName)) == 'composer.json')
 				{
-					return new ComposerFile($this->debug, $fileName);
+					return new ComposerFile($this->debug, $fileName, $this->rundir);
 				}
 				else
 				{
-					return new JsonFile($this->debug, $fileName);
+					return new JsonFile($this->debug, $fileName, $this->rundir);
 				}
 
 			case 'yml':
 				if (strtolower(basename($fileName)) == 'services.yml')
 				{
-					return new ServiceFile($this->debug, $fileName);
+					return new ServiceFile($this->debug, $fileName, $this->rundir);
 				}
 				if (strtolower(basename($fileName)) == 'routing.yml')
 				{
-					return new RoutingFile($this->debug, $fileName);
+					return new RoutingFile($this->debug, $fileName, $this->rundir);
 				}
 
-				return new YmlFile($this->debug, $fileName);
+				return new YmlFile($this->debug, $fileName, $this->rundir);
 
 			case 'txt':
 			case 'md':
@@ -175,34 +183,34 @@ class FileLoader
 			case 'gitignore':
 			case 'map':
 			case 'sh': // Decide if we want a special file type for shell files!
-				return new PlainFile($this->debug, $fileName);
+				return new PlainFile($this->debug, $fileName, $this->rundir);
 
 			case 'xml':
-				return new XmlFile($this->debug, $fileName);
+				return new XmlFile($this->debug, $fileName, $this->rundir);
 
 			case 'js':
-				return new JavascriptFile($this->debug, $fileName);
+				return new JavascriptFile($this->debug, $fileName, $this->rundir);
 
 			case 'css':
-				return new CssFile($this->debug, $fileName);
+				return new CssFile($this->debug, $fileName, $this->rundir);
 
 			case 'gif':
 			case 'png':
 			case 'jpg':
 			case 'jpeg':
-				return new ImageFile($this->debug, $fileName);
+				return new ImageFile($this->debug, $fileName, $this->rundir);
 
 			case 'swf':
 				$this->output->addMessage(Output::NOTICE, sprintf("Found an SWF file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)));
 
-				return new BinaryFile($this->debug, $fileName);
+				return new BinaryFile($this->debug, $fileName, $this->rundir);
 			case 'ds_store':
 				$this->output->addMessage(Output::ERROR, sprintf("Found an OS X specific file at %s, please make sure to remove it prior to submission.", $fileName));
 
-				return new BinaryFile($this->debug, $fileName);
+				return new BinaryFile($this->debug, $fileName, $this->rundir);
 
 			case 'lock':
-				return new LockFile($this->debug, $fileName);
+				return new LockFile($this->debug, $fileName, $this->rundir);
 
 			default:
 				if ($returnNull)
@@ -211,9 +219,9 @@ class FileLoader
 				}
 
 				$file = basename($fileName);
-				$this->output->addMessage(Output::WARNING, "Can't detect the file type for $file, handling it as a binary file.", null, true);
+				$this->output->addMessage(Output::WARNING, "Can't detect the file type for $file, handling it as a binary file.");
 
-				return new BinaryFile($this->debug, $fileName);
+				return new BinaryFile($this->debug, $fileName, $this->rundir);
 		}
 	}
 }

@@ -21,9 +21,9 @@ class YmlFile extends BaseFile implements YmlFileInterface
 {
 	protected $yamlFile;
 
-	public function __construct($debug, $filename)
+	public function __construct($debug, $filename, $rundir)
 	{
-		parent::__construct($debug, $filename);
+		parent::__construct($debug, $filename, $rundir);
 
 		try
 		{

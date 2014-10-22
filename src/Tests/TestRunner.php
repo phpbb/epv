@@ -180,7 +180,7 @@ class TestRunner
 			->exclude('travis')
 			->in($this->directory);
 
-		$loader = new FileLoader($this->output, $this->debug, $this->basedir);
+		$loader = new FileLoader($this->output, $this->debug, $this->basedir, $this->directory);
 		foreach ($iterator as $file)
 		{
 			/** @var \Symfony\Component\Finder\SplFileInfo $file */

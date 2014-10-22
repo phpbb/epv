@@ -128,7 +128,7 @@ class epv_test_validate_php_functions extends BaseTest
 	 */
 	private function validate(PHPFileInterface $file)
 	{
-		$this->output->writelnIfDebug('Attempting to parse file: ' . $file->getFilename());
+		$this->output->writelnIfDebug('Attempting to parse file: ' . $file->getSaveFilename());
 
 		$this->file     = $file;
 		$this->in_phpbb = false;
@@ -155,7 +155,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 		catch (PHPParser_Error $e) // Catch PhpParser error.
 		{
-			$this->output->addMessage(Output::FATAL, 'PHP parse error in file ' . $file->getFilename() . '. Message: ' . $e->getMessage());
+			$this->output->addMessage(Output::FATAL, 'PHP parse error in file ' . $file->getSaveFilename() . '. Message: ' . $e->getMessage());
 		}
 	}
 
@@ -189,7 +189,7 @@ class epv_test_validate_php_functions extends BaseTest
 		if ($this->isTest())
 		{
 			// We skip tests.
-			$this->output->writelnIfDebug(sprintf('Skipped %s because of test file.', $this->file->getFilename()));
+			$this->output->writelnIfDebug(sprintf('Skipped %s because of test file.', $this->file->getSaveFilename()));
 			$ok = true;
 		}
 
@@ -207,7 +207,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 		else
 		{
-			$this->output->writelnIfDebug(sprintf('Did not find IN_PHPBB, but php file contains a namespace with just classes or is a test file.', $this->file->getFilename()));
+			$this->output->writelnIfDebug(sprintf('Did not find IN_PHPBB, but php file contains a namespace with just classes or is a test file.', $this->file->getSaveFilename()));
 		}
 	}
 
@@ -510,7 +510,7 @@ class epv_test_validate_php_functions extends BaseTest
 	 */
 	private function addMessage($type, $message)
 	{
-		$this->output->addMessage($type, sprintf("%s in %s", $message, $this->file->getFilename()));
+		$this->output->addMessage($type, sprintf("%s in %s", $message, $this->file->getSaveFilename()));
 	}
 
 	/**

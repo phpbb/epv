@@ -30,6 +30,12 @@ interface FileInterface
 	 */
 	function getFilename();
 
+	/*
+	 * Get the filename without the full path
+	 * @return string
+	 */
+	function getSaveFilename();
+
 	/**
 	 * Get the full file for a specific file.
 	 * @return string

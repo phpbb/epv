@@ -39,7 +39,7 @@ class Message
 
 		if ($this->file != null)
 		{
-			$file = ' in ' . $this->file->getFilename();
+			$file = ' in ' . $this->file->getSaveFilename();
 		}
 
 		switch ($this->type)
