@@ -40,6 +40,11 @@ abstract class BaseTest implements TestInterface
 	protected $basedir;
 
 	/**
+	 * @var string
+	 */
+	protected $namespace;
+
+	/**
 	 * @param                                   $debug
 	 * @param \Phpbb\Epv\Output\OutputInterface $output
 	 * @param                                   $basedir   string Basedirectory of the extension
