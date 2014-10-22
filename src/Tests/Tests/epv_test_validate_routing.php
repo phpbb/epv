@@ -27,7 +27,6 @@ class epv_test_validate_routing extends BaseTest
 		parent::__construct($debug, $output, $basedir, $namespace, $titania);
 
 		$this->fileTypeFull   = Type::TYPE_ROUTING;
-		$this->totalFileTests = 0;
 	}
 
 	public function validateFile(FileInterface $file)
@@ -50,8 +49,6 @@ class epv_test_validate_routing extends BaseTest
 
 		if (is_array($yml))
 		{
-			$this->output->inMaxPogress(sizeof($yml) * 2);
-
 			foreach ($yml as $key => $route)
 			{
 				$this->validateRoutingName($key, $file);
@@ -77,17 +74,9 @@ class epv_test_validate_routing extends BaseTest
 		{
 			$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in route names in %s. Current route name: %s', $file->getFilename(), $route));
 		}
-		else
-		{
-			$this->output->printErrorLevel();
-		}
 		if (substr($route, 0, strlen($vendor)) != $vendor)
 		{
 			$this->output->addMessage(Output::WARNING, sprintf('The route name should start with vendor_namespace (which is %s) but started with %s in %s', $vendor, $route, $file->getFilename()));
-		}
-		else
-		{
-			$this->output->printErrorLevel();
 		}
 	}
 

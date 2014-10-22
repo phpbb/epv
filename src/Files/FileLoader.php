@@ -63,11 +63,7 @@ class FileLoader
 				// Otherwise add notice.
 				if (strtolower($fileName) !== 'readme')
 				{
-					$this->output->addMessage(Output::NOTICE, sprintf("The file %s has no valid extension.", basename($fileName)), null, true);
-				}
-				else
-				{
-					$this->output->printErrorLevel();
+					$this->output->addMessage(Output::NOTICE, sprintf("The file %s has no valid extension.", basename($fileName)));
 				}
 				$file = new PlainFile($this->debug, $fileName);
 			}
@@ -94,7 +90,7 @@ class FileLoader
 			else if ($size >= 4) // Files with 3 ore more dots should not happen.
 			{
 				$error = true;
-				$this->output->addMessage(Output::ERROR, sprintf("File (%s) seems to have too many dots. Using the last part as extension.", $fileName), null, true);
+				$this->output->addMessage(Output::ERROR, sprintf("File (%s) seems to have too many dots. Using the last part as extension.", $fileName));
 
 				$file = self::tryLoadFile($fileName, $split[sizeof($split) - 1]);
 
@@ -197,11 +193,11 @@ class FileLoader
 				return new ImageFile($this->debug, $fileName);
 
 			case 'swf':
-				$this->output->addMessage(Output::NOTICE, sprintf("Found an SWF file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)), null, true);
+				$this->output->addMessage(Output::NOTICE, sprintf("Found an SWF file (%s), please make sure to include the source files for it, as required by the GPL.", basename($fileName)));
 
 				return new BinaryFile($this->debug, $fileName);
 			case 'ds_store':
-				$this->output->addMessage(Output::ERROR, sprintf("Found an OS X specific file at %s, please make sure to remove it prior to submission.", $fileName), null, true);
+				$this->output->addMessage(Output::ERROR, sprintf("Found an OS X specific file at %s, please make sure to remove it prior to submission.", $fileName));
 
 				return new BinaryFile($this->debug, $fileName);
 

@@ -196,7 +196,6 @@ class php_exporter
 
 			if (isset($match[2]))
 			{
-				$this->output->inMaxPogress(1);
 				$this->output->addMessage(Output::ERROR, sprintf('Event names should be all lowercase in %s for event %s', $this->current_file, $match[2]));
 			}
 			else

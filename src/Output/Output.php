@@ -160,14 +160,9 @@ class Output implements \Phpbb\Epv\Output\OutputInterface {
      * @param $type int message type
      * @param $message string message
      * @param \Phpbb\Epv\Files\FileInterface $file File the error happened in. When provided, this is displayed to the user
-     * @param bool $skipError skip the printErrorLevel call (Default false)
      */
-    public function addMessage($type, $message, FileInterface $file = null, $skipError = false)
+    public function addMessage($type, $message, FileInterface $file = null)
     {
-        if (!$skipError)
-        {
-            $this->printErrorLevel($type);
-        }
         switch ($type)
         {
             case Output::FATAL:
@@ -224,68 +219,16 @@ class Output implements \Phpbb\Epv\Output\OutputInterface {
      */
     public function getMessageCount($type)
     {
-        switch ($type)
-        {
-            case Output::FATAL:
-                return $this->fatal;
-            case Output::ERROR:
-                return $this->error;
-            case Output::WARNING:
-                return $this->warning;
-            case Output::NOTICE:
-                return $this->notice;
-        }
-    }
-    /**
-     * @param int $maxProgress
-     */
-    public function setMaxProgress($maxProgress)
-    {
-        $this->maxProgress = $maxProgress;
-    }
-
-    /**
-     * Increase the max progress during the run.
-     *
-     * @param $inc
-     */
-    public function inMaxPogress($inc)
-    {
-        $this->setMaxProgress($this->maxProgress + $inc);
-    }
-
-    /**
-     * @param $result the result of this specific test.
-     */
-    public function printErrorLevel($result = null)
-    {
-        if ($result == Output::FATAL)
-        {
-            $this->output->write("<fatal>F</fatal>");
-        }
-        else if ($result == Output::ERROR)
-        {
-            $this->output->write("<error>E</error>");
-        }
-        else if ($result == Output::WARNING)
-        {
-            $this->output->write("<warning>W</warning>");
-        }
-        else if ($result == Output::NOTICE)
-        {
-            $this->output->write("<notice>N</notice>");
-        }
-        else
-        {
-            $this->output->write(".");
-        }
-        $this->progress++;
-
-        if ($this->progress % 85 == 0)
-        {
-            $this->output->write(' ' . sprintf('%' . strlen($this->maxProgress) . 's', $this->progress));
-            $this->output->write(' / ' . $this->maxProgress);
-            $this->output->writeln(' (' . sprintf('%3s', floor(100 * ($this->progress / $this->maxProgress))) . '%)');
-        }
+	    switch ($type)
+	    {
+		    case Output::FATAL:
+			    return $this->fatal;
+		    case Output::ERROR:
+			    return $this->error;
+		    case Output::WARNING:
+			    return $this->warning;
+		    case Output::NOTICE:
+			    return $this->notice;
+	    }
     }
 }

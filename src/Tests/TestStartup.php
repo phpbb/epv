@@ -36,7 +36,7 @@ class TestStartup
 	 * @param                 $type     int Type what the location is
 	 * @param                 $location string Location where the extension is
 	 * @param                 $debug    boolean if debug is enabled
-	 * @param string          $branch   When using GIT and GITHUB you can provide a brachname. When empty, defaults to master
+	 * @param string          $branch   When using GIT and GITHUB you can provide a branch name. When empty, defaults to master
 	 */
 	public function __construct(OutputInterface $output, $type, $location, $debug, $branch = '')
 	{

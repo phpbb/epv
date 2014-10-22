@@ -10,6 +10,7 @@
 namespace Phpbb\Epv\Tests;
 
 
+use Phpbb\Epv\Files\FileInterface;
 use Phpbb\Epv\Files\FileLoader;
 use Phpbb\Epv\Files\Line;
 use Phpbb\Epv\Output\Output;
@@ -65,42 +66,9 @@ class TestRunner
 		}
 		$this->output->writeln("Running tests.");
 
-		// We start with calculating the total number of tests we are doing.
-		$maxProgress = 0;
-
-		foreach ($this->tests as $test)
-		{
-			/** @var  \Phpbb\Epv\Tests\TestInterface $test */
-			if ($test->doValidateDirectory())
-			{
-				$maxProgress += ($test->getTotalDirectoryTests());
-			}
-		}
-
-		foreach ($this->files as $file)
-		{
-			/** @var  \Phpbb\Epv\Files\FileInterface $file */
-			// Get the number of lines;
-			$lines = sizeof($file->getLines());
-
-			foreach ($this->tests as $test)
-			{
-				/** @var  \Phpbb\Epv\Tests\TestInterface $test */
-				if ($test->doValidateFile($file->getFileType()))
-				{
-					$maxProgress += ($test->getTotalFileTests());
-				}
-				if ($test->doValidateLine($file->getFileType()))
-				{
-					$maxProgress += ($test->getTotalLineTests() * $lines);
-				}
-			}
-		}
-
-		$this->output->setMaxProgress($maxProgress);
-
 		// Now, we basicly do the same as above, but we do really run the tests.
 		// All other tests are specific to files.
+		/** @var  \Phpbb\Epv\Tests\TestInterface $test */
 		foreach ($this->tests as $test)
 		{
 			if ($test->doValidateDirectory())
@@ -113,10 +81,12 @@ class TestRunner
 		// And over the tests that are available.
 		// First do the full file check.
 		// After that loop over each line and test per line.
+		/** @var FileInterface $file */
 		foreach ($this->files as $file)
 		{
 			$linetest = array();
 
+			/** @var  \Phpbb\Epv\Tests\TestInterface $test */
 			foreach ($this->tests as $test)
 			{
 				if ($test->doValidateFile($file->getFileType()))

@@ -25,7 +25,6 @@ class epv_test_validate_composer  extends BaseTest{
         parent::__construct($debug, $output, $basedir, $namespace, $titania);
 
         $this->fileTypeFull = Type::TYPE_COMPOSER;
-        $this->totalFileTests = 2;
     }
 
     /**
@@ -60,10 +59,6 @@ class epv_test_validate_composer  extends BaseTest{
         if ($addMessage)
         {
             $this->output->addMessage($type, $message, $this->file);
-        }
-        else
-        {
-            $this->output->printErrorLevel();
         }
     }
 

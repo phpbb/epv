@@ -34,10 +34,9 @@ interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterf
      * @param $type int message type
      * @param $message string message
      * @param \Phpbb\Epv\Files\FileInterface $file File the error happened in. When provided, this is displayed to the user
-     * @param bool $skipError
      * @return
      */
-    public function addMessage($type, $message, FileInterface $file = null, $skipError = false);
+    public function addMessage($type, $message, FileInterface $file = null);
 
     /**
      * Get all messages saved into the message queue.
@@ -57,26 +56,4 @@ interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterf
 	 * @return mixed
 	 */
 	public function getMessageCount($type);
-
-    /**
-     * Set the max progress (Number of tests) for this run.
-     *
-     *
-     * @param $maxProgress int
-     */
-    public function setMaxProgress($maxProgress);
-
-    /**
-     * Increase the max progress during the run.
-     *
-     * @param $inc
-     */
-    public function inMaxPogress($inc);
-
-    /**
-     * Print the status of this specific test.
-     *
-     * @param $result The result for this specific test.
-     */
-    public function printErrorLevel($result = null);
 }

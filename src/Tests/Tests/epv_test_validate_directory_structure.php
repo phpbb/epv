@@ -14,7 +14,6 @@ use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\BaseTest;
 
 class epv_test_validate_directory_structure  extends BaseTest{
-    // $this->totalDirectoryTests is sizeof this.
     private $requiredFiles;
 
     public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
@@ -26,7 +25,7 @@ class epv_test_validate_directory_structure  extends BaseTest{
 	    if (!$titania)
 	    {
 		    $ns = ''; // Skip checking full directory structure on EPV.
-		    $this->output->addMessage(Output::NOTICE, "Important: The full directory structure is not tested. See the extension validation guidelines for the full directory structure.", null, true);
+		    $this->output->addMessage(Output::NOTICE, "Important: The full directory structure is not tested. See the extension validation guidelines for the full directory structure.");
 	    }
 	    else
 	    {
@@ -37,8 +36,6 @@ class epv_test_validate_directory_structure  extends BaseTest{
 		    'license.txt' => Output::ERROR,
 		    $ns . 'composer.json' => Output::FATAL,
 	    );
-
-        $this->totalDirectoryTests = sizeof($this->requiredFiles);
     }
 
     public function validateDirectory(array $dirList)
@@ -76,10 +73,6 @@ class epv_test_validate_directory_structure  extends BaseTest{
                 {
                     $this->output->addMessage($type, sprintf("The required file %s is missing from the extension package.", $file));
                 }
-            }
-            else
-            {
-                $this->output->printErrorLevel();
             }
         }
     }

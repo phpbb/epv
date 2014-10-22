@@ -20,8 +20,6 @@ class epv_test_validate_event_names extends BaseTest
 		parent::__construct($debug, $output, $basedir, $namespace, $titania);
 
 		$this->directory = true;
-
-		$this->totalDirectoryTests = 0;
 	}
 
 	public function validateDirectory(array $dirList)
@@ -40,13 +38,11 @@ class epv_test_validate_event_names extends BaseTest
 			catch
 			(\LogicException $e)
 			{
-				$this->output->inMaxPogress(1);
 				$this->output->addMessage(Output::FATAL, $e->getMessage());
 			}
 		}
 
 		$events = $exporter->get_events();
-		$this->output->inMaxPogress(sizeof($events) * 3);
 		$vendor = strtolower(str_replace('/', '.', $this->namespace)); // event names are requierd to be lowercase!
 
 		foreach ($events as $event)
@@ -59,19 +55,11 @@ class epv_test_validate_event_names extends BaseTest
 			{
 				$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in event names in %s. Current event name: %s', $event['file'], $event['event']));
 			}
-			else
-			{
-				$this->output->printErrorLevel();
-			}
 
 			$substr = substr($event['event'], 0, strlen($vendor));
 			if ($substr != $vendor)
 			{
 				$this->output->addMessage(Output::NOTICE, sprintf('The event name should start with vendor.namespace (Which is %s) but started with %s in %s', $vendor, $substr, $event['file']));
-			}
-			else
-			{
-				$this->output->printErrorLevel();
 			}
 		}
 	}
