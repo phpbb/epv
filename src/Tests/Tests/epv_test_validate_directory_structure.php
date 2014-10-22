@@ -46,9 +46,13 @@ class epv_test_validate_directory_structure extends BaseTest
 					{
 						$this->output->addMessage(Output::WARNING, 'The name of composer.json should be completely lowercase.');
 					}
-					$sp    = str_replace($dir, '\\', '/');
-					$split = explode($sp, '/');
-					$ns    = $split[sizeof($split) - 3] . '\\' . $split[sizeof($split) - 2];
+					$sp    = str_replace('\\', '/', $dir);
+					$split = explode('/', $sp);
+					$ns    = '';
+					if (sizeof($split) - 3 >= 0)
+					{
+						$ns .= $split[sizeof($split) - 3] . '/' . $split[sizeof($split) - 2];
+					}
 
 					if ($this->namespace != $ns)
 					{
