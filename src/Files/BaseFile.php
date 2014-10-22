@@ -65,8 +65,7 @@ abstract class BaseFile implements FileInterface
 
 	public function getSaveFilename()
 	{
-
-
+		return str_replace($this->basedir, '', $this->fileName);
 	}
 
 	/**
