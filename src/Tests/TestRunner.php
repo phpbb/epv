@@ -238,7 +238,7 @@ class TestRunner
 
 		$class = '\\Phpbb\Epv\\Tests\\Tests\\' . $file;
 
-		$filetest = new $class($this->debug, $this->output, $this->basedir, $this->namespace, $this->titania);
+		$filetest = new $class($this->debug, $this->output, $this->basedir, $this->namespace, $this->titania, $this->directory);
 
 		if (!$filetest instanceof TestInterface)
 		{

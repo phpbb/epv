@@ -50,19 +50,26 @@ abstract class BaseTest implements TestInterface
 	protected $titania;
 
 	/**
+	 * @var string
+	 */
+	protected $opendir;
+
+	/**
 	 * @param                                   $debug
 	 * @param \Phpbb\Epv\Output\OutputInterface $output
 	 * @param                                   $basedir   string Basedirectory of the extension
 	 * @param                                   $namespace string Namespace of the extension
 	 * @param                                   $titania
+	 * @param string                            $opendir The directory the _user_ provided
 	 */
-	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
+	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
 		$this->debug     = $debug;
 		$this->output    = $output;
 		$this->basedir   = $basedir;
 		$this->namespace = $namespace;
 		$this->titania   = $titania;
+		$this->opendir   = $opendir;
 	}
 
 	/**

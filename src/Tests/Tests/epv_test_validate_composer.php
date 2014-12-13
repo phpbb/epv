@@ -20,9 +20,9 @@ use Phpbb\Epv\Tests\Type;
 class epv_test_validate_composer extends BaseTest
 {
 
-	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
+	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
-		parent::__construct($debug, $output, $basedir, $namespace, $titania);
+		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
 
 		$this->fileTypeFull = Type::TYPE_COMPOSER;
 	}

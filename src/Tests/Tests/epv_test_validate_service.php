@@ -22,9 +22,9 @@ class epv_test_validate_service extends BaseTest
 {
 
 
-	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
+	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
-		parent::__construct($debug, $output, $basedir, $namespace, $titania);
+		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
 
 		$this->fileTypeFull = Type::TYPE_SERVICE;
 	}

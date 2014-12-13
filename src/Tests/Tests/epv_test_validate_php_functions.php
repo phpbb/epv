@@ -97,10 +97,11 @@ class epv_test_validate_php_functions extends BaseTest
 	 * @param string          $basedir
 	 * @param string          $namespace
 	 * @param boolean         $titania
+	 * @param string          $opendir
 	 */
-	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
+	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
-		parent::__construct($debug, $output, $basedir, $namespace, $titania);
+		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
 
 		$this->fileTypeFull   = Type::TYPE_PHP;
 		$this->parser         = new PHPParser_Parser(new PHPParser_Lexer_Emulative());

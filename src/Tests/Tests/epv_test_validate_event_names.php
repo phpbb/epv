@@ -15,16 +15,16 @@ use Phpbb\Epv\Tests\BaseTest;
 
 class epv_test_validate_event_names extends BaseTest
 {
-	public function __construct($debug, \Phpbb\Epv\Output\OutputInterface $output, $basedir, $namespace, $titania)
+	public function __construct($debug, \Phpbb\Epv\Output\OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
-		parent::__construct($debug, $output, $basedir, $namespace, $titania);
+		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
 
 		$this->directory = true;
 	}
 
 	public function validateDirectory(array $dirList)
 	{
-		$exporter = new php_exporter($this->output);
+		$exporter = new php_exporter($this->output, $this->opendir);
 
 		foreach ($dirList as $file)
 		{

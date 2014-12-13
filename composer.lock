@@ -1,8 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
-        "This file is @generated automatically"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
     "hash": "a6a10e797d73aa2ad05f0b24c0537c9f",
     "packages": [
@@ -149,17 +148,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.5.5",
+            "version": "v2.6.1",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "ca053eaa031c93afb68a71e4eb1f4168dfd4a661"
+                "reference": "ef825fd9f809d275926547c9e57cbf14968793e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/ca053eaa031c93afb68a71e4eb1f4168dfd4a661",
-                "reference": "ca053eaa031c93afb68a71e4eb1f4168dfd4a661",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/ef825fd9f809d275926547c9e57cbf14968793e8",
+                "reference": "ef825fd9f809d275926547c9e57cbf14968793e8",
                 "shasum": ""
             },
             "require": {
@@ -167,16 +166,18 @@
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/event-dispatcher": "~2.1"
+                "symfony/event-dispatcher": "~2.1",
+                "symfony/process": "~2.1"
             },
             "suggest": {
                 "psr/log": "For using the console logger",
-                "symfony/event-dispatcher": ""
+                "symfony/event-dispatcher": "",
+                "symfony/process": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -200,21 +201,21 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-25 09:53:56"
+            "time": "2014-12-02 20:19:20"
         },
         {
             "name": "symfony/finder",
-            "version": "v2.5.5",
+            "version": "v2.6.1",
             "target-dir": "Symfony/Component/Finder",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "d5033742b9a6206ef6d06e813870bca18e9205df"
+                "reference": "0d3ef7f6ec55a7af5eca7914eaa0dacc04ccc721"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/d5033742b9a6206ef6d06e813870bca18e9205df",
-                "reference": "d5033742b9a6206ef6d06e813870bca18e9205df",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/0d3ef7f6ec55a7af5eca7914eaa0dacc04ccc721",
+                "reference": "0d3ef7f6ec55a7af5eca7914eaa0dacc04ccc721",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +224,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -247,21 +248,21 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-27 08:35:39"
+            "time": "2014-12-02 20:19:20"
         },
         {
             "name": "symfony/process",
-            "version": "v2.5.5",
+            "version": "v2.6.1",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "8a1ec96c4e519cee0fb971ea48a1eb7369dda54b"
+                "reference": "bf0c9bd625f13b0b0bbe39919225cf145dfb935a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/8a1ec96c4e519cee0fb971ea48a1eb7369dda54b",
-                "reference": "8a1ec96c4e519cee0fb971ea48a1eb7369dda54b",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/bf0c9bd625f13b0b0bbe39919225cf145dfb935a",
+                "reference": "bf0c9bd625f13b0b0bbe39919225cf145dfb935a",
                 "shasum": ""
             },
             "require": {
@@ -270,7 +271,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -294,21 +295,21 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-23 05:25:11"
+            "time": "2014-12-02 20:19:20"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.5.5",
+            "version": "v2.6.1",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "b1dbc53593b98c2d694ebf383660ac9134d30b96"
+                "reference": "3346fc090a3eb6b53d408db2903b241af51dcb20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/b1dbc53593b98c2d694ebf383660ac9134d30b96",
-                "reference": "b1dbc53593b98c2d694ebf383660ac9134d30b96",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/3346fc090a3eb6b53d408db2903b241af51dcb20",
+                "reference": "3346fc090a3eb6b53d408db2903b241af51dcb20",
                 "shasum": ""
             },
             "require": {
@@ -317,7 +318,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -341,22 +342,22 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-22 09:14:18"
+            "time": "2014-12-02 20:19:20"
         }
     ],
     "packages-dev": [
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.0.11",
+            "version": "2.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "53603b3c995f5aab6b59c8e08c3a663d2cc810b7"
+                "reference": "0e7d2eec5554f869fa7a4ec2d21e4b37af943ea5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/53603b3c995f5aab6b59c8e08c3a663d2cc810b7",
-                "reference": "53603b3c995f5aab6b59c8e08c3a663d2cc810b7",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/0e7d2eec5554f869fa7a4ec2d21e4b37af943ea5",
+                "reference": "0e7d2eec5554f869fa7a4ec2d21e4b37af943ea5",
                 "shasum": ""
             },
             "require": {
@@ -408,7 +409,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-08-31 06:33:04"
+            "time": "2014-12-03 06:41:44"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -776,28 +777,28 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "1.0.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "79517609ec01139cd7e9fded0dd7ce08c952ef6a"
+                "reference": "6e6c71d918088c251b181ba8b3088af4ac336dd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/79517609ec01139cd7e9fded0dd7ce08c952ef6a",
-                "reference": "79517609ec01139cd7e9fded0dd7ce08c952ef6a",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/6e6c71d918088c251b181ba8b3088af4ac336dd7",
+                "reference": "6e6c71d918088c251b181ba8b3088af4ac336dd7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.0.*@dev"
+                "phpunit/phpunit": "~4.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -812,8 +813,7 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "Provides functionality to handle HHVM/PHP environments",
@@ -823,27 +823,27 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2014-02-18 16:17:19"
+            "time": "2014-10-25 08:00:45"
         },
         {
             "name": "sebastian/exporter",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "1f9a98e6f5dfe0524cb8c6166f7c82f3e9ae1529"
+                "reference": "c7d59948d6e82818e1bdff7cadb6c34710eb7dc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/1f9a98e6f5dfe0524cb8c6166f7c82f3e9ae1529",
-                "reference": "1f9a98e6f5dfe0524cb8c6166f7c82f3e9ae1529",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/c7d59948d6e82818e1bdff7cadb6c34710eb7dc0",
+                "reference": "c7d59948d6e82818e1bdff7cadb6c34710eb7dc0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.0.*@dev"
+                "phpunit/phpunit": "~4.0"
             },
             "type": "library",
             "extra": {
@@ -862,11 +862,6 @@
             ],
             "authors": [
                 {
-                    "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
-                },
-                {
                     "name": "Jeff Welch",
                     "email": "whatthejeff@gmail.com"
                 },
@@ -875,13 +870,16 @@
                     "email": "github@wallbash.com"
                 },
                 {
-                    "name": "Adam Harvey",
-                    "email": "aharvey@php.net",
-                    "role": "Lead"
-                },
-                {
                     "name": "Bernhard Schussek",
                     "email": "bschussek@2bepublished.at"
+                },
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de"
+                },
+                {
+                    "name": "Adam Harvey",
+                    "email": "aharvey@php.net"
                 }
             ],
             "description": "Provides the functionality to export PHP variables for visualization",
@@ -890,7 +888,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2014-02-16 08:26:31"
+            "time": "2014-09-10 00:51:36"
         },
         {
             "name": "sebastian/version",
@@ -934,7 +932,6 @@
         "nikic/php-parser": 20,
         "gitonomy/gitlib": 20
     },
-    "prefer-stable": false,
     "platform": {
         "php": ">=5.3.3"
     },

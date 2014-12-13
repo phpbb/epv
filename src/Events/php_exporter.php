@@ -37,15 +37,23 @@ class php_exporter
 	/** @var \Phpbb\Epv\Output\OutputInterface */
 	protected $output;
 
+	/** @var string  */
+	protected $rundir;
+
+	/** @var string */
+	protected $current_clean_file;
+
 	/**
 	 * @param \Phpbb\Epv\Output\OutputInterface $output
+	 * @param string                            $rundir
 	 */
-	public function __construct(OutputInterface $output)
+	public function __construct(OutputInterface $output, $rundir)
 	{
 		$this->output             = $output;
 		$this->events             = $this->file_lines = array();
 		$this->current_file       = $this->current_event = '';
 		$this->current_event_line = 0;
+		$this->rundir             = $rundir;
 	}
 
 	/**
@@ -93,6 +101,7 @@ class php_exporter
 	public function crawl_php_file($file)
 	{
 		$this->current_file = $file;
+		$this->current_clean_file = str_replace($this->rundir, '', $file);
 		$this->file_lines   = array();
 		$content            = file_get_contents($this->current_file);
 		$num_events_found   = 0;
@@ -142,7 +151,7 @@ class php_exporter
 					if (isset($this->events[$this->current_event]))
 					{
 						throw new \LogicException("The event '{$this->current_event}' from file "
-							. "'{$this->current_file}:{$event_line_num}' already exists in file "
+							. "'{$this->current_clean_file}:{$event_line_num}' already exists in file "
 							. "'{$this->events[$this->current_event]['file']}'", 10);
 					}
 
@@ -200,12 +209,12 @@ class php_exporter
 
 			if (isset($match[2]))
 			{
-				$this->output->addMessage(Output::ERROR, sprintf('Event names should be all lowercase in %s for event %s', $this->current_file, $match[2]));
+				$this->output->addMessage(Output::ERROR, sprintf('Event names should be all lowercase in %s for event %s', $this->current_clean_file, $match[2]));
 			}
 			else
 			{
 				throw new \LogicException("Can not find event name in line '{$event_text_line}' "
-					. "in file '{$this->current_file}:{$event_line}'", 1);
+					. "in file '{$this->current_clean_file}:{$event_line}'", 1);
 			}
 		}
 
@@ -250,7 +259,7 @@ class php_exporter
 		{
 			if (!preg_match('#^([a-zA-Z_][a-zA-Z0-9_]*)$#', $var))
 			{
-				throw new \LogicException("Found invalid var '{$var}' in array for event '{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 3);
+				throw new \LogicException("Found invalid var '{$var}' in array for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 3);
 			}
 		}
 
@@ -280,14 +289,14 @@ class php_exporter
 			if ($throw_multiline && sizeof($vars_array) > 6)
 			{
 				throw new \LogicException('Should use multiple lines for $vars definition '
-					. "for event '{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 2);
+					. "for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 2);
 			}
 
 			return $vars_array;
 		}
 		else
 		{
-			throw new \LogicException("Can not find '\$vars = array();'-line for event '{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 1);
+			throw new \LogicException("Can not find '\$vars = array();'-line for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'. Are you using UNIX style linefeeds?", 1);
 		}
 	}
 
@@ -309,7 +318,7 @@ class php_exporter
 			if ($current_vars_line > $this->current_event_line)
 			{
 				// Reached the start of the file
-				throw new \LogicException("Can not find end of \$vars array for event '{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 2);
+				throw new \LogicException("Can not find end of \$vars array for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'.", 2);
 			}
 		}
 
@@ -344,7 +353,7 @@ class php_exporter
 					if (sizeof($doc_line) !== 5)
 					{
 						throw new \LogicException("Found invalid line '{$this->file_lines[$this->current_event_line - $current_doc_line]}' "
-							. "for event '{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 1);
+							. "for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 1);
 					}
 					$doc_vars[] = $doc_line[3];
 				}
@@ -354,14 +363,14 @@ class php_exporter
 			if ($current_doc_line > $this->current_event_line)
 			{
 				// Reached the start of the file
-				throw new \LogicException("Can not find end of docblock for event '{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 2);
+				throw new \LogicException("Can not find end of docblock for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 2);
 			}
 		}
 
 		if (empty($doc_vars))
 		{
 			// Reached the start of the file
-			throw new \LogicException("Can not find @var lines for event '{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 3);
+			throw new \LogicException("Can not find @var lines for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 3);
 		}
 
 		foreach ($doc_vars as $var)
@@ -369,7 +378,7 @@ class php_exporter
 			if (!preg_match('#^([a-zA-Z_][a-zA-Z0-9_]*)$#', $var))
 			{
 				throw new \LogicException("Found invalid @var '{$var}' in docblock for event "
-					. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 4);
+					. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 4);
 			}
 		}
 
@@ -419,7 +428,7 @@ class php_exporter
 			{
 				// Reached the start of this doc block
 				throw new \LogicException("Can not find '@{$find_tag}' information for event "
-					. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 1);
+					. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 1);
 			}
 
 			foreach ($disallowed_tags as $disallowed_tag)
@@ -428,7 +437,7 @@ class php_exporter
 				{
 					// Found @var after the @since
 					throw new \LogicException("Found '@{$disallowed_tag}' information after '@{$find_tag}' for event "
-						. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 3);
+						. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 3);
 				}
 			}
 
@@ -442,7 +451,7 @@ class php_exporter
 			{
 				// Reached the start of the file
 				throw new \LogicException("Can not find '@{$find_tag}' information for event "
-					. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 2);
+					. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 2);
 			}
 		}
 
@@ -465,7 +474,7 @@ class php_exporter
 			{
 				// Reached the start of the file
 				throw new \LogicException("Can not find a description for event "
-					. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 1);
+					. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 1);
 			}
 		}
 
@@ -476,7 +485,7 @@ class php_exporter
 		{
 			// First line of the doc block is a @-line, empty or only contains "*"
 			throw new \LogicException("Can not find a description for event "
-				. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 2);
+				. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 2);
 		}
 
 		return $find_desc_line;
@@ -497,7 +506,7 @@ class php_exporter
 		if (!isset($match[1]))
 		{
 			throw new \LogicException("Invalid '@since' information for event "
-				. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'");
+				. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'");
 		}
 
 		return $match[1];
@@ -519,13 +528,13 @@ class php_exporter
 		if ($event !== trim($event))
 		{
 			throw new \LogicException("Invalid '@event' information for event "
-				. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 1);
+				. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 1);
 		}
 
 		if ($event !== $event_name)
 		{
 			throw new \LogicException("Event name does not match '@event' tag for event "
-				. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'", 2);
+				. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'", 2);
 		}
 
 		return $event;
@@ -549,7 +558,7 @@ class php_exporter
 		if ($sizeof_vars_array !== sizeof($vars_docblock) || $sizeof_vars_array !== sizeof(array_intersect($vars_array, $vars_docblock)))
 		{
 			throw new \LogicException("\$vars array does not match the list of '@var' tags for event "
-				. "'{$this->current_event}' in file '{$this->current_file}:{$this->current_event_line}'");
+				. "'{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'");
 		}
 	}
 }

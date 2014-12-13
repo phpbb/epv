@@ -17,9 +17,9 @@ class epv_test_validate_directory_structure extends BaseTest
 {
 	private $strict = false;
 
-	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania)
+	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
-		parent::__construct($debug, $output, $basedir, $namespace, $titania);
+		parent::__construct($debug, $output, $basedir, $namespace, $titania,$opendir);
 
         $this->directory = true;
     }
