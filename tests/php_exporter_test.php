@@ -33,7 +33,7 @@ class php_exporter_test extends \PHPUnit_Framework_TestCase
 	public function test_event_name($line, $content, $expected_name, $expected_errors = null)
 	{
 		$output   = new \Phpbb\Epv\Tests\Mock\Output();
-		$exporter = new \Phpbb\Epv\Events\php_exporter($output);
+		$exporter = new \Phpbb\Epv\Events\php_exporter($output, '');
 		$exporter->set_content(file($content));
 
 		$name = $exporter->get_event_name($line, false);

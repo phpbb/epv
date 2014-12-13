@@ -72,7 +72,7 @@ interface TestInterface
 
 	/**
 	 *
-	 * @return bool
+	 * @return string
 	 */
 	public function testName();
 

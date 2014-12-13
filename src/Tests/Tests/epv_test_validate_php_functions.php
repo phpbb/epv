@@ -105,7 +105,6 @@ class epv_test_validate_php_functions extends BaseTest
 
 		$this->fileTypeFull   = Type::TYPE_PHP;
 		$this->parser         = new PHPParser_Parser(new PHPParser_Lexer_Emulative());
-		$this->totalFileTests = 2;
 	}
 
 	/**
