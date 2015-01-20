@@ -97,9 +97,6 @@ class FileLoader
 			}
 			else if ($size >= 4) // Files with 3 ore more dots should not happen.
 			{
-				$error = true;
-				$this->output->addMessage(Output::ERROR, sprintf("File (%s) seems to have too many dots. Using the last part as extension.", $fileName));
-
 				$file = self::tryLoadFile($fileName, $split[sizeof($split) - 1]);
 
 			}
