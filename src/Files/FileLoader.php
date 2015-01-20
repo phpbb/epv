@@ -104,11 +104,10 @@ class FileLoader
 	 *
 	 * @param $fileName
 	 * @param $extension
-	 * @param $returnNull boolean Return null in cases where file is not reconised.
 	 *
 	 * @return BinaryFile|ComposerFile|CssFile|HTMLFile|JavascriptFile|JsonFile|PHPFile|PlainFile|XmlFile|YmlFile|ImageFile|null
 	 */
-	private function tryLoadFile($fileName, $extension, $returnNull = false)
+	private function tryLoadFile($fileName, $extension)
 	{
 		$this->output->writelnIfDebug("<info>Attempting to load $fileName with extension $extension</info>");
 		$this->loadError = false;
@@ -192,10 +191,6 @@ class FileLoader
 				return new LockFile($this->debug, $fileName, $this->rundir);
 
 			default:
-				if ($returnNull)
-				{
-					return null;
-				}
 
 				$file = basename($fileName);
 				$this->output->addMessage(Output::WARNING, "Can't detect the file type for $file, handling it as a binary file.");
