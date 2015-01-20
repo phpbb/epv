@@ -65,9 +65,10 @@ class FileLoader
 
 		try
 		{
+			// File has no extension
 			if ($size == 1)
 			{
-				// File has no extension. If it is a readme file it is ok.
+				// If it is a readme file it is ok.
 				// Otherwise add notice.
 				if (strtolower($fileName) !== 'readme')
 				{
@@ -75,30 +76,11 @@ class FileLoader
 				}
 				$file = new PlainFile($this->debug, $fileName, $this->rundir);
 			}
-			else if ($size == 2)
+			// File has an extension
+			else if ($size > 1)
 			{
-
-				$file = self::tryLoadFile($fileName, $split[1]);
-			}
-			else if ($size == 3)
-			{
-				// First, we tried the first extension,
-				// Like phpunit-test.xml.all
-				// If that has no matches, we try the
-				// last extension.
-
-				$file = self::tryLoadFile($fileName, $split[1], true);
-
-				if (!$file)
-				{
-					$file = self::tryLoadFile($fileName, $split[2]);
-				}
-
-			}
-			else if ($size >= 4) // Files with 3 ore more dots should not happen.
-			{
+				// Try to load the file, the last part of $split contains the extension
 				$file = self::tryLoadFile($fileName, $split[sizeof($split) - 1]);
-
 			}
 			else // Blank filename?
 			{
