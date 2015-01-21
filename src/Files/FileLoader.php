@@ -65,9 +65,10 @@ class FileLoader
 
 		try
 		{
+			// File has no extension
 			if ($size == 1)
 			{
-				// File has no extension. If it is a readme file it is ok.
+				// If it is a readme file it is ok.
 				// Otherwise add notice.
 				if (strtolower($fileName) !== 'readme')
 				{
@@ -75,33 +76,11 @@ class FileLoader
 				}
 				$file = new PlainFile($this->debug, $fileName, $this->rundir);
 			}
-			else if ($size == 2)
+			// File has an extension
+			else if ($size > 1)
 			{
-
-				$file = self::tryLoadFile($fileName, $split[1]);
-			}
-			else if ($size == 3)
-			{
-				// First, we tried the first extension,
-				// Like phpunit-test.xml.all
-				// If that has no matches, we try the
-				// last extension.
-
-				$file = self::tryLoadFile($fileName, $split[1], true);
-
-				if (!$file)
-				{
-					$file = self::tryLoadFile($fileName, $split[2]);
-				}
-
-			}
-			else if ($size >= 4) // Files with 3 ore more dots should not happen.
-			{
-				$error = true;
-				$this->output->addMessage(Output::ERROR, sprintf("File (%s) seems to have too many dots. Using the last part as extension.", $fileName));
-
+				// Try to load the file, the last part of $split contains the extension
 				$file = self::tryLoadFile($fileName, $split[sizeof($split) - 1]);
-
 			}
 			else // Blank filename?
 			{
@@ -125,11 +104,10 @@ class FileLoader
 	 *
 	 * @param $fileName
 	 * @param $extension
-	 * @param $returnNull boolean Return null in cases where file is not reconised.
 	 *
 	 * @return BinaryFile|ComposerFile|CssFile|HTMLFile|JavascriptFile|JsonFile|PHPFile|PlainFile|XmlFile|YmlFile|ImageFile|null
 	 */
-	private function tryLoadFile($fileName, $extension, $returnNull = false)
+	private function tryLoadFile($fileName, $extension)
 	{
 		$this->output->writelnIfDebug("<info>Attempting to load $fileName with extension $extension</info>");
 		$this->loadError = false;
@@ -213,10 +191,6 @@ class FileLoader
 				return new LockFile($this->debug, $fileName, $this->rundir);
 
 			default:
-				if ($returnNull)
-				{
-					return null;
-				}
 
 				$file = basename($fileName);
 				$this->output->addMessage(Output::WARNING, "Can't detect the file type for $file, handling it as a binary file.");
