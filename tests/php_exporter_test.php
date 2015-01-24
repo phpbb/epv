@@ -12,7 +12,7 @@ class php_exporter_test extends \PHPUnit_Framework_TestCase
 
 	public static function setUpBeforeClass()
 	{
-		require('./tests/Mock/Output.php');
+		require_once('./tests/Mock/Output.php');
 	}
 
 	public function extension_data()

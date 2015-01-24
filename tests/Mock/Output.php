@@ -70,13 +70,18 @@ class Output implements OutputInterface
 	 * @param                                $type    int message type
 	 * @param                                $message string message
 	 * @param \Phpbb\Epv\Files\FileInterface $file    File the error happened in. When provided, this is displayed to the user
-	 * @param bool                           $skipError
 	 *
-	 * @return
+	 * @throws \Exception
+	 * @internal param bool $skipError
+	 *
 	 */
-	public function addMessage($type, $message, FileInterface $file = null, $skipError = false)
+	public function addMessage($type, $message, FileInterface $file = null)
 	{
 		$this->messages[] = array('type' => $type, 'message' => $message);
+
+		if ($type == self::FATAL) {
+			throw new \Exception($message);
+		}
 	}
 
 	/**
@@ -110,27 +115,6 @@ class Output implements OutputInterface
 	}
 
 	public function getFormatter()
-	{
-
-	}
-
-	/**
-	 * Set the max progress (Number of tests) for this run.
-	 *
-	 *
-	 * @param $maxProgress int
-	 */
-	public function setMaxProgress($maxProgress)
-	{
-
-	}
-
-	/**
-	 * Increase the max progress during the run.
-	 *
-	 * @param $inc
-	 */
-	public function inMaxPogress($inc)
 	{
 
 	}
