@@ -61,6 +61,11 @@ class epv_test_validate_directory_structure extends BaseTest
 					break;
 			}
 		}
+
+		if (!$files['license'])
+		{
+			$this->output->addMessage(Output::ERROR, 'Missing required license.txt file');
+		}
 	}
 
 	public function testName()
