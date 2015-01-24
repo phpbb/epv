@@ -42,15 +42,8 @@ class epv_test_validate_directory_structure extends BaseTest
 						$this->output->addMessage(Output::WARNING, 'The name of license.json should be completely lowercase.');
 					}
 
-					$sp    = str_replace('\\', '/', $dir);
-					$sp    = str_replace(str_replace('\\', '/', $this->opendir), '', $sp);
-					$sp    = str_replace('/license.txt', '', $sp);
 
-					if ($this->namespace != $sp)
-					{
-						$this->output->addMessage(Output::ERROR, 'The license file should be in the same directory as composer.json');
-					}
-
+					// Do not check license.txt location. Will give false positives in case packaging is wrong directory wise.
 					break;
 
 				case 'composer.json':

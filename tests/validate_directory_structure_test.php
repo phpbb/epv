@@ -48,7 +48,7 @@ class validate_directory_structure extends PHPUnit_Framework_TestCase {
 			'/a/b/epv/test/license.txt',
 		));
 	}
-/*
+
 	public function test_composer_wrong2() {
 		$output = $this->getOutputMock();
 		$output->expects($this->once())
@@ -65,18 +65,20 @@ class validate_directory_structure extends PHPUnit_Framework_TestCase {
 
 	public function test_composer_wrong() {
 		$output = $this->getOutputMock();
-		$output->expects($this->once())
+
+		$output->expects($this->exactly(1))
 			->method('addMessage')
 			->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 'Packaging structure doesn\'t meet the extension DB policies.')
 		;
 
-		$tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure(false, $output, '/test/test/epv/test', 'epv/test', false, '/test/');
+
+		$tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure(false, $output, '/a/b/', 'epv/test', false, '/a/');
 		$tester->validateDirectory(array(
-			'/test/test/composer.json',
-			'/test/test/epv/test/license.txt',
+			'/a/b/composer.json',
+			'/a/b/epv/test/license.txt',
 		));
 	}
-*/
+
 	/**
 	 * @return \PHPUnit_Framework_MockObject_MockObject
 	 */
