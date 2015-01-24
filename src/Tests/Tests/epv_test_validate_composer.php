@@ -9,6 +9,7 @@
  */
 namespace Phpbb\Epv\Tests\Tests;
 
+use Composer\Composer;
 use Phpbb\Epv\Files\FileInterface;
 use Phpbb\Epv\Files\Type\ComposerFileInterface;
 use Phpbb\Epv\Output\Output;
@@ -45,13 +46,26 @@ class epv_test_validate_composer extends BaseTest
 		$this->file = $file;
 
 		$this->validateName($file);
+		$this->validateLicense($file);
+	}
+
+	/**
+	 * Validate if the provided license is the GPL.
+	 *
+	 * @param \Phpbb\Epv\Files\Type\ComposerFileInterface $file
+	 */
+	private function validateLicense(ComposerFileInterface $file)
+	{
+		$json = $file->getJson();
+		$this->addMessageIfBooleanTrue(!isset($json['license']), Output::FATAL, 'The license key is missing');
+		$this->addMessageIfBooleanTrue($json['license'] != 'GPL-2.0', Output::ERROR, 'It is required to use the GPL-2.0 as license. MIT is not allowed as per the extension database policies.');
 	}
 
 	private function validateName(ComposerFileInterface $file)
 	{
 		$json = $file->getJson();
 		$this->addMessageIfBooleanTrue(!isset($json['name']), Output::FATAL, 'The name key is missing');
-		$this->addMessageIfBooleanTrue(strpos($json['name'], '_') !== false, Output::ERROR, 'The namespace should not contain underscores');
+		$this->addMessageIfBooleanTrue(strpos($json['name'], '_') !== false, Output::FATAL, 'The namespace should not contain underscores');
 
 	}
 

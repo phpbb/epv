@@ -19,7 +19,7 @@ class epv_test_validate_directory_structure extends BaseTest
 
 	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
-		parent::__construct($debug, $output, $basedir, $namespace, $titania,$opendir);
+		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
 
         $this->directory = true;
     }
@@ -32,11 +32,25 @@ class epv_test_validate_directory_structure extends BaseTest
 		);
 		foreach ($dirList as $dir)
 		{
-
 			switch (strtolower(basename($dir)))
 			{
 				case 'license.txt':
 					$files['license'] = true;
+
+					if (basename($dir) != strtolower(basename($dir)))
+					{
+						$this->output->addMessage(Output::WARNING, 'The name of license.json should be completely lowercase.');
+					}
+
+					$sp    = str_replace('\\', '/', $dir);
+					$sp    = str_replace(str_replace('\\', '/', $this->opendir), '', $sp);
+					$sp    = str_replace('/license.txt', '', $sp);
+
+					if ($this->namespace != $sp)
+					{
+						$this->output->addMessage(Output::ERROR, 'The license file should be in the same directory as composer.json');
+					}
+
 					break;
 
 				case 'composer.json':
@@ -47,14 +61,10 @@ class epv_test_validate_directory_structure extends BaseTest
 						$this->output->addMessage(Output::WARNING, 'The name of composer.json should be completely lowercase.');
 					}
 					$sp    = str_replace('\\', '/', $dir);
-					$split = explode('/', $sp);
-					$ns    = '';
-					if (sizeof($split) - 3 >= 0)
-					{
-						$ns .= $split[sizeof($split) - 3] . '/' . $split[sizeof($split) - 2];
-					}
+					$sp    = str_replace(str_replace('\\', '/', $this->opendir), '', $sp);
+					$sp    = str_replace('/composer.json', '', $sp);
 
-					if ($this->namespace != $ns)
+					if ($this->namespace != $sp)
 					{
 						$this->output->addMessage(Output::ERROR, 'Packaging structure doesn\'t meet the extension DB policies.');
 					}
