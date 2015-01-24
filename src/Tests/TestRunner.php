@@ -186,7 +186,6 @@ class TestRunner
 			/** @var \Symfony\Component\Finder\SplFileInfo $file */
 			if (!$file->getRealPath())
 			{
-				$fl = $this->directory . '/' . $file->getRelativePathname();
 				$this->output->write("<info>Finder found a file, but it does not seem to be readable or does not actually exist.</info>");
 				continue;
 			}

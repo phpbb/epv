@@ -12,13 +12,13 @@ namespace Phpbb\Epv\Files\Type;
 
 use Phpbb\Epv\Files\BaseFile;
 use Phpbb\Epv\Files\Exception\FileLoadException;
-use Phpbb\Epv\Output\Messages;
 use Phpbb\Epv\Tests\Type;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
 class YmlFile extends BaseFile implements YmlFileInterface
 {
+	/** @var array */
 	protected $yamlFile;
 
 	public function __construct($debug, $filename, $rundir)

@@ -61,7 +61,6 @@ class FileLoader
 
 		$split = explode('.', basename($fileName));
 		$size  = sizeof($split);
-		$error = false;
 
 		try
 		{

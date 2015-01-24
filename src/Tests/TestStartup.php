@@ -24,7 +24,7 @@ class TestStartup
 	/** @var int|null */
 	private $type = null;
 
-	/** @var \Phpbb\Epv\Output\Output */
+	/** @var \Phpbb\Epv\Output\OutputInterface  */
 	private $output;
 
 	const TYPE_DIRECTORY = 1;

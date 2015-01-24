@@ -43,8 +43,6 @@ class ValidateCommand extends Command
 		$git    = $input->getOption('git');
 		$github = $input->getOption('github');
 		$branch = $input->getOption('branch');
-		$type   = null;
-		$loc    = null;
 
 		if (!empty($github))
 		{
@@ -71,7 +69,7 @@ class ValidateCommand extends Command
 		$output = new Output($output, $debug);
 		$output->setFormatter(new OutputFormatter(true));
 
-		$test = new TestStartup($output, $type, $loc, $debug, $branch);
+		new TestStartup($output, $type, $loc, $debug, $branch);
 
 		if ($output->getFatalCount() > 0)
 		{
