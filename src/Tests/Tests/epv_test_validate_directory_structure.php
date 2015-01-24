@@ -39,7 +39,7 @@ class epv_test_validate_directory_structure extends BaseTest
 
 					if (basename($dir) != strtolower(basename($dir)))
 					{
-						$this->output->addMessage(Output::WARNING, 'The name of license.json should be completely lowercase.');
+						$this->output->addMessage(Output::WARNING, 'The name of license.txt should be completely lowercase.');
 					}
 
 
