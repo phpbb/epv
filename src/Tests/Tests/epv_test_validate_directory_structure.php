@@ -56,7 +56,7 @@ class epv_test_validate_directory_structure extends BaseTest
 					$sp    = str_replace(str_replace('\\', '/', $this->opendir), '', $sp);
 					$sp    = str_replace('/composer.json', '', $sp);
 
-					if ($sp[0] == '/')
+					if (!empty($sp) && $sp[0] == '/')
 					{
 						// for some reason, there is a extra / on at least OS X
 						$sp = substr($sp, 1, strlen($sp));
