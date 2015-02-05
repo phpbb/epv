@@ -42,7 +42,6 @@ class epv_test_validate_directory_structure extends BaseTest
 						$this->output->addMessage(Output::WARNING, 'The name of license.txt should be completely lowercase.');
 					}
 
-
 					// Do not check license.txt location. Will give false positives in case packaging is wrong directory wise.
 					break;
 
@@ -56,6 +55,12 @@ class epv_test_validate_directory_structure extends BaseTest
 					$sp    = str_replace('\\', '/', $dir);
 					$sp    = str_replace(str_replace('\\', '/', $this->opendir), '', $sp);
 					$sp    = str_replace('/composer.json', '', $sp);
+
+					if ($sp[0] == '/')
+					{
+						// for some reason, there is a extra / on at least OS X
+						$sp = substr($sp, 1, strlen($sp));
+					}
 
 					if ($this->namespace != $sp)
 					{

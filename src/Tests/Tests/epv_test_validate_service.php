@@ -72,11 +72,11 @@ class epv_test_validate_service extends BaseTest
 	{
 		$vendor = str_replace('/', '.', $this->namespace);
 
-		if (strtolower(substr($service, 0, 5)) == 'phpbb')
+		if (strtolower(substr($service, 0, 6)) == 'phpbb.')
 		{
 			$this->output->addMessage(Output::ERROR, sprintf('The phpbb vendorname should only be used for official extensions in service names in %s. Current service name: %s', $file->getSaveFilename(), $service));
 		}
-		else if (strtolower(substr($service, 0, 4)) == 'core')
+		else if (strtolower(substr($service, 0, 5)) == 'core.')
 		{
 			$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in event names in %s. Current event name: %s', $file->getSaveFilename(), $service));
 		}

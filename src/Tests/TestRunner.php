@@ -44,7 +44,7 @@ class TestRunner
 	public function __construct(OutputInterface $output, $directory, $debug, $isTitania = false)
 	{
 		$this->output    = $output;
-		$this->directory = $directory;
+		$this->directory = realpath($directory);
 		$this->debug     = $debug;
 		$this->titania   = $isTitania;
 
