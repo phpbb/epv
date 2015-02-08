@@ -183,7 +183,7 @@ class php_exporter
 	public function get_event_name($event_line, $is_dispatch)
 	{
 		$event_text_line = $this->file_lines[$event_line];
-		$event_text_line = ltrim($event_text_line, "\t");
+		$event_text_line = ltrim($event_text_line, " \t");
 
 		if ($is_dispatch)
 		{
@@ -245,7 +245,7 @@ class php_exporter
 	 */
 	public function get_vars_from_array()
 	{
-		$line = ltrim($this->file_lines[$this->current_event_line - 1], "\t");
+		$line = ltrim($this->file_lines[$this->current_event_line - 1], " \t");
 		if ($line === ');')
 		{
 			$vars_array = $this->get_vars_from_multi_line_array();
@@ -310,7 +310,7 @@ class php_exporter
 	{
 		$current_vars_line = 2;
 		$var_lines         = array();
-		while (ltrim($this->file_lines[$this->current_event_line - $current_vars_line], "\t") !== '$vars = array(')
+		while (ltrim($this->file_lines[$this->current_event_line - $current_vars_line], " \t") !== '$vars = array(')
 		{
 			$var_lines[] = substr(trim($this->file_lines[$this->current_event_line - $current_vars_line]), 0, -1);
 
@@ -336,9 +336,9 @@ class php_exporter
 		$doc_vars          = array();
 		$current_doc_line  = 1;
 		$found_comment_end = false;
-		while (ltrim($this->file_lines[$this->current_event_line - $current_doc_line], "\t") !== '/**')
+		while (ltrim($this->file_lines[$this->current_event_line - $current_doc_line], " \t") !== '/**')
 		{
-			if (ltrim($this->file_lines[$this->current_event_line - $current_doc_line], "\t") === '*/')
+			if (ltrim($this->file_lines[$this->current_event_line - $current_doc_line], " \t") === '*/')
 			{
 				$found_comment_end = true;
 			}
@@ -422,9 +422,9 @@ class php_exporter
 	{
 		$find_tag_line     = 0;
 		$found_comment_end = false;
-		while (strpos(ltrim($this->file_lines[$this->current_event_line - $find_tag_line], "\t"), '* @' . $find_tag . ' ') !== 0)
+		while (strpos(ltrim($this->file_lines[$this->current_event_line - $find_tag_line], " \t"), '* @' . $find_tag . ' ') !== 0)
 		{
-			if ($found_comment_end && ltrim($this->file_lines[$this->current_event_line - $find_tag_line], "\t") === '/**')
+			if ($found_comment_end && ltrim($this->file_lines[$this->current_event_line - $find_tag_line], " \t") === '/**')
 			{
 				// Reached the start of this doc block
 				throw new \LogicException("Can not find '@{$find_tag}' information for event "
@@ -433,7 +433,7 @@ class php_exporter
 
 			foreach ($disallowed_tags as $disallowed_tag)
 			{
-				if ($found_comment_end && strpos(ltrim($this->file_lines[$this->current_event_line - $find_tag_line], "\t"), '* @' . $disallowed_tag) === 0)
+				if ($found_comment_end && strpos(ltrim($this->file_lines[$this->current_event_line - $find_tag_line], " \t"), '* @' . $disallowed_tag) === 0)
 				{
 					// Found @var after the @since
 					throw new \LogicException("Found '@{$disallowed_tag}' information after '@{$find_tag}' for event "
@@ -441,7 +441,7 @@ class php_exporter
 				}
 			}
 
-			if (ltrim($this->file_lines[$this->current_event_line - $find_tag_line], "\t") === '*/')
+			if (ltrim($this->file_lines[$this->current_event_line - $find_tag_line], " \t") === '*/')
 			{
 				$found_comment_end = true;
 			}
@@ -467,7 +467,7 @@ class php_exporter
 	public function find_description()
 	{
 		$find_desc_line = 0;
-		while (ltrim($this->file_lines[$this->current_event_line - $find_desc_line], "\t") !== '/**')
+		while (ltrim($this->file_lines[$this->current_event_line - $find_desc_line], " \t") !== '/**')
 		{
 			$find_desc_line++;
 			if ($find_desc_line > $this->current_event_line)
@@ -502,7 +502,7 @@ class php_exporter
 	public function validate_since($line)
 	{
 		$match = array();
-		preg_match('#^\* @since (\d+\.\d+\.\d+(?:-(?:a|b|RC|pl)\d+)?)$#', ltrim($line, "\t"), $match);
+		preg_match('#^\* @since (\d+(\.\d+)+(?:-(?:a|b|RC|pl)\d+)?)$#', ltrim($line, " \t"), $match);
 		if (!isset($match[1]))
 		{
 			throw new \LogicException("Invalid '@since' information for event "
@@ -523,7 +523,7 @@ class php_exporter
 	 */
 	public function validate_event($event_name, $line)
 	{
-		$event = substr(ltrim($line, "\t"), strlen('* @event '));
+		$event = substr(ltrim($line, " \t"), strlen('* @event '));
 
 		if ($event !== trim($event))
 		{
