@@ -81,7 +81,7 @@ class TestStartup
 		}
 
 
-		$this->output->writeln(sprintf("Checkout out %s from git from branch %s.", $git, $branch));
+		$this->output->writeln(sprintf("Checkout %s from git on branch %s.", $git, $branch));
 		$tmpdir = sys_get_temp_dir();
 		$uniq   = $tmpdir . DIRECTORY_SEPARATOR . uniqid();
 
@@ -110,7 +110,7 @@ class TestStartup
 			$dir = "on directory <info>$this->dir</info>";
 		}
 
-		$this->output->writeln("Running Extension Pre Validator{$dir}.");
+		$this->output->writeln("Running Extension Pre Validator {$dir}.");
 		$runner = new TestRunner($this->output, $this->dir, $this->debug);
 
 		if ($this->debug)
