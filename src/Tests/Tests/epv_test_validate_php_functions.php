@@ -478,6 +478,7 @@ class epv_test_validate_php_functions extends BaseTest
 			'var_dump'         => Output::ERROR,
 			'print_r'          => Output::ERROR,
 			'printf'           => Output::ERROR,
+			'unserialize'      => Output::ERROR,
 		);
 
 		foreach ($warn_array as $err => $level)
