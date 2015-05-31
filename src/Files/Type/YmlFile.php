@@ -30,7 +30,7 @@ class YmlFile extends BaseFile implements YmlFileInterface
 			$content = Yaml::parse($this->fileData);
 
 			// Look for imports
-			if (is_array($content['imports']))
+			if (isset($content['imports']) && is_array($content['imports']))
 			{
 				// Imports are defined relatively, get the directory based on the current file
 				$currentPathInfo = pathinfo($filename);
