@@ -27,7 +27,30 @@ class YmlFile extends BaseFile implements YmlFileInterface
 
 		try
 		{
-			$this->yamlFile = Yaml::parse($this->fileData);
+			$content = Yaml::parse($this->fileData);
+
+			// Look for imports
+			if (is_array($content['imports']))
+			{
+				// Imports are defined relatively, get the directory based on the current file
+				$currentPathInfo = pathinfo($filename);
+				$dirname = $currentPathInfo['dirname'];
+
+				foreach ($content['imports'] as $import)
+				{
+					if (isset($import['resource']))
+					{
+						$importYmlFileName = $dirname . '/' . $import['resource'];
+						$importYmlFile = new YmlFile($debug, $importYmlFileName, $rundir);
+						$extraContent = $importYmlFile->getYaml();
+
+						// Imports are at the top of the yaml file, so these should be loaded first.
+						// The values of the current yaml file will overwrite existing array values of the imports.
+						$content = array_replace_recursive($extraContent, $content);
+					}
+				}
+			}
+			$this->yamlFile = $content;
 		}
 		catch (ParseException $ex)
 		{
