@@ -175,6 +175,7 @@ class FileLoader
 			case 'png':
 			case 'jpg':
 			case 'jpeg':
+			case 'svg':
 				return new ImageFile($this->debug, $fileName, $this->rundir);
 
 			case 'swf':
