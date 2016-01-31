@@ -13,10 +13,10 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.3.3",
-        "symfony/yaml": ">=2.3,<2.7",
-        "symfony/console": ">=2.3,<2.7",
-        "symfony/finder": ">=2.3,<2.7",
-        "symfony/process": ">=2.3,<2.7",
+        "symfony/yaml": "~2.3",
+        "symfony/console": "~2.3",
+        "symfony/finder": "~2.3",
+        "symfony/process": "~2.3",
         "nikic/php-parser": "0.9.*@dev",
         "gitonomy/gitlib": "0.1.*@dev",
         "sensiolabs/ansi-to-html": "~1.1"
