@@ -47,6 +47,7 @@ class epv_test_validate_composer extends BaseTest
 
 		$this->validateName($file);
 		$this->validateLicense($file);
+		$this->validateVersion($file);
 	}
 
 	/**
