@@ -1,8 +1,6 @@
 {
     "name": "phpbb/epv",
     "description": "A extension validator for phpBB extensions. Extensions are required to pass the validator when submitted to the extension database.",
-    "require-dev": {
-    },
     "license": "GPL-2.0",
     "authors": [
         {
