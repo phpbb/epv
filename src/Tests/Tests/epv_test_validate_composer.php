@@ -84,7 +84,7 @@ class epv_test_validate_composer extends BaseTest
 
 			if (preg_match($regex, $json['extra']['soft-require']['phpbb/phpbb']))
 			{
-				$replace = preg_replace($regex, '$1$2', $json['extra']['require']['phpbb/phpbb']);;
+				$replace = preg_replace($regex, '$1$2', $json['extra']['soft-require']['phpbb/phpbb']);;
 				$this->addMessageIfBooleanTrue(true, Output::ERROR, sprintf('A invalid version constraint is used in soft-require: phpbb/phpbb. You can\'t combine a <|<=|~|\^|>|>= with a *|x. Please replace %s with %s', $json['extra']['soft-require']['phpbb/phpbb'], $replace));
 			}
 		}
