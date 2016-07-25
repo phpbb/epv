@@ -69,6 +69,6 @@ class epv_test_validate_event_names extends BaseTest
 
 	public function testName()
 	{
-		return "test even names";
+		return "test event names";
 	}
 }
