@@ -43,7 +43,7 @@ class epv_test_validate_event_names extends BaseTest
 		}
 
 		$events = $exporter->get_events();
-		// event names are requierd to be lowercase
+		// event names are required to be lowercase
 		// event names should end with a dot to seperate the vendor.name and the actual event name.
 		$vendor = strtolower(str_replace('/', '.', $this->namespace)) + '.'; 
 
