@@ -43,7 +43,8 @@ class epv_test_validate_event_names extends BaseTest
 		}
 
 		$events = $exporter->get_events();
-		$vendor = strtolower(str_replace('/', '.', $this->namespace)); // event names are requierd to be lowercase!
+		$this->output->inMaxPogress(sizeof($events) * 3);
+		$vendor = strtolower(str_replace('/', '.', $this->namespace)) + '.'; // event names are requierd to be lowercase!
 
 		foreach ($events as $event)
 		{
