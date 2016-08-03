@@ -19,7 +19,7 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
         $output = $this->getOutputMock();
         $output->expects($this->exactly(1))
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of $request->enable_super_globals is not allowed for security reasons on line 7 in tests/testFiles/enable_globalsphp')
+            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globalsphp')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/enable_globals.php');
