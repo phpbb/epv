@@ -415,7 +415,7 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		if ($name == 'enable_super_globals') 
 		{
-			$this->addMessage(Output::FATAL, sprintf('The use of $request->enable_super_globals is not allowed for security reasons on line %s', $node->getAttribute('startLine')));
+			$this->addMessage(Output::FATAL, sprintf('The use of enable_super_globals() is not allowed for security reasons on line %s', $node->getAttribute('startLine')));
 		}
 	}
 
