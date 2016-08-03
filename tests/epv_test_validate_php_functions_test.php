@@ -10,6 +10,11 @@
 
 class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
 {
+	public static function setUpBeforeClass()
+	{
+		require_once('./tests/Mock/Output.php');
+	}
+	
     public function test_usage_of_enable_globals() {
         $output = $this->getOutputMock();
         $output->expects($this->exactly(1))
