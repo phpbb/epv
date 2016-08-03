@@ -31,6 +31,7 @@ use PHPParser_Node_Stmt_If;
 use PHPParser_Node_Stmt_Interface;
 use PHPParser_Node_Stmt_Namespace;
 use PHPParser_Node_Stmt_Use;
+use PHPParser_Node_Expr_MethodCall;
 use PHPParser_Parser;
 
 
@@ -285,6 +286,7 @@ class epv_test_validate_php_functions extends BaseTest
 				$this->validateFunctionNames($node);
 				$this->validateExit($node);
 				$this->validatePrint($node);
+				$this->validateMethodCalls($node);
 			}
 
 			if (is_array($node) || is_object($node))
@@ -366,11 +368,54 @@ class epv_test_validate_php_functions extends BaseTest
 			$name = (string)$node->expr->name->subNodes[0];
 		}
 
-		if ($name != null)
+		if ($name !== null)
 		{
 			$this->validateDbal($name, $node);
 			$this->validateDeprecated($name, $node);
 			$this->validateFunctions($name, $node);
+		}
+	}
+	
+	/**
+	 * Validate method calls to classes.
+	 * @param \PHPParser_Node $node Node to validate
+	 */
+	private function validateMethodCalls(PHPParser_Node $node) {
+		$name = null;
+		if ($node instanceof PHPParser_Node_Expr_MethodCall)
+		{
+			if ($node->name instanceof PHPParser_Node_Expr_Variable)
+			{
+				// If function name is a variable.
+				$name = (string)$node->name->name;
+			}
+			else
+			{
+				$name = (string)$node->name;
+			}
+		}
+		else if (isset($node->expr) && $node->expr instanceof PHPParser_Node_Expr_MethodCall)
+		{
+			$name = (string)$node->expr->name;
+		}
+
+		if ($name !== null)
+		{
+			$this->validateEnableGlobals($name, $node);
+		}		
+	}
+
+	/**
+	 * Valdiate the use of enable_globals.
+	 *
+	 * @param                 $name
+	 * @param \PHPParser_Node $node
+	 */	
+	private function validateEnableGlobals($name, PHPParser_Node $node) 
+	{
+		if ($name == 'enable_super_globals') 
+		{
+			$this->addMessage(Output::FATAL, sprintf('The use of enable_super_globals() is not allowed for security reasons on line %s', $node->getAttribute('startLine')));
 		}
 	}
 
