@@ -368,7 +368,7 @@ class epv_test_validate_php_functions extends BaseTest
 			$name = (string)$node->expr->name->subNodes[0];
 		}
 
-		if ($name != null)
+		if ($name !== null)
 		{
 			$this->validateDbal($name, $node);
 			$this->validateDeprecated($name, $node);
@@ -399,7 +399,7 @@ class epv_test_validate_php_functions extends BaseTest
 			$name = (string)$node->expr->name;
 		}
 
-		if ($name != null)
+		if ($name !== null)
 		{
 			$this->validateEnableGlobals($name, $node);
 		}		
