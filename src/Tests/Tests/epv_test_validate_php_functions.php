@@ -21,10 +21,12 @@ use Phpbb\Epv\Tests\Type;
 use PHPParser_Error;
 use PHPParser_Lexer_Emulative;
 use PHPParser_Node;
+use PHPParser_Node_Expr_Concat;
 use PHPParser_Node_Expr_Exit;
 use PHPParser_Node_Expr_FuncCall;
 use PHPParser_Node_Expr_Print;
 use PHPParser_Node_Expr_Variable;
+use PHPParser_Node_Scalar_String;
 use PHPParser_Node_Stmt_Class;
 use PHPParser_Node_Stmt_Echo;
 use PHPParser_Node_Stmt_If;
@@ -358,6 +360,16 @@ class epv_test_validate_php_functions extends BaseTest
 				// If function name is a variable.
 				$name = (string)$node->name->name;
 			}
+			else if ($node->name instanceof PHPParser_Node_Expr_Concat)
+			{
+				// Only test if both are a string
+				// This mean that if a user works around this test he can do so, but otherwise we will
+				// need to parse variables and stuff.
+				if ($node->left instanceof PHPParser_Node_Scalar_String && $node->right instanceof PHPParser_Node_Scalar_String)
+				{
+					$name = $node->left->value . $node->right->value;
+				}
+			}
 			else
 			{
 				$name = (string)$node->name;
@@ -388,6 +400,16 @@ class epv_test_validate_php_functions extends BaseTest
 			{
 				// If function name is a variable.
 				$name = (string)$node->name->name;
+			}
+			else if ($node->name instanceof PHPParser_Node_Expr_Concat)
+			{
+				// Only test if both are a string
+				// This mean that if a user works around this test he can do so, but otherwise we will
+				// need to parse variables and stuff.
+				if ($node->left instanceof PHPParser_Node_Scalar_String && $node->right instanceof PHPParser_Node_Scalar_String)
+				{
+					$name = $node->left->value . $node->right->value;
+				}
 			}
 			else
 			{
