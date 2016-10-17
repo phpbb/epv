@@ -416,7 +416,7 @@ class epv_test_validate_php_functions extends BaseTest
 				$name = (string)$node->name;
 			}
 		}
-		else if (isset($node->expr) && $node->expr instanceof PHPParser_Node_Expr_MethodCall)
+		else if (isset($node->expr) && $node->expr instanceof PHPParser_Node_Expr_MethodCall && !($node->expr->name instanceof PHPParser_Node_Expr_Variable))
 		{
 			$name = (string)$node->expr->name;
 		}
