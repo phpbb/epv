@@ -20,6 +20,7 @@ use Phpbb\Epv\Files\Type\JavascriptFile;
 use Phpbb\Epv\Files\Type\JsonFile;
 use Phpbb\Epv\Files\Type\LangFile;
 use Phpbb\Epv\Files\Type\LockFile;
+use Phpbb\Epv\Files\Type\MigrationFile;
 use Phpbb\Epv\Files\Type\PHPFile;
 use Phpbb\Epv\Files\Type\PlainFile;
 use Phpbb\Epv\Files\Type\RoutingFile;
@@ -123,6 +124,10 @@ class FileLoader
 				if (trim(strtolower($dir[0])) == 'language')
 				{
 					return new LangFile($this->debug, $fileName, $this->rundir);
+				}
+				if (trim(strtolower($dir[0])) == 'migrations')
+				{
+					return new MigrationFile($this->debug, $fileName, $this->rundir);
 				}
 
 				return new PHPFile($this->debug, $fileName, $this->rundir);
