@@ -12,7 +12,7 @@ namespace Phpbb\Epv\Files\Type;
 use Phpbb\Epv\Files\BaseFile;
 use Phpbb\Epv\Tests\Type;
 
-class MigrationFile extends BaseFile implements PHPFileInterface
+class MigrationFile extends BaseFile implements MigrationFileInterface
 {
 	/**
 	 * Get the file type for the specific file.
