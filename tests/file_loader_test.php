@@ -16,7 +16,7 @@ class file_loader_test extends PHPUnit_Framework_TestCase {
 
 	private function getLoader()
 	{
-		return $file = new \Phpbb\Epv\Files\FileLoader(new \Phpbb\Epv\Tests\Mock\Output(), false, '.', '.');
+		return $file = new \Phpbb\Epv\Files\FileLoader(new \Phpbb\Epv\Tests\Mock\Output(), false, 'tests/testFiles/', '.');
 	}
 
 	public function test_file_php() {
@@ -24,8 +24,13 @@ class file_loader_test extends PHPUnit_Framework_TestCase {
 
 		$type = $file->loadFile('tests/testFiles/test.txt.php');
 		$typePhp = $file->loadFile('tests/testFiles/test.php');
+		$typeMigration = $file->loadFile('tests/testFiles/migrations/test.php');
 
 		$this->assertTrue($type instanceof \Phpbb\Epv\Files\Type\PHPFile);
 		$this->assertTrue($typePhp instanceof \Phpbb\Epv\Files\Type\PHPFile);
+		$this->assertFalse($typePhp instanceof \Phpbb\Epv\Files\Type\MigrationFile);
+		$this->assertFalse($typePhp instanceof \Phpbb\Epv\Files\Type\LangFile);
+		$this->assertTrue($typeMigration instanceof \Phpbb\Epv\Files\Type\PHPFileInterface); // It extends from the interface!
+		$this->assertTrue($typeMigration instanceof \Phpbb\Epv\Files\Type\MigrationFile, 'type is migration file');
 	}
 }
