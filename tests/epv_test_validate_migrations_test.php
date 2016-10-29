@@ -94,7 +94,7 @@ class epv_test_validate_migrations extends PHPUnit_Framework_TestCase
      */
     private function validate(\Phpbb\Epv\Output\OutputInterface $output, \Phpbb\Epv\Files\Type\MigrationFileInterface $file)
     {
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_migrations(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_migrations(false, $output, '/a/b/', '', false, '/a/');
 
         $tester->validateFile($file);
     }

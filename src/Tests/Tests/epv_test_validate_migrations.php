@@ -55,9 +55,10 @@ class epv_test_validate_migrations extends BaseTest
     private function validate(FileInterface $file)
     {
         $classname = $file->getSaveFilename();
-        $classname = str_replace('/', '\\', $classname);
         $classname = str_replace('.php', '', $classname);
-        $classname = '\\' . $classname;
+        $classname = '\\' . $this->namespace . $classname;
+        $classname = str_replace('/', '\\', $classname);
+        $classname = str_replace('\\\\', '\\', $classname);
 
         if (class_exists($classname))
         {
@@ -67,7 +68,7 @@ class epv_test_validate_migrations extends BaseTest
             return;
         }
 
-        @include($file->getFilename());
+        include($file->getFilename());
 
         if (!class_exists($classname))
         {
