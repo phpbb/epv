@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "39aab03c3923d21f94fed007bd7693ae",
-    "content-hash": "6c7b259e62b346768f5bdb152bf081c4",
+    "hash": "5795127a511b30a8697a2065fd005741",
+    "content-hash": "6ee3e473949cc7c28e803bcae17afc6c",
     "packages": [
         {
             "name": "gitonomy/gitlib",
@@ -105,6 +105,48 @@
                 "php"
             ],
             "time": "2014-07-23 18:24:17"
+        },
+        {
+            "name": "phpbb/phpbb-core",
+            "version": "3.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpbb/phpbb-core.git",
+                "reference": "b399d98176282ad670578c1f451bc8dfba7b55f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpbb/phpbb-core/zipball/b399d98176282ad670578c1f451bc8dfba7b55f5",
+                "reference": "b399d98176282ad670578c1f451bc8dfba7b55f5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "phpBB Limited",
+                    "email": "operations@phpbb.com",
+                    "homepage": "https://www.phpbb.com/go/authors"
+                }
+            ],
+            "description": "Collection of core phpBB libraries",
+            "homepage": "https://www.phpbb.com",
+            "keywords": [
+                "forum",
+                "phpbb"
+            ],
+            "time": "2015-02-01 18:18:30"
         },
         {
             "name": "psr/log",
