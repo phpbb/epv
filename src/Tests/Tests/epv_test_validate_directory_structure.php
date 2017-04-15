@@ -64,7 +64,9 @@ class epv_test_validate_directory_structure extends BaseTest
 
 					if ($this->namespace != $sp)
 					{
-						$this->output->addMessage(Output::ERROR, 'Packaging structure doesn\'t meet the extension DB policies.');
+						$this->output->addMessage(Output::ERROR, 
+							sprintf("Packaging structure doesn't meet the extension DB policies.\nExpected: %s\nGot: %s",
+							$this->namespace, $sp));
 					}
 					break;
 			}

@@ -53,7 +53,9 @@ class validate_directory_structure extends PHPUnit_Framework_TestCase {
 		$output = $this->getOutputMock();
 		$output->expects($this->once())
 			->method('addMessage')
-			->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 'Packaging structure doesn\'t meet the extension DB policies.')
+			->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 
+				sprintf("Packaging structure doesn't meet the extension DB policies.\nExpected: %s\nGot: %s",
+				'epv/test', 'b/epv/test'))
 		;
 		$tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure(false, $output, '/a/b/epv/test', 'epv/test', false, '/a/');
 		$tester->validateDirectory(array(
@@ -68,7 +70,9 @@ class validate_directory_structure extends PHPUnit_Framework_TestCase {
 
 		$output->expects($this->exactly(1))
 			->method('addMessage')
-			->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 'Packaging structure doesn\'t meet the extension DB policies.')
+			->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 
+				sprintf("Packaging structure doesn't meet the extension DB policies.\nExpected: %s\nGot: %s",
+				'epv/test', 'b'))
 		;
 
 
