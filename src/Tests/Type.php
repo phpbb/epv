@@ -27,4 +27,5 @@ class Type
 	const TYPE_JS = 2048;
 	const TYPE_LOCK = 4096;
 	const TYPE_ROUTING = 8192;
+	const TYPE_MIGRATION = 16384;
 }
