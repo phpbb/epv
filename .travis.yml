@@ -6,7 +6,7 @@ php:
   - hhvm
 
 install:
-  - php composer.phar install --dev --no-interaction --prefer-source
+  - travis_retry php composer.phar install --dev --no-interaction --prefer-source
 
 script:
   - bin/phpunit
