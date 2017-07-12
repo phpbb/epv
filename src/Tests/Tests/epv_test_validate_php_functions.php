@@ -20,10 +20,12 @@ use Phpbb\Epv\Tests\Exception\TestException;
 use Phpbb\Epv\Tests\Type;
 use PhpParser\Error;
 use PhpParser\Node;
+use PhpParser\Node\Expr\AssignOp\Concat;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Eval_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Print_;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -360,7 +362,7 @@ class epv_test_validate_php_functions extends BaseTest
 				// If function name is a variable.
 				$name = (string)$node->name->name;
 			}
-			else if ($node->name instanceof Node\Expr\AssignOp\Concat)
+			else if ($node->name instanceof Concat)
 			{
 				// Only test if both are a string
 				// This mean that if a user works around this test he can do so, but otherwise we will
@@ -402,7 +404,7 @@ class epv_test_validate_php_functions extends BaseTest
 				// If function name is a variable.
 				$name = (string)$node->name->name;
 			}
-			else if ($node->name instanceof Node\Expr\AssignOp\Concat)
+			else if ($node->name instanceof Concat)
 			{
 				// Only test if both are a string
 				// This mean that if a user works around this test he can do so, but otherwise we will
@@ -412,6 +414,10 @@ class epv_test_validate_php_functions extends BaseTest
 					$name = $node->left->value . $node->right->value;
 				}
 			}
+			else if ($node->name instanceof PropertyFetch)
+            {
+                $name = null; // This is a variable. We are going to ignore this.
+            }
 			else
 			{
 				$name = (string)$node->name;
