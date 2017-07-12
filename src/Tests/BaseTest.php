@@ -173,6 +173,6 @@ abstract class BaseTest implements TestInterface
 		$dir = str_replace($this->basedir, '', $file->getFilename());
 		$dir = explode("/", $dir);
 
-		return $dir[0] == 'test' || $dir[0] == 'tests';
+		return ($dir[0] == 'test' || $dir[0] == 'tests') && $dir[1] != 'testFiles';
 	}
 }

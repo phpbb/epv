@@ -54,6 +54,56 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
         $tester->validateFile($file);
     }
 
+    public function test_usage_of_no_inphpbb() {
+        $output = $this->getOutputMock();
+        $output->expects($this->exactly(1))
+            ->method('addMessage')
+            ->with(\Phpbb\Epv\Output\OutputInterface::WARNING, 'IN_PHPBB is not defined in tests/testFiles/no_in_phpbbphp')
+        ;
+
+        $file = $this->getLoader()->loadFile('tests/testFiles/no_in_phpbb.php');
+
+        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester->validateFile($file);
+    }
+
+    public function test_usage_of_wrong_in_phpbb() {
+        $output = $this->getOutputMock();
+        $output->expects($this->exactly(2))
+            ->method('addMessage')
+        ;
+
+        $file = $this->getLoader()->loadFile('tests/testFiles/in_phpbb_wrong.php');
+
+        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester->validateFile($file);
+    }
+
+    public function test_usage_of_wrong_in_phpbb2() {
+        $output = $this->getOutputMock();
+        $output->expects($this->exactly(5))
+            ->method('addMessage')
+        ;
+
+        $file = $this->getLoader()->loadFile('tests/testFiles/in_phpbb_wrong2.php');
+
+        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester->validateFile($file);
+    }
+
+    public function test_usage_of_namespace() {
+        $output = $this->getOutputMock();
+        $output->expects($this->exactly(2))
+            ->method('addMessage')
+        ;
+
+        $file = $this->getLoader()->loadFile('tests/testFiles/no_namespace.php');
+
+        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester->validateFile($file);
+    }
+
+
 
     private function getLoader()
     {

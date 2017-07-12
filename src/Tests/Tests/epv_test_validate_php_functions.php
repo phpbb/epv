@@ -221,7 +221,6 @@ class epv_test_validate_php_functions extends BaseTest
 	 *
 	 * @param array $nodes
 	 *
-	 * @internal param array $node
 	 */
 	private function parseNodes(array $nodes)
 	{
@@ -335,7 +334,7 @@ class epv_test_validate_php_functions extends BaseTest
 				// Found IN_PHPBB, but it didn't exists?
 				// We dont set $this->in_phpbb, so parseNode continue running on this node.
 				// Also include a notice.
-				$this->addMessage(Output::NOTICE, 'IN_PHPBB check should exit if it is not defined.');
+				$this->addMessage(Output::NOTICE, 'IN_PHPBB check should exit if it is not defined');
 			}
 			if (sizeof($node->stmts) > 1)
 			{
@@ -378,7 +377,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 		else if (isset($node->expr) && $node->expr instanceof FuncCall)
 		{
-			$name = (string)$node->expr->name->subNodes[0];
+			$name = (string)$node->expr->name->parts[0];
 		}
 
 		if ($name !== null)
