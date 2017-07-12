@@ -15,7 +15,7 @@
         "symfony/console": "~2.3",
         "symfony/finder": "~2.3",
         "symfony/process": "~2.3",
-        "nikic/php-parser": "0.9.*@dev",
+        "nikic/php-parser": "~3.0",
         "gitonomy/gitlib": "0.1.*@dev",
         "sensiolabs/ansi-to-html": "~1.1"
     },
