@@ -3,6 +3,10 @@
 if (!defined('IN_PHPBB')) {
   exit;
 }
+$a = 'enable';
+$b = '_super_globals';
+$request->{$a}{$b}();
 
-$request->enable_super_globals();
+$enable_super_globals = 'enable_super_globals';
 
+$request->$enable_super_globals();

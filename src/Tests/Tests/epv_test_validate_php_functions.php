@@ -20,7 +20,9 @@ use Phpbb\Epv\Tests\Exception\TestException;
 use Phpbb\Epv\Tests\Type;
 use PhpParser\Error;
 use PhpParser\Node;
-use PhpParser\Node\Expr\AssignOp\Concat;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Eval_;
 use PhpParser\Node\Expr\FuncCall;
@@ -357,25 +359,7 @@ class epv_test_validate_php_functions extends BaseTest
 		$name = null;
 		if ($node instanceof FuncCall)
 		{
-			if ($node->name instanceof Variable)
-			{
-				// If function name is a variable.
-				$name = (string)$node->name->name;
-			}
-			else if ($node->name instanceof Concat)
-			{
-				// Only test if both are a string
-				// This mean that if a user works around this test he can do so, but otherwise we will
-				// need to parse variables and stuff.
-				if ($node->left instanceof String_ && $node->right instanceof String_)
-				{
-					$name = $node->left->value . $node->right->value;
-				}
-			}
-			else
-			{
-				$name = (string)$node->name;
-			}
+			$name = $this->getMethodName($node);
 		}
 		else if (isset($node->expr) && $node->expr instanceof FuncCall)
 		{
@@ -399,31 +383,9 @@ class epv_test_validate_php_functions extends BaseTest
 		$name = null;
 		if ($node instanceof Node\Expr\MethodCall)
 		{
-			if ($node->name instanceof Variable)
-			{
-				// If function name is a variable.
-				$name = (string)$node->name->name;
-			}
-			else if ($node->name instanceof Concat)
-			{
-				// Only test if both are a string
-				// This mean that if a user works around this test he can do so, but otherwise we will
-				// need to parse variables and stuff.
-				if ($node->left instanceof String_ && $node->right instanceof String_)
-				{
-					$name = $node->left->value . $node->right->value;
-				}
-			}
-			else if ($node->name instanceof PropertyFetch)
-            {
-                $name = null; // This is a variable. We are going to ignore this.
-            }
-			else
-			{
-				$name = (string)$node->name;
-			}
-		}
-		else if (isset($node->expr) && $node->expr instanceof Node\Expr\MethodCall && !($node->expr->name instanceof Variable))
+            $name = $this->getMethodName($node);
+        }
+		else if (isset($node->expr) && $node->expr instanceof Node\Expr\MethodCall && !($node->expr->name instanceof Variable) && !($node->expr->name instanceof PropertyFetch))
 		{
 			$name = (string)$node->expr->name;
 		}
@@ -433,6 +395,33 @@ class epv_test_validate_php_functions extends BaseTest
 			$this->validateEnableGlobals($name, $node);
 		}		
 	}
+
+    /**
+     * @param FuncCall|Expr\MethodCall $node
+     * @return null|string
+     */
+    private function getMethodName(Node $node)
+    {
+        if ($node->name instanceof Variable || $node->name instanceof PropertyFetch || $node->name instanceof ArrayDimFetch)
+        {
+            return null; // This is a variable. We are going to ignore this. We do not want to track variable contents
+        }
+        else if ($node->name instanceof Concat)
+        {
+            // Only test if both are a string
+            // This mean that if a user works around this test he can do so, but otherwise we will
+            // need to parse variables and stuff.
+            if ($node->name->left instanceof String_ && $node->name->right instanceof String_)
+            {
+                return $node->name->left->value . $node->name->right->value;
+            }
+        }
+        else
+        {
+            return (string)$node->name;
+        }
+        return null;
+    }
 
     /**
      * Valdiate the use of enable_globals.
@@ -603,4 +592,5 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		return 'Validate php structure and deprecated functions';
 	}
+
 }

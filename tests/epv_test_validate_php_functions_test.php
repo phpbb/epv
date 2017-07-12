@@ -28,6 +28,31 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
         $tester->validateFile($file);
     }
 
+    public function test_usage_of_enable_globals2() {
+        $output = $this->getOutputMock();
+        $output->expects($this->exactly(0))
+            ->method('addMessage')
+             ;
+
+        $file = $this->getLoader()->loadFile('tests/testFiles/enable_globals2.php');
+
+        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester->validateFile($file);
+    }
+
+    public function test_usage_of_enable_globals3() {
+        $output = $this->getOutputMock();
+        $output->expects($this->exactly(1))
+            ->method('addMessage')
+            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals3php')
+        ;
+
+        $file = $this->getLoader()->loadFile('tests/testFiles/enable_globals3.php');
+
+        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester->validateFile($file);
+    }
+
     public function test_usage_of_addslashes() {
         $output = $this->getOutputMock();
         $output->expects($this->exactly(1))
