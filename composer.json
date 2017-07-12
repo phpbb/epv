@@ -10,11 +10,11 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.3.3",
-        "symfony/yaml": "~2.3",
-        "symfony/console": "~2.3",
-        "symfony/finder": "~2.3",
-        "symfony/process": "~2.3",
+        "php": ">=5.5.0",
+        "symfony/yaml": "~2.3|~3.0",
+        "symfony/console": "~2.3|~3.0",
+        "symfony/finder": "~2.3|~3.0",
+        "symfony/process": "~2.3|~3.0",
         "nikic/php-parser": "~3.0",
         "gitonomy/gitlib": "0.1.*@dev",
         "sensiolabs/ansi-to-html": "~1.1"
