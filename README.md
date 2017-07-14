@@ -5,6 +5,8 @@ Extension Pre-Validator
 
 This repository contains the extension pre-validator, used for pre validating extensions when submittion to the database at phpBB.com.
 
+Please note that EPV requires at least PHP 5.5 
+
 Using EPV
 ---------
 

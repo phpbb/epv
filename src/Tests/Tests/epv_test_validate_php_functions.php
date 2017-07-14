@@ -18,28 +18,33 @@ use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\BaseTest;
 use Phpbb\Epv\Tests\Exception\TestException;
 use Phpbb\Epv\Tests\Type;
-use PHPParser_Error;
-use PHPParser_Lexer_Emulative;
-use PHPParser_Node;
-use PHPParser_Node_Expr_Concat;
-use PHPParser_Node_Expr_Exit;
-use PHPParser_Node_Expr_FuncCall;
-use PHPParser_Node_Expr_Print;
-use PHPParser_Node_Expr_Variable;
-use PHPParser_Node_Scalar_String;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Echo;
-use PHPParser_Node_Stmt_If;
-use PHPParser_Node_Stmt_Interface;
-use PHPParser_Node_Stmt_Namespace;
-use PHPParser_Node_Stmt_Use;
-use PHPParser_Node_Expr_MethodCall;
-use PHPParser_Parser;
+use PhpParser\Error;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Eval_;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Print_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Echo_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\InterfaceTest;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\ParserFactory;
 
 
 class epv_test_validate_php_functions extends BaseTest
 {
-	/** @var \PHPParser_Parser */
+    /**
+     * @var \PhpParser\Parser
+     */
 	private $parser;
 
 	/** @var bool */
@@ -107,7 +112,7 @@ class epv_test_validate_php_functions extends BaseTest
 		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
 
 		$this->fileTypeFull   = Type::TYPE_PHP;
-		$this->parser         = new PHPParser_Parser(new PHPParser_Lexer_Emulative());
+		$this->parser         = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
 	}
 
 	/**
@@ -156,7 +161,7 @@ class epv_test_validate_php_functions extends BaseTest
 				$this->checkInPhpBB($stmt);
 			}
 		}
-		catch (PHPParser_Error $e) // Catch PhpParser error.
+		catch (Error $e) // Catch PhpParser error.
 		{
 			$this->output->addMessage(Output::FATAL, 'PHP parse error in file ' . $file->getSaveFilename() . '. Message: ' . $e->getMessage());
 		}
@@ -171,11 +176,11 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		$ok = true;
 		// Lets see if there is just a namespace + class
-		if (sizeof($stmt) == 1 && $stmt[0] instanceof PHPParser_Node_Stmt_Namespace)
+		if (sizeof($stmt) == 1 && $stmt[0] instanceof Namespace_)
 		{
 			foreach ($stmt[0]->stmts as $st)
 			{
-				if ($st instanceof PHPParser_Node_Stmt_Class || $st instanceof PHPParser_Node_Stmt_Interface || $st instanceof PHPParser_Node_Stmt_Use)
+				if ($st instanceof Class_ || $st instanceof Interface_ || $st instanceof Use_)
 				{ // Statement is a class, interface or a Use classname.
 					continue;
 				}
@@ -220,18 +225,17 @@ class epv_test_validate_php_functions extends BaseTest
 	 *
 	 * @param array $nodes
 	 *
-	 * @internal param array $node
 	 */
 	private function parseNodes(array $nodes)
 	{
-		if (!($nodes[0] instanceof PHPParser_Node_Stmt_Namespace))
+		if (!($nodes[0] instanceof Namespace_))
 		{
 			$err = false;
 			foreach ($nodes as $node)
 			{
 				// Check if there is a class.
 				// If there is a class, there should be a namespace.
-				if ($node instanceof PHPParser_Node_Stmt_Class || $node instanceof PHPParser_Node_Stmt_Interface)
+				if ($node instanceof Class_ || $node instanceof InterfaceTest)
 				{
 					$this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, 'All files with a class or an interface should have a namespace');
 					$err = true;
@@ -268,7 +272,7 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		foreach ($nodes as $node)
 		{
-			if ($node instanceof PHPParser_Node_Stmt_If && !$this->in_phpbb)
+			if ($node instanceof If_ && !$this->in_phpbb)
 			{
 				$this->checkInDefined($node);
 				if ($this->in_phpbb)
@@ -283,7 +287,7 @@ class epv_test_validate_php_functions extends BaseTest
 			}
 
 			// Because the array can contain more as just Nodes, we check for that here.
-			if ($node instanceof PHPParser_Node)
+			if ($node instanceof Node)
 			{
 				$this->validateFunctionNames($node);
 				$this->validateExit($node);
@@ -317,14 +321,14 @@ class epv_test_validate_php_functions extends BaseTest
 	 *
 	 * @param \PHPParser_Node_Stmt_If $node if node that checks possible for IN_PHPBB
 	 */
-	private function checkInDefined(PHPParser_Node_Stmt_If $node)
+	private function checkInDefined(If_ $node)
 	{
 		$cond = $node->cond;
 
-		if ($cond instanceof \PHPParser_Node_Expr_BooleanNot && $cond->expr instanceof PHPParser_Node_Expr_FuncCall && $cond->expr->name == 'defined' && $cond->expr->args[0]->value->value == 'IN_PHPBB')
+		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name == 'defined' && $cond->expr->args[0]->value->value == 'IN_PHPBB')
 		{
 
-			if ($node->stmts[0] instanceof PHPParser_Node_Expr_Exit)
+			if ($node->stmts[0] instanceof Node\Expr\Exit_)
 			{
 				// Found IN_PHPBB
 				$this->in_phpbb = true;
@@ -334,7 +338,7 @@ class epv_test_validate_php_functions extends BaseTest
 				// Found IN_PHPBB, but it didn't exists?
 				// We dont set $this->in_phpbb, so parseNode continue running on this node.
 				// Also include a notice.
-				$this->addMessage(Output::NOTICE, 'IN_PHPBB check should exit if it is not defined.');
+				$this->addMessage(Output::NOTICE, 'IN_PHPBB check should exit if it is not defined');
 			}
 			if (sizeof($node->stmts) > 1)
 			{
@@ -345,39 +349,21 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 	}
 
-	/**
-	 * Do certain validations on function names.
-	 *
-	 * @param \PHPParser_Node $node Node to validate
-	 */
-	private function validateFunctionNames(PHPParser_Node $node)
+    /**
+     * Do certain validations on function names.
+     *
+     * @param Node $node Node to validate
+     */
+	private function validateFunctionNames(Node $node)
 	{
 		$name = null;
-		if ($node instanceof PHPParser_Node_Expr_FuncCall)
+		if ($node instanceof FuncCall)
 		{
-			if ($node->name instanceof PHPParser_Node_Expr_Variable)
-			{
-				// If function name is a variable.
-				$name = (string)$node->name->name;
-			}
-			else if ($node->name instanceof PHPParser_Node_Expr_Concat)
-			{
-				// Only test if both are a string
-				// This mean that if a user works around this test he can do so, but otherwise we will
-				// need to parse variables and stuff.
-				if ($node->left instanceof PHPParser_Node_Scalar_String && $node->right instanceof PHPParser_Node_Scalar_String)
-				{
-					$name = $node->left->value . $node->right->value;
-				}
-			}
-			else
-			{
-				$name = (string)$node->name;
-			}
+			$name = $this->getMethodName($node);
 		}
-		else if (isset($node->expr) && $node->expr instanceof PHPParser_Node_Expr_FuncCall)
+		else if (isset($node->expr) && $node->expr instanceof FuncCall)
 		{
-			$name = (string)$node->expr->name->subNodes[0];
+			$name = (string)$node->expr->name->parts[0];
 		}
 
 		if ($name !== null)
@@ -386,37 +372,20 @@ class epv_test_validate_php_functions extends BaseTest
 			$this->validateDeprecated($name, $node);
 			$this->validateFunctions($name, $node);
 		}
+        $this->validateEval($node);
 	}
 	
 	/**
 	 * Validate method calls to classes.
-	 * @param \PHPParser_Node $node Node to validate
+	 * @param Node $node Node to validate
 	 */
-	private function validateMethodCalls(PHPParser_Node $node) {
+	private function validateMethodCalls(Node $node) {
 		$name = null;
-		if ($node instanceof PHPParser_Node_Expr_MethodCall)
+		if ($node instanceof Node\Expr\MethodCall)
 		{
-			if ($node->name instanceof PHPParser_Node_Expr_Variable)
-			{
-				// If function name is a variable.
-				$name = (string)$node->name->name;
-			}
-			else if ($node->name instanceof PHPParser_Node_Expr_Concat)
-			{
-				// Only test if both are a string
-				// This mean that if a user works around this test he can do so, but otherwise we will
-				// need to parse variables and stuff.
-				if ($node->left instanceof PHPParser_Node_Scalar_String && $node->right instanceof PHPParser_Node_Scalar_String)
-				{
-					$name = $node->left->value . $node->right->value;
-				}
-			}
-			else
-			{
-				$name = (string)$node->name;
-			}
-		}
-		else if (isset($node->expr) && $node->expr instanceof PHPParser_Node_Expr_MethodCall && !($node->expr->name instanceof PHPParser_Node_Expr_Variable))
+            $name = $this->getMethodName($node);
+        }
+		else if (isset($node->expr) && $node->expr instanceof Node\Expr\MethodCall && !($node->expr->name instanceof Variable) && !($node->expr->name instanceof PropertyFetch))
 		{
 			$name = (string)$node->expr->name;
 		}
@@ -427,13 +396,40 @@ class epv_test_validate_php_functions extends BaseTest
 		}		
 	}
 
-	/**
-	 * Valdiate the use of enable_globals.
-	 *
-	 * @param                 $name
-	 * @param \PHPParser_Node $node
-	 */	
-	private function validateEnableGlobals($name, PHPParser_Node $node) 
+    /**
+     * @param FuncCall|Expr\MethodCall $node
+     * @return null|string
+     */
+    private function getMethodName(Node $node)
+    {
+        if ($node->name instanceof Variable || $node->name instanceof PropertyFetch || $node->name instanceof ArrayDimFetch)
+        {
+            return null; // This is a variable. We are going to ignore this. We do not want to track variable contents
+        }
+        else if ($node->name instanceof Concat)
+        {
+            // Only test if both are a string
+            // This mean that if a user works around this test he can do so, but otherwise we will
+            // need to parse variables and stuff.
+            if ($node->name->left instanceof String_ && $node->name->right instanceof String_)
+            {
+                return $node->name->left->value . $node->name->right->value;
+            }
+        }
+        else
+        {
+            return (string)$node->name;
+        }
+        return null;
+    }
+
+    /**
+     * Valdiate the use of enable_globals.
+     *
+     * @param $name
+     * @param Node $node
+     */
+	private function validateEnableGlobals($name, Node $node)
 	{
 		if ($name == 'enable_super_globals') 
 		{
@@ -441,13 +437,21 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 	}
 
+	private function validateEval(Node $node)
+    {
+        if ($node instanceof Eval_)
+        {
+            $this->addMessage(Output::FATAL, sprintf('The use of eval() is not allowed for security reasons on line %s', $node->getAttribute('startLine')));
+        }
+    }
+
 	/**
 	 * Valdiate the use of deprecated functions.
 	 *
 	 * @param                 $name
-	 * @param \PHPParser_Node $node
+	 * @param Node $node
 	 */
-	private function validateDeprecated($name, PHPParser_Node $node)
+	private function validateDeprecated($name, Node $node)
 	{
 		foreach ($this->deprecated as $depName => $dep)
 		{
@@ -471,9 +475,9 @@ class epv_test_validate_php_functions extends BaseTest
 	 * Validate the use of non dbal names.
 	 *
 	 * @param string          $name function name
-	 * @param \PHPParser_Node $node
+	 * @param Node $node
 	 */
-	private function validateDbal($name, PHPParser_Node $node)
+	private function validateDbal($name, Node $node)
 	{
 		foreach ($this->dbal as $dbal)
 		{
@@ -497,11 +501,11 @@ class epv_test_validate_php_functions extends BaseTest
 	/**
 	 * Validate if a node uses exit.
 	 *
-	 * @param \PHPParser_Node $node Node to validate
+	 * @param Node $node Node to validate
 	 */
-	private function validateExit(PHPParser_Node $node)
+	private function validateExit(Node $node)
 	{
-		if ($node instanceof PHPParser_Node_Expr_Exit)
+		if ($node instanceof Node\Expr\Exit_)
 		{
 			$this->addMessage(Output::WARNING, sprintf('Using exit on line %s', $node->getAttribute("startLine")));
 		}
@@ -510,11 +514,11 @@ class epv_test_validate_php_functions extends BaseTest
 	/**
 	 * Validate if a node uses print or echo.
 	 *
-	 * @param PHPParser_Node $node Node to validate
+	 * @param Node $node Node to validate
 	 */
-	private function validatePrint(PHPParser_Node $node)
+	private function validatePrint(Node $node)
 	{
-		if ($node instanceof PHPParser_Node_Expr_Print || $node instanceof PHPParser_Node_Stmt_Echo)
+		if ($node instanceof Print_ || $node instanceof Echo_)
 		{
 			$this->addMessage(Output::ERROR, sprintf('The template system should be used instead of echo or print on line %s', $node->getAttribute('startLine')));
 		}
@@ -524,12 +528,11 @@ class epv_test_validate_php_functions extends BaseTest
 	 * Validate if a node uses certain functions that should not be used within phpBB.
 	 *
 	 * @param                 $name
-	 * @param \PHPParser_Node $node Node to validate
+	 * @param Node $node Node to validate
 	 */
-	private function validateFunctions($name, PHPParser_Node $node)
+	private function validateFunctions($name, Node $node)
 	{
 		$warn_array = array(
-			'eval'             => Output::ERROR,
 			'exec'             => Output::ERROR,
 			'system'           => Output::ERROR,
 			'passthru'         => Output::ERROR,
@@ -589,4 +592,5 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		return 'Validate php structure and deprecated functions';
 	}
+
 }
