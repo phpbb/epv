@@ -118,8 +118,8 @@ class FileLoader
 				// First, check if this file is a lang file.
 				$file = basename($fileName);
 				$dir  = str_replace($file, '', $fileName);
-				$dir  = str_replace($this->basedir, '', $fileName);
-				$dir  = explode('/', $dir);
+				$dir  = str_replace($this->basedir, '', $dir);
+				$dir  = explode('/', trim($dir, '/'));
 
 				if (trim(strtolower($dir[0])) == 'language')
 				{

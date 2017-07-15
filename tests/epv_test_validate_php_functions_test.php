@@ -14,12 +14,12 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
 	{
 		require_once('./tests/Mock/Output.php');
 	}
-	
+
     public function test_usage_of_enable_globals() {
         $output = $this->getOutputMock();
         $output->expects($this->exactly(1))
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globalsphp')
+            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/enable_globals.php');
@@ -44,7 +44,7 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
         $output = $this->getOutputMock();
         $output->expects($this->exactly(1))
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals3php')
+            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals3.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/enable_globals3.php');
@@ -57,7 +57,7 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
         $output = $this->getOutputMock();
         $output->expects($this->exactly(1))
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 'Using addslashes on line 8 in tests/testFiles/addslashesphp')
+            ->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 'Using addslashes on line 8 in tests/testFiles/addslashes.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/addslashes.php');
@@ -70,7 +70,7 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
         $output = $this->getOutputMock();
         $output->expects($this->exactly(1))
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of eval() is not allowed for security reasons on line 8 in tests/testFiles/evalphp')
+            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of eval() is not allowed for security reasons on line 8 in tests/testFiles/eval.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/eval.php');
@@ -83,7 +83,7 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
         $output = $this->getOutputMock();
         $output->expects($this->exactly(1))
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::WARNING, 'IN_PHPBB is not defined in tests/testFiles/no_in_phpbbphp')
+            ->with(\Phpbb\Epv\Output\OutputInterface::WARNING, 'IN_PHPBB is not defined in tests/testFiles/no_in_phpbb.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/no_in_phpbb.php');

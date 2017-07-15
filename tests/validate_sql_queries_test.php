@@ -14,12 +14,12 @@ class validate_sql_queries_test extends PHPUnit_Framework_TestCase
 	{
 		require_once('./tests/Mock/Output.php');
 	}
-	
+
 	public function test_insecure_sql_query() {
 		$output = $this->getMock('Phpbb\Epv\Output\OutputInterface');
 		$output->expects($this->once())
 			->method('addMessage')
-			->with(\Phpbb\Epv\Output\OutputInterface::WARNING, 'Found potential SQL injection on line 5 in tests/testFiles/sql_injectionphp')
+			->with(\Phpbb\Epv\Output\OutputInterface::WARNING, 'Found potential SQL injection on line 5 in tests/testFiles/sql_injection.php')
 		;
 
 		$file_loader = new \Phpbb\Epv\Files\FileLoader(new \Phpbb\Epv\Tests\Mock\Output(), false, '.', '.');
