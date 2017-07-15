@@ -121,11 +121,11 @@ class FileLoader
 				$dir  = str_replace($this->basedir, '', $dir);
 				$dir  = explode('/', trim($dir, '/'));
 
-				if (trim(strtolower($dir[0])) == 'language')
+				if (trim(strtolower(end($dir))) == 'language')
 				{
 					return new LangFile($this->debug, $fileName, $this->rundir);
 				}
-				if (trim(strtolower($dir[0])) == 'migrations')
+				if (trim(strtolower(end($dir))) == 'migrations')
 				{
 					return new MigrationFile($this->debug, $fileName, $this->rundir);
 				}
