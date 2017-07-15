@@ -56,16 +56,27 @@ abstract class BaseFile implements FileInterface
 
 	/**
 	 * Get the filename for this file.
-	 * @return filename
+	 * @return string
 	 */
 	public function getFilename()
 	{
 		return $this->fileName;
 	}
 
+	/*
+	 * Get the filename without the full path
+	 * @return string
+	 */
 	public function getSaveFilename()
 	{
-		return str_replace($this->basedir, '', $this->fileName);
+		$filename = $this->fileName;
+
+		if (0 === strpos($filename, $this->basedir))
+		{
+			$filename = substr($filename, strlen($this->basedir));
+		}
+
+		return $filename;
 	}
 
 	/**

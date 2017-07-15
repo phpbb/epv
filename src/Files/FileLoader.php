@@ -118,14 +118,14 @@ class FileLoader
 				// First, check if this file is a lang file.
 				$file = basename($fileName);
 				$dir  = str_replace($file, '', $fileName);
-				$dir  = str_replace($this->basedir, '', $fileName);
-				$dir  = explode('/', $dir);
+				$dir  = str_replace($this->basedir, '', $dir);
+				$dir  = explode('/', trim($dir, '/'));
 
-				if (trim(strtolower($dir[0])) == 'language')
+				if (trim(strtolower(end($dir))) == 'language')
 				{
 					return new LangFile($this->debug, $fileName, $this->rundir);
 				}
-				if (trim(strtolower($dir[0])) == 'migrations')
+				if (trim(strtolower(end($dir))) == 'migrations')
 				{
 					return new MigrationFile($this->debug, $fileName, $this->rundir);
 				}
