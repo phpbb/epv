@@ -54,7 +54,7 @@ class epv_test_validate_revert_schema extends BaseTest
 	{
 		if (!$file instanceof MigrationFile)
 		{
-			throw new TestException('This test expects a migration file, got ' . get_class($file));
+			throw new TestException(sprintf('This test expects a migration file, got %s (%s).', get_class($file), $file->getFilename()));
 		}
 
 		try
