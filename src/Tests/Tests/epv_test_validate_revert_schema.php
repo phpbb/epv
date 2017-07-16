@@ -61,7 +61,7 @@ class epv_test_validate_revert_schema extends BaseTest
 		{
 			$nodes = $this->parser->parse($file->getFile());
 
-			if (!$this->parseNodes($nodes))
+			if ($this->isMissingRevertSchema($nodes))
 			{
 				$this->output->addMessage(Output::ERROR, sprintf('Migration file %s is missing the revert_schema() method.', $file->getSaveFilename()));
 			}
@@ -76,17 +76,17 @@ class epv_test_validate_revert_schema extends BaseTest
 	 * @param Node[] $nodes
 	 * @return bool
 	 */
-	protected function parseNodes($nodes)
+	protected function isMissingRevertSchema($nodes)
 	{
 		foreach ($nodes as $node)
 		{
 			if ($node instanceof Class_ && $this->hasMethod($node, 'update_schema') && !$this->hasMethod($node, 'revert_schema'))
 			{
-				return false;
+				return true;
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	/**
