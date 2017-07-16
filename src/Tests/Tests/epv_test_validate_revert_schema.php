@@ -80,27 +80,7 @@ class epv_test_validate_revert_schema extends BaseTest
 	{
 		foreach ($nodes as $node)
 		{
-			if ($node instanceof Class_)
-			{
-				if (!$this->parseClass($node->stmts))
-				{
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * @param Node[] $nodes
-	 * @return bool
-	 */
-	protected function parseClass($nodes)
-	{
-		foreach ($nodes as $node)
-		{
-			if ($node instanceof ClassMethod && $node->name === 'update_schema' && !$this->hasMethod($nodes, 'revert_schema'))
+			if ($node instanceof Class_ && $this->hasMethod($node, 'update_schema') && !$this->hasMethod($node, 'revert_schema'))
 			{
 				return false;
 			}
@@ -110,13 +90,13 @@ class epv_test_validate_revert_schema extends BaseTest
 	}
 
 	/**
-	 * @param Node[] $nodes
+	 * @param Class_ $node
 	 * @param string $methodName
 	 * @return bool
 	 */
-	protected function hasMethod($nodes, $methodName)
+	protected function hasMethod($node, $methodName)
 	{
-		foreach ($nodes as $node)
+		foreach ($node->stmts as $node)
 		{
 			if ($node instanceof ClassMethod && $node->name === $methodName)
 			{
