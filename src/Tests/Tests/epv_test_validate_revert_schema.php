@@ -41,7 +41,7 @@ class epv_test_validate_revert_schema extends BaseTest
 	{
 		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
 
-		$this->fileTypeFull = Type::TYPE_PHP | Type::TYPE_MIGRATION;
+		$this->fileTypeFull = Type::TYPE_MIGRATION;
 		$this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
 	}
 
