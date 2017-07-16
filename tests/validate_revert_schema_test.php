@@ -64,7 +64,7 @@ class validate_revert_schema_test extends PHPUnit_Framework_TestCase
 			/** @var PHPUnit_Framework_MockObject_MockObject $output */
 			$output->expects($this->once())
 				->method('addMessage')
-				->with(OutputInterface::FATAL, 'Migration file tests/testFiles/migrations/missing_revert_schema.php is missing the revert_schema() method.');
+				->with(OutputInterface::ERROR, 'Migration file tests/testFiles/migrations/missing_revert_schema.php is missing the revert_schema() method.');
 		});
 	}
 }

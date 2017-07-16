@@ -63,7 +63,7 @@ class epv_test_validate_revert_schema extends BaseTest
 
 			if (!$this->parseNodes($nodes))
 			{
-				$this->output->addMessage(Output::FATAL, sprintf('Migration file %s is missing the revert_schema() method.', $file->getSaveFilename()));
+				$this->output->addMessage(Output::ERROR, sprintf('Migration file %s is missing the revert_schema() method.', $file->getSaveFilename()));
 			}
 		}
 		catch (Error $e)
