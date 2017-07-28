@@ -11,11 +11,12 @@ namespace Phpbb\Epv\Tests\Tests;
 
 use Phpbb\Epv\Events\php_exporter;
 use Phpbb\Epv\Output\Output;
+use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\BaseTest;
 
 class epv_test_validate_event_names extends BaseTest
 {
-	public function __construct($debug, \Phpbb\Epv\Output\OutputInterface $output, $basedir, $namespace, $titania, $opendir)
+	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
 		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
 
@@ -50,11 +51,11 @@ class epv_test_validate_event_names extends BaseTest
 		foreach ($events as $event)
 		{
 			$event['file'] = str_replace($this->basedir, '', $event['file']);
-			if (strtolower(substr($event['event'], 0, 6)) == 'phpbb.')
+			if (0 === stripos($event['event'], 'phpbb.'))
 			{
 				$this->output->addMessage(Output::ERROR, sprintf('The phpbb vendorname should only be used for official extensions in event names in %s. Current event name: %s', $event['file'], $event['event']));
 			}
-			else if (strtolower(substr($event['event'], 0, 5)) == 'core.')
+			else if (0 === stripos($event['event'], 'core.'))
 			{
 				$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in event names in %s. Current event name: %s', $event['file'], $event['event']));
 			}
@@ -69,6 +70,6 @@ class epv_test_validate_event_names extends BaseTest
 
 	public function testName()
 	{
-		return "Test event names";
+		return 'Test event names';
 	}
 }
