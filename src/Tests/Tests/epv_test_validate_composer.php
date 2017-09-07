@@ -95,25 +95,27 @@ class epv_test_validate_composer extends BaseTest
 
 		$parser = new ValidatingArrayLoader(new ArrayLoader(), true, null, ValidatingArrayLoader::CHECK_ALL);
 		try {
-            $parser->load($json);
-        }
-        catch (InvalidPackageException $exception)
-        {
-            $this->handleMessages($exception->getErrors(), Output::FATAL);
-            $this->handleMessages($exception->getWarnings(), Output::WARNING);
-        }
+			$parser->load($json);
+		}
+		catch (InvalidPackageException $exception)
+		{
+			$this->handleMessages($exception->getErrors(), Output::FATAL);
+			$this->handleMessages($exception->getWarnings(), Output::WARNING);
+		}
 	}
 
-    /**
-     * @param array $errorList
-     * @param int $type
-     */
-    private function handleMessages(array $errorList, $type = Output::ERROR)
-    {
-        foreach ($errorList as $error) {
-            $this->output->addMessage($type, 'Composer validation error: ' . $error);
-        }
-    }
+	/**
+	 * Add a array of errors as error into the report
+	 *
+	 * @param array $errorList
+	 * @param int $type
+	 */
+	private function handleMessages(array $errorList, $type = Output::ERROR)
+	{
+		foreach ($errorList as $error) {
+			$this->output->addMessage($type, 'Composer validation error: ' . $error);
+		}
+	}
 	private function addMessageIfBooleanTrue($addMessage, $type, $message)
 	{
 		if ($addMessage)
