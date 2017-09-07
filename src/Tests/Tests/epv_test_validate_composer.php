@@ -113,7 +113,7 @@ class epv_test_validate_composer extends BaseTest
 	private function handleMessages(array $errorList, $type = Output::ERROR)
 	{
 		foreach ($errorList as $error) {
-			$this->output->addMessage($type, 'Composer validation error: ' . $error);
+			$this->output->addMessage($type, 'Composer validation: ' . $error);
 		}
 	}
 	private function addMessageIfBooleanTrue($addMessage, $type, $message)
