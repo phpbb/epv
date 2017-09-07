@@ -19,7 +19,7 @@ class validate_composer_test extends PHPUnit_Framework_TestCase
 		$output = $this->getMock('Phpbb\Epv\Output\OutputInterface');
 		$output->expects($this->atLeastOnce())
 			->method('addMessage')
-			->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'Composer validation error: require.phpbb/phpbb : invalid version constraint (Could not parse version constraint <3.3.x: Invalid version string "3.3.x")')
+			->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'Composer validation: require.phpbb/phpbb : invalid version constraint (Could not parse version constraint <3.3.x: Invalid version string "3.3.x")')
 		;
 
 		$file_loader = new \Phpbb\Epv\Files\FileLoader(new \Phpbb\Epv\Tests\Mock\Output(), false, '.', '.');
