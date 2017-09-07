@@ -10,6 +10,10 @@
 namespace Phpbb\Epv\Tests\Tests;
 
 use Composer\Composer;
+use Composer\Package\Loader\ArrayLoader;
+use Composer\Package\Loader\InvalidPackageException;
+use Composer\Package\Loader\ValidatingArrayLoader;
+use Composer\Package\Version\VersionParser;
 use Phpbb\Epv\Files\FileInterface;
 use Phpbb\Epv\Files\Type\ComposerFileInterface;
 use Phpbb\Epv\Output\Output;
@@ -88,8 +92,30 @@ class epv_test_validate_composer extends BaseTest
 				$this->addMessageIfBooleanTrue(true, Output::ERROR, sprintf('An invalid version constraint is used in soft-require: phpbb/phpbb. You can\'t combine a <|<=|~|\^|>|>= with a *|x. Please replace %s with %s', $json['extra']['soft-require']['phpbb/phpbb'], $replace));
 			}
 		}
+
+		$parser = new ValidatingArrayLoader(new ArrayLoader(), true, null, ValidatingArrayLoader::CHECK_ALL);
+		try {
+			$parser->load($json);
+		}
+		catch (InvalidPackageException $exception)
+		{
+			$this->handleMessages($exception->getErrors(), Output::FATAL);
+			$this->handleMessages($exception->getWarnings(), Output::WARNING);
+		}
 	}
 
+	/**
+	 * Add a array of errors as error into the report
+	 *
+	 * @param array $errorList
+	 * @param int $type
+	 */
+	private function handleMessages(array $errorList, $type = Output::ERROR)
+	{
+		foreach ($errorList as $error) {
+			$this->output->addMessage($type, 'Composer validation: ' . $error);
+		}
+	}
 	private function addMessageIfBooleanTrue($addMessage, $type, $message)
 	{
 		if ($addMessage)
@@ -102,4 +128,5 @@ class epv_test_validate_composer extends BaseTest
 	{
 		return "Validate composer structure";
 	}
+
 }
