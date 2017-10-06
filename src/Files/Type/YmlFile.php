@@ -27,7 +27,7 @@ class YmlFile extends BaseFile implements YmlFileInterface
 
 		try
 		{
-			$content = Yaml::parse($this->fileData);
+			$content = (array) Yaml::parse($this->fileData);
 
 			// Look for imports
 			if (isset($content['imports']) && is_array($content['imports']))
