@@ -1,0 +1,6 @@
+imports:
+    - { resource: empty.yml }
+
+services:
+    some.service.name:
+        class: a\b\c

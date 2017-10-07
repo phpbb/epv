@@ -29,6 +29,11 @@ class YmlFile extends BaseFile implements YmlFileInterface
 		{
 			$content = Yaml::parse($this->fileData);
 
+			if (!is_array($content))
+			{
+				throw new ParseException("Empty file");
+			}
+
 			// Look for imports
 			if (isset($content['imports']) && is_array($content['imports']))
 			{
@@ -40,9 +45,18 @@ class YmlFile extends BaseFile implements YmlFileInterface
 				{
 					if (isset($import['resource']))
 					{
-						$importYmlFileName = $dirname . '/' . $import['resource'];
-						$importYmlFile = new YmlFile($debug, $importYmlFileName, $rundir);
-						$extraContent = $importYmlFile->getYaml();
+						try
+						{
+							$importYmlFileName = $dirname . '/' . $import['resource'];
+							$importYmlFile = new YmlFile($debug, $importYmlFileName, $rundir);
+							$extraContent = $importYmlFile->getYaml();
+						}
+						catch (FileLoadException $ex)
+						{
+							// The imported yml file will be loaded individually later.
+							// Let's avoid duplicate error messages here and continue with the current yml.
+							$extraContent = array();
+						}
 
 						// Imports are at the top of the yaml file, so these should be loaded first.
 						// The values of the current yaml file will overwrite existing array values of the imports.
