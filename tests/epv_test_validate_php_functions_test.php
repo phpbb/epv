@@ -152,6 +152,18 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
         $tester->validateFile($file);
     }
 
+    public function test_usage_variable() {
+        $output = $this->getOutputMock();
+        $output->expects($this->exactly(0))
+            ->method('addMessage')
+        ;
+
+        $file = $this->getLoader()->loadFile('tests/testFiles/variable_function.php');
+
+        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester->validateFile($file);
+    }
+
     private function getLoader()
     {
         return $file = new \Phpbb\Epv\Files\FileLoader(new \Phpbb\Epv\Tests\Mock\Output(), false, '.', '.');
