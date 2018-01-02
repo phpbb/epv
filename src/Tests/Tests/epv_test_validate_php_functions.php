@@ -361,7 +361,7 @@ class epv_test_validate_php_functions extends BaseTest
 		{
 			$name = $this->getMethodName($node);
 		}
-		else if (isset($node->expr) && $node->expr instanceof FuncCall)
+		else if (isset($node->expr) && $node->expr instanceof FuncCall && isset($node->expr->name->parts) && is_array($node->expr->name->parts))
 		{
 			$name = (string)$node->expr->name->parts[0];
 		}
