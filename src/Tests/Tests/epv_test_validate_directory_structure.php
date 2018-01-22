@@ -17,6 +17,17 @@ class epv_test_validate_directory_structure extends BaseTest
 {
 	private $strict = false;
 
+	/**
+	 * Keywords that are all required to be present in
+	 * the license.txt file to not generate a warning
+	 *
+	 * @const array
+	 */
+	const LICENSE_KEYWORDS = [
+		'gnu general public license',
+		'version 2',
+	];
+
 	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
 		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
@@ -42,6 +53,17 @@ class epv_test_validate_directory_structure extends BaseTest
 						$this->output->addMessage(Output::WARNING, 'The name of license.txt should be completely lowercase.');
 					}
 
+					$license_text = strtolower(@file_get_contents($dir));
+
+					foreach (self::LICENSE_KEYWORDS as $license_keyword)
+					{
+						if (strpos($license_text, $license_keyword) === false)
+						{
+							$this->output->addMessage(Output::WARNING, 'Make sure the license.txt contains the GPLv2.');
+							break;
+						}
+					}
+
 					// Do not check license.txt location. Will give false positives in case packaging is wrong directory wise.
 					break;
 
@@ -64,7 +86,7 @@ class epv_test_validate_directory_structure extends BaseTest
 
 					if ($this->namespace != $sp)
 					{
-						$this->output->addMessage(Output::ERROR, 
+						$this->output->addMessage(Output::ERROR,
 							sprintf("Packaging structure doesn't meet the extension DB policies.\nExpected: %s\nGot: %s",
 							$this->namespace, $sp));
 					}
