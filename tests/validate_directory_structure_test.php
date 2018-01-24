@@ -17,7 +17,7 @@ class validate_directory_structure extends PHPUnit_Framework_TestCase {
 		;
 
 		$tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure(false, $output, '/a/b/epv/test', 'epv/test', false, '/a/');
-		$tester->validateDirectory(array());
+		$tester->validateDirectory(array(), false);
 	}
 
 	public function test_license() {
@@ -33,7 +33,7 @@ class validate_directory_structure extends PHPUnit_Framework_TestCase {
 		$tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure(false, $output, '/a/b/epv/test', 'epv/test', false, '/a/b/');
 		$tester->validateDirectory(array(
 			'/a/b/epv/test/license.txt',
-		));
+		), false);
 	}
 
 	public function test_composer() {
@@ -46,14 +46,14 @@ class validate_directory_structure extends PHPUnit_Framework_TestCase {
 		$tester->validateDirectory(array(
 			'/a/b/epv/test/composer.json',
 			'/a/b/epv/test/license.txt',
-		));
+		), false);
 	}
 
 	public function test_composer_wrong2() {
 		$output = $this->getOutputMock();
 		$output->expects($this->once())
 			->method('addMessage')
-			->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 
+			->with(\Phpbb\Epv\Output\OutputInterface::ERROR,
 				sprintf("Packaging structure doesn't meet the extension DB policies.\nExpected: %s\nGot: %s",
 				'epv/test', 'b/epv/test'))
 		;
@@ -61,7 +61,7 @@ class validate_directory_structure extends PHPUnit_Framework_TestCase {
 		$tester->validateDirectory(array(
 			'/a/b/epv/test/composer.json',
 			'/a/b/epv/test/license.txt',
-		));
+		), false);
 	}
 
 
@@ -70,17 +70,16 @@ class validate_directory_structure extends PHPUnit_Framework_TestCase {
 
 		$output->expects($this->exactly(1))
 			->method('addMessage')
-			->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 
+			->with(\Phpbb\Epv\Output\OutputInterface::ERROR,
 				sprintf("Packaging structure doesn't meet the extension DB policies.\nExpected: %s\nGot: %s",
 				'epv/test', 'b'))
 		;
-
 
 		$tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure(false, $output, '/a/b/', 'epv/test', false, '/a/');
 		$tester->validateDirectory(array(
 			'/a/b/composer.json',
 			'/a/b/epv/test/license.txt',
-		));
+		), false);
 	}
 
 	/**

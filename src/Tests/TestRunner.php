@@ -54,6 +54,15 @@ class TestRunner
 	}
 
 	/**
+	 * @param string $resource
+	 * @return bool|string
+	 */
+	public static function getResource($resource)
+	{
+		return realpath(__DIR__. '/../Resources/' . $resource);
+	}
+
+	/**
 	 * Run the actual test suite.
 	 *
 	 * @throws Exception\TestException

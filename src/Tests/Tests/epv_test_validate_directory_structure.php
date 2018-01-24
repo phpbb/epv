@@ -12,21 +12,15 @@ namespace Phpbb\Epv\Tests\Tests;
 use Phpbb\Epv\Output\Output;
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\BaseTest;
+use Phpbb\Epv\Tests\TestRunner;
 
 class epv_test_validate_directory_structure extends BaseTest
 {
 	private $strict = false;
 
-	/**
-	 * Keywords that are all required to be present in
-	 * the license.txt file to not generate a warning
-	 *
-	 * @const array
-	 */
-	const LICENSE_KEYWORDS = [
-		'gnu general public license',
-		'version 2',
-	];
+	const LICENSE_SIMILARITY_TRESHOLD = 0.995;
+
+	const LICENSE_CLOSING_WORDS = 'END OF TERMS AND CONDITIONS';
 
 	public function __construct($debug, OutputInterface $output, $basedir, $namespace, $titania, $opendir)
 	{
@@ -35,7 +29,7 @@ class epv_test_validate_directory_structure extends BaseTest
         $this->directory = true;
     }
 
-	public function validateDirectory(array $dirList)
+	public function validateDirectory(array $dirList, $validateLicenseContents = true)
 	{
 		$files = array(
 			'license'  => false,
@@ -53,14 +47,17 @@ class epv_test_validate_directory_structure extends BaseTest
 						$this->output->addMessage(Output::WARNING, 'The name of license.txt should be completely lowercase.');
 					}
 
-					$license_text = strtolower(@file_get_contents($dir));
-
-					foreach (self::LICENSE_KEYWORDS as $license_keyword)
+					if ($validateLicenseContents)
 					{
-						if (strpos($license_text, $license_keyword) === false)
+						$licenseSimilarity = $this->validateLicenseContents(TestRunner::getResource('gpl-2.0.txt'), $dir);
+
+						if ($licenseSimilarity < self::LICENSE_SIMILARITY_TRESHOLD)
 						{
-							$this->output->addMessage(Output::WARNING, 'Make sure the license.txt contains the GPLv2.');
-							break;
+							$msg = 'Similarity of the license.txt to the GPL-2.0 is too low. Expected is %s%% or above but got %s%%';
+							$expectedPercent = round(self::LICENSE_SIMILARITY_TRESHOLD * 100, 2);
+							$actualPercent = round($licenseSimilarity * 100, 2);
+
+							$this->output->addMessage(Output::WARNING, sprintf($msg, $expectedPercent, $actualPercent));
 						}
 					}
 
@@ -103,5 +100,102 @@ class epv_test_validate_directory_structure extends BaseTest
 	public function testName()
 	{
 		return "Validate directory structure";
+	}
+
+	/**
+	 * @param string $expectedLicenseFile Path to the file of the expected license
+	 * @param string $extLicenseFile      Path to the extension's license.txt file
+	 * @return float
+	 */
+	public function validateLicenseContents($expectedLicenseFile, $extLicenseFile)
+	{
+		$expectedLicense = @file_get_contents($expectedLicenseFile);
+		$extLicense = @file_get_contents($extLicenseFile);
+
+		// Remove everything after the closing words
+		if (($closingWordsPos = strripos($extLicense, self::LICENSE_CLOSING_WORDS)) !== false)
+		{
+			$extLicense = substr($extLicense, 0, $closingWordsPos + strlen(self::LICENSE_CLOSING_WORDS));
+		}
+
+		// Remove all whitespaces
+		$extLicense = preg_replace('/\s+/', '', $extLicense);
+		$expectedLicense = preg_replace('/\s+/', '', $expectedLicense);
+
+		return $this->diceCoefficient($expectedLicense, $extLicense);
+	}
+
+	/**
+	 * Sørensen–Dice coefficient, case sensitive
+	 *
+	 * @param string $str1
+	 * @param string $str2
+	 * @return float a value between 0 and 1, 1 being exact match
+	 */
+	protected function diceCoefficient($str1, $str2)
+	{
+		$str1 = (string) $str1;
+		$str2 = (string) $str2;
+
+		if ($str1 === $str2)
+		{
+			return 1;
+		}
+
+		if (!strlen($str1) || !strlen($str2))
+		{
+			return 0;
+		}
+
+		$bi1 = $this->bigrams($str1);
+		$bi2 = $this->bigrams($str2);
+
+		sort($bi1);
+		sort($bi2);
+
+		$i = 0;
+		$j = 0;
+		$matches = 0;
+		$len1 = sizeof($bi1);
+		$len2 = sizeof($bi2);
+
+		while ($i < $len1 && $j < $len2)
+		{
+			$cmp = strcmp($bi1[$i], $bi2[$j]);
+
+			if ($cmp == 0)
+			{
+				$matches += 2;
+				$i++;
+				$j++;
+			}
+			else if ($cmp < 0)
+			{
+				$i++;
+			}
+			else
+			{
+				$j++;
+			}
+		}
+
+		return $matches / ($len1 + $len2);
+	}
+
+	/**
+	 * @param $str
+	 * @return array
+	 */
+	protected function bigrams($str)
+	{
+		$bigrams = [];
+		$len = strlen($str);
+
+		for ($i = 0; $i < $len - 1; $i++)
+		{
+			$bigrams[] = $str[$i] . $str[$i + 1];
+		}
+
+		return $bigrams;
 	}
 }
