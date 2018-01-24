@@ -19,10 +19,11 @@ class validate_license_test extends PHPUnit_Framework_TestCase
 	 * @param callable $configure
 	 */
 	private function validateLicense($license, $configure) {
+		/** @var OutputInterface $output */
 		$output = $this->getMock('Phpbb\Epv\Output\OutputInterface');
 		$configure($output);
 
-		$tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure(false, $output, 'tests/testFiles/', 'epv/test', false, 'tests/testFiles/');
+		$tester = new epv_test_validate_directory_structure(false, $output, 'tests/testFiles/', 'epv/test', false, 'tests/testFiles/');
 		$tester->validateDirectory([
 			'tests/testFiles/licenses/' . $license . '/license.txt',
 		]);
