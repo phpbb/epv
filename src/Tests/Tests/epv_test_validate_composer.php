@@ -63,7 +63,7 @@ class epv_test_validate_composer extends BaseTest
 	{
 		$json = $file->getJson();
 		$this->addMessageIfBooleanTrue(!isset($json['license']), Output::FATAL, 'The license key is missing');
-		$this->addMessageIfBooleanTrue(isset($json['license']) && $json['license'] != 'GPL-2.0', Output::ERROR, 'It is required to use the GPL-2.0 as license. MIT is not allowed as per the extension database policies.');
+		$this->addMessageIfBooleanTrue(isset($json['license']) && $json['license'] != 'GPL-2.0-only', Output::ERROR, 'It is required to use the GPL-2.0-only as license. Other licenses are not allowed as per the extension database policies.');
 	}
 
 	private function validateName(ComposerFileInterface $file)
