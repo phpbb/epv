@@ -18,7 +18,7 @@ class epv_test_validate_directory_structure extends BaseTest
 {
 	private $strict = false;
 
-	const LICENSE_SIMILARITY_TRESHOLD = 0.995;
+	const LICENSE_SIMILARITY_THRESHOLD = 0.995;
 
 	const LICENSE_CLOSING_WORDS = 'END OF TERMS AND CONDITIONS';
 
@@ -49,12 +49,12 @@ class epv_test_validate_directory_structure extends BaseTest
 
 					if ($validateLicenseContents)
 					{
-						$licenseSimilarity = $this->validateLicenseContents(TestRunner::getResource('gpl-2.0.txt'), $dir);
+						$licenseSimilarity = $this->licenseSimilarity(TestRunner::getResource('gpl-2.0.txt'), $dir);
 
-						if ($licenseSimilarity < self::LICENSE_SIMILARITY_TRESHOLD)
+						if ($licenseSimilarity !== false && $licenseSimilarity < self::LICENSE_SIMILARITY_THRESHOLD)
 						{
 							$msg = 'Similarity of the license.txt to the GPL-2.0 is too low. Expected is %s%% or above but got %s%%';
-							$expectedPercent = self::LICENSE_SIMILARITY_TRESHOLD * 100;
+							$expectedPercent = self::LICENSE_SIMILARITY_THRESHOLD * 100;
 							$actualPercent = bcdiv($licenseSimilarity * 100, 1, 2);
 
 							$this->output->addMessage(Output::WARNING, sprintf($msg, $expectedPercent, $actualPercent));
@@ -105,12 +105,25 @@ class epv_test_validate_directory_structure extends BaseTest
 	/**
 	 * @param string $expectedLicenseFile Path to the file of the expected license
 	 * @param string $extLicenseFile      Path to the extension's license.txt file
-	 * @return float
+	 * @return bool|float
 	 */
-	public function validateLicenseContents($expectedLicenseFile, $extLicenseFile)
+	public function licenseSimilarity($expectedLicenseFile, $extLicenseFile)
 	{
 		$expectedLicense = @file_get_contents($expectedLicenseFile);
+
+		if ($expectedLicense === false)
+		{
+			$this->output->addMessage(Output::WARNING, 'Failed to load expected license file from ' . $expectedLicenseFile);
+			return false;
+		}
+
 		$extLicense = @file_get_contents($extLicenseFile);
+
+		if ($extLicense === false)
+		{
+			$this->output->addMessage(Output::WARNING, 'Failed to load extension license file from ' . $extLicense);
+			return false;
+		}
 
 		// Remove everything after the closing words
 		if (($closingWordsPos = strripos($extLicense, self::LICENSE_CLOSING_WORDS)) !== false)
