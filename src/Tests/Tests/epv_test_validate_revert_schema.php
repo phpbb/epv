@@ -20,6 +20,7 @@ use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\ParserFactory;
 
 class epv_test_validate_revert_schema extends BaseTest
@@ -78,11 +79,16 @@ class epv_test_validate_revert_schema extends BaseTest
 	 */
 	protected function isMissingRevertSchema($nodes)
 	{
-		foreach ($nodes as $node)
+		$root = reset($nodes);
+
+		if ($root instanceof Namespace_)
 		{
-			if ($node instanceof Class_ && $this->hasMethod($node, 'update_schema') && !$this->hasMethod($node, 'revert_schema'))
+			foreach ($root->stmts as $node)
 			{
-				return true;
+				if ($node instanceof Class_ && $this->hasMethod($node, 'update_schema') && !$this->hasMethod($node, 'revert_schema'))
+				{
+					return true;
+				}
 			}
 		}
 
