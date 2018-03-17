@@ -1,7 +1,7 @@
 {
     "name": "phpbb/epv",
     "description": "A extension validator for phpBB extensions. Extensions are required to pass the validator when submitted to the extension database.",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "authors": [
         {
             "name": "Paul Sohier",

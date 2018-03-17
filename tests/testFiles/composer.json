@@ -5,7 +5,7 @@
   "homepage": "https://www.phpbbextensions.io",
   "version": "1.0.1",
   "time": "2017-05-07",
-  "license": "GPL-2.0",
+  "license": "GPL-2.0-only",
   "authors": [
     {
       "name": "paul999",
