@@ -240,19 +240,22 @@ class php_exporter
 	/**
 	 * Find the $vars array
 	 *
-	 * @return array        List of variables
+	 * @param    bool   $throw_multiline      Throw an exception when there are too
+	 *                                        many arguments in one line.
+	 *
+ 	 * @return array        List of variables
 	 * @throws \LogicException
 	 */
-	public function get_vars_from_array()
+	public function get_vars_from_array($throw_multiline = true)
 	{
 		$line = ltrim($this->file_lines[$this->current_event_line - 1], " \t");
-		if ($line === ');')
+		if ($line === ');' || $line === '];')
 		{
 			$vars_array = $this->get_vars_from_multi_line_array();
 		}
 		else
 		{
-			$vars_array = $this->get_vars_from_single_line_array($line);
+			$vars_array = $this->get_vars_from_single_line_array($line, $throw_multiline);
 		}
 
 		foreach ($vars_array as $var)
@@ -269,7 +272,7 @@ class php_exporter
 	}
 
 	/**
-	 * Find the variables in single line array
+	 * Find the variables in a single line array
 	 *
 	 * @param    string $line
 	 * @param    bool   $throw_multiline      Throw an exception when there are too
@@ -281,11 +284,11 @@ class php_exporter
 	public function get_vars_from_single_line_array($line, $throw_multiline = true)
 	{
 		$match = array();
-		preg_match('#^\$vars = array\(\'([a-zA-Z0-9_\' ,]+)\'\);$#', $line, $match);
+		preg_match('#^\$vars = (?:(\[)|array\()\'([a-z0-9_\' ,]+)\'(?(1)\]|\));$#i', $line, $match);
 
-		if (isset($match[1]))
+		if (isset($match[2]))
 		{
-			$vars_array = explode("', '", $match[1]);
+			$vars_array = explode("', '", $match[2]);
 			if ($throw_multiline && sizeof($vars_array) > 6)
 			{
 				throw new \LogicException('Should use multiple lines for $vars definition '
@@ -301,7 +304,7 @@ class php_exporter
 	}
 
 	/**
-	 * Find the variables in single line array
+	 * Find the variables in a multi line array
 	 *
 	 * @return array        List of variables
 	 * @throws \LogicException
@@ -310,7 +313,7 @@ class php_exporter
 	{
 		$current_vars_line = 2;
 		$var_lines         = array();
-		while (ltrim($this->file_lines[$this->current_event_line - $current_vars_line], " \t") !== '$vars = array(')
+		while (!in_array(ltrim($this->file_lines[$this->current_event_line - $current_vars_line], "\t"), ['$vars = array(', '$vars = [']))
 		{
 			$var_lines[] = substr(trim($this->file_lines[$this->current_event_line - $current_vars_line]), 0, -1);
 

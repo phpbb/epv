@@ -7,6 +7,11 @@
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
+
+use Phpbb\Epv\Events\php_exporter;
+use Phpbb\Epv\Output\OutputInterface;
+use Phpbb\Epv\Tests\Mock\Output;
+
 class php_exporter_test extends \PHPUnit_Framework_TestCase
 {
 
@@ -17,38 +22,49 @@ class php_exporter_test extends \PHPUnit_Framework_TestCase
 
 	public function extension_data()
 	{
-		return array(
-			array(27, './tests/events/invalid_name.php', 'rxu.PostsMerging.posts_merging_end', array(
-				array(
-					'type'    => Phpbb\Epv\Output\OutputInterface::ERROR,
-					'message' => 'Event names should be all lowercase in  for event rxu.PostsMerging.posts_merging_end',
-				))),
-			array(27, './tests/events/valid_name.php', 'rxu.postsmerging.posts_merging_end')
-		);
+		$expected_vars = ['mode', 'subject', 'username', 'topic_type', 'poll', 'data', 'update_message', 'update_search_index', 'url'];
+		sort($expected_vars);
+
+		$expected_errors = [
+			[
+				'type'    => OutputInterface::ERROR,
+				'message' => 'Event names should be all lowercase in  for event %s',
+			],
+		];
+
+		return [
+			[27, './tests/events/invalid_name_long_multi.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
+			[17, './tests/events/invalid_name_long_single.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
+			[27, './tests/events/invalid_name_short_multi.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
+			[17, './tests/events/invalid_name_short_single.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
+			[27, './tests/events/valid_name_long_multi.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
+			[17, './tests/events/valid_name_long_single.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
+			[27, './tests/events/valid_name_short_multi.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
+			[17, './tests/events/valid_name_short_single.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
+		];
 	}
 
 	/**
 	 * @dataProvider extension_data
 	 */
-	public function test_event_name($line, $content, $expected_name, $expected_errors = null)
+	public function test_event_name($line, $content, $expected_name, $expected_vars, $expected_errors = [])
 	{
-		$output   = new \Phpbb\Epv\Tests\Mock\Output();
-		$exporter = new \Phpbb\Epv\Events\php_exporter($output, '');
-		$exporter->set_content(file($content));
+		$output   = new Output();
+		$exporter = new php_exporter($output, '');
+		$exporter->set_content(explode("\n", file_get_contents($content)));
 
 		$name = $exporter->get_event_name($line, false);
-		$this->assertEquals($expected_name, $name);
+		$exporter->set_current_event($name, $line);
+		$vars = $exporter->get_vars_from_array(false);
 
-		if ($expected_errors == null)
-		{
-			$expected_errors = array();
-		}
+		$this->assertEquals($expected_name, $name);
+		$this->assertEquals($expected_vars, $vars);
 		$this->assertEquals(sizeof($expected_errors), sizeof($output->messages));
 
 		for ($i = 0; $i < sizeof($expected_errors); $i++)
 		{
 			$this->assertEquals($output->messages[$i]['type'], $expected_errors[$i]['type']);
-			$this->assertEquals($output->messages[$i]['message'], $expected_errors[$i]['message']);
+			$this->assertEquals($output->messages[$i]['message'], sprintf($expected_errors[$i]['message'], $expected_name));
 		}
 	}
 }
