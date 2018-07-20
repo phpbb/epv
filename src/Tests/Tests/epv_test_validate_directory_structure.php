@@ -55,7 +55,8 @@ class epv_test_validate_directory_structure extends BaseTest
 						{
 							$msg = 'Similarity of the license.txt to the GPL-2.0 is too low. Expected is %s%% or above but got %s%%';
 							$expectedPercent = self::LICENSE_SIMILARITY_THRESHOLD * 100;
-							$actualPercent = bcdiv($licenseSimilarity * 100, 1, 2);
+							// Truncate after 2nd decimal
+							$actualPercent = floor($licenseSimilarity * 10000) / 100;
 
 							$this->output->addMessage(Output::WARNING, sprintf($msg, $expectedPercent, $actualPercent));
 						}
