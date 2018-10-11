@@ -120,12 +120,14 @@ class FileLoader
 				$dir  = str_replace($file, '', $fileName);
 				$dir  = str_replace($this->basedir, '', $dir);
 				$dir  = explode('/', trim($dir, '/'));
+				$dir  = array_map('strtolower', $dir);
 
-				if (trim(strtolower(end($dir))) == 'language')
+				if (in_array('language', $dir))
 				{
 					return new LangFile($this->debug, $fileName, $this->rundir);
 				}
-				if (trim(strtolower(end($dir))) == 'migrations')
+
+				if (in_array('migrations', $dir))
 				{
 					return new MigrationFile($this->debug, $fileName, $this->rundir);
 				}
