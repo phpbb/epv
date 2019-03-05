@@ -74,7 +74,7 @@ class epv_test_validate_languages extends BaseTest
 				}
 				catch (Error $e)
 				{
-					$this->output->addMessage(OutputInterface::FATAL, 'PHP parse error in file ' . $file->getSaveFilename() . '. Message: ' . $e->getMessage());
+					$this->output->addMessage(OutputInterface::FATAL, 'PHP parse error in file ' . str_replace($this->basedir, '', $file) . '. Message: ' . $e->getMessage());
 				}
 			}
 		}
