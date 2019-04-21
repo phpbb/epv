@@ -36,9 +36,9 @@ class TestStartup
 	 * @param                 $type     int Type what the location is
 	 * @param                 $location string Location where the extension is
 	 * @param                 $debug    boolean if debug is enabled
-     * @parm                  $oauth_token string The personal oauth string to use
+	 * @parm                  $oauth_token string The personal oauth string to use
 	 * @param string          $branch   When using GIT and GITHUB you can provide a branch name. When empty, defaults to master
-     * @throws TestException
+	 * @throws TestException
 	 */
 	public function __construct(OutputInterface $output, $type, $location, $debug, $oauth = '', $branch = '')
 	{
@@ -71,7 +71,7 @@ class TestStartup
 	 *
 	 * @param string $git    Location of the git repo
 	 * @param string $branch branch to checkout
-     * @param string $oauth Personal oauth string to use
+	 * @param string $oauth Personal oauth string to use
 	 *
 	 * @throws Exception\TestException
 	 * @return string local directory of the cloned repo
@@ -95,10 +95,10 @@ class TestStartup
 		}
 
 		if (!empty($oauth) && strpos($git, 'https://github.com') !== false)
-        {
-            $oauth = $oauth . ':x-oauth-basic@';
-            $git = str_replace('github.com', $oauth . 'github.com', $git);
-        }
+		{
+			$oauth = $oauth . ':x-oauth-basic@';
+			$git = str_replace('github.com', $oauth . 'github.com', $git);
+		}
 
 		Admin::cloneBranchTo($uniq, $git, $branch, false);
 
@@ -109,7 +109,7 @@ class TestStartup
 	 * Run the test suite with the current directory.
 	 *
 	 * @param boolean $printDir print directory information
-     * @throws TestException
+	 * @throws TestException
 	 */
 	private function runTests($printDir = true)
 	{
