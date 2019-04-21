@@ -36,9 +36,11 @@ class TestStartup
 	 * @param                 $type     int Type what the location is
 	 * @param                 $location string Location where the extension is
 	 * @param                 $debug    boolean if debug is enabled
+     * @parm                  $oauth_token string The personal oauth string to use
 	 * @param string          $branch   When using GIT and GITHUB you can provide a branch name. When empty, defaults to master
+     * @throws TestException
 	 */
-	public function __construct(OutputInterface $output, $type, $location, $debug, $branch = '')
+	public function __construct(OutputInterface $output, $type, $location, $debug, $oauth = '', $branch = '')
 	{
 		$this->output = $output;
 		$rundir       = true;
@@ -51,7 +53,7 @@ class TestStartup
 
 		if ($type == self::TYPE_GIT)
 		{
-			$location = $this->initGit($location, $branch);
+			$location = $this->initGit($location, $branch, $oauth);
 			$rundir   = false;
 		}
 
@@ -69,17 +71,17 @@ class TestStartup
 	 *
 	 * @param string $git    Location of the git repo
 	 * @param string $branch branch to checkout
+     * @param string $oauth Personal oauth string to use
 	 *
 	 * @throws Exception\TestException
 	 * @return string local directory of the cloned repo
 	 */
-	private function initGit($git, $branch)
+	private function initGit($git, $branch, $oauth)
 	{
 		if (empty($branch))
 		{
 			$branch = 'master';
 		}
-
 
 		$this->output->writeln(sprintf("Checkout %s from git on branch %s.", $git, $branch));
 		$tmpdir = sys_get_temp_dir();
@@ -92,6 +94,12 @@ class TestStartup
 			throw new TestException('Unable to create tmp directory');
 		}
 
+		if (!empty($oauth) && strpos($git, 'https://github.com') !== false)
+        {
+            $oauth = $oauth . ':x-oauth-basic@';
+            $git = str_replace('github.com', $oauth . 'github.com', $git);
+        }
+
 		Admin::cloneBranchTo($uniq, $git, $branch, false);
 
 		return $uniq;
@@ -101,6 +109,7 @@ class TestStartup
 	 * Run the test suite with the current directory.
 	 *
 	 * @param boolean $printDir print directory information
+     * @throws TestException
 	 */
 	private function runTests($printDir = true)
 	{
