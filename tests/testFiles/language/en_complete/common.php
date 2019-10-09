@@ -14,6 +14,8 @@ $lang = array_merge($lang, array(
 	'A' => 'First language string',
 ));
 
-$lang = array_merge($lang, array(
+$b = array(
 	'B' => 'Second language string',
-));
+);
+
+$lang = array_merge($lang, $b);

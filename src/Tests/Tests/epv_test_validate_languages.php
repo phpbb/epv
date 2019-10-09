@@ -12,13 +12,10 @@
 namespace Phpbb\Epv\Tests\Tests;
 
 use Phpbb\Epv\Output\OutputInterface;
+use Phpbb\Epv\Tests\ArrayKeyVisitor;
 use Phpbb\Epv\Tests\BaseTest;
 use PhpParser\Error;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar\String_;
+use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 
@@ -28,6 +25,16 @@ class epv_test_validate_languages extends BaseTest
      * @var Parser
      */
 	private $parser;
+
+	/**
+	 * @var ArrayKeyVisitor
+	 */
+	private $visitor;
+
+	/**
+	 * @var NodeTraverser
+	 */
+	private $traverser;
 
 	/**
 	 * @param bool            $debug if debug is enabled
@@ -43,6 +50,9 @@ class epv_test_validate_languages extends BaseTest
 
 		$this->directory = true;
 		$this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+		$this->visitor = new ArrayKeyVisitor;
+		$this->traverser = new NodeTraverser;
+		$this->traverser->addVisitor($this->visitor);
 	}
 
 	/**
@@ -99,8 +109,7 @@ class epv_test_validate_languages extends BaseTest
 	}
 
 	/**
-	 * This method scans through all global-scoped calls to array_merge
-	 * and extracts all string keys of all array arguments.
+	 * This method scans through all array literals and collects all their string keys.
 	 *
 	 * @param string $filename File name to a phpBB language file
 	 * @return array
@@ -109,50 +118,9 @@ class epv_test_validate_languages extends BaseTest
 	protected function load_language_keys($filename)
 	{
 		$contents = @file_get_contents($filename);
-
-		$keys = [];
-
 		$nodes = $this->parser->parse($contents);
-
-		foreach ($nodes as $node)
-		{
-			if ($node instanceof Assign && $node->expr instanceof FuncCall)
-			{
-				/** @var FuncCall $expr */
-				$expr = $node->expr;
-
-				if ($expr->name->getFirst() === 'array_merge')
-				{
-					for ($i = 1; $i < sizeof($expr->args); $i++)
-					{
-						/** @var Array_ $array */
-						$array = $expr->args[$i]->value;
-
-						if ($array instanceof Array_)
-						{
-							foreach ($array->items as $item)
-							{
-								/** @var ArrayItem $item */
-								if ($item->key instanceof String_)
-								{
-									$keys[] = $item->key->value;
-								}
-								else
-								{
-									$this->output->addMessage(OutputInterface::NOTICE, 'Language key is not a string value in ' . substr($filename, strlen($this->basedir)) . ' on line ' . $item->key->getLine());
-								}
-							}
-						}
-						else
-						{
-							$this->output->addMessage(OutputInterface::ERROR, sprintf('Expected argument %d of array_merge() to be %s, got %s on line %d', $i + 1, Array_::class, get_class($array), $array->getLine()));
-						}
-					}
-				}
-			}
-		}
-
-		return $keys;
+		$this->traverser->traverse($nodes);
+		return $this->visitor->get_array_keys();
 	}
 
 	/**
