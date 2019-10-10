@@ -22,8 +22,8 @@ use PhpParser\ParserFactory;
 class epv_test_validate_languages extends BaseTest
 {
 	/**
-     * @var Parser
-     */
+	 * @var Parser
+	 */
 	private $parser;
 
 	/**

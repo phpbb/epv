@@ -37,9 +37,9 @@ class ArrayKeyVisitor extends NodeVisitorAbstract
 	 */
 	public function enterNode(Node $node)
 	{
-        if ($node instanceof Array_)
+		if ($node instanceof Array_)
 		{
-            foreach ($node->items as $item)
+			foreach ($node->items as $item)
 			{
 				/** @var ArrayItem $item */
 				if ($item->key instanceof String_)
@@ -47,13 +47,13 @@ class ArrayKeyVisitor extends NodeVisitorAbstract
 					$this->keys[] = $item->key->value;
 				}
 			}
-        }
-    }
+		}
+	}
 
 	/**
 	 * @return array
 	 */
-    public function get_array_keys()
+	public function get_array_keys()
 	{
 		return $this->keys;
 	}
