@@ -12,4 +12,8 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'A' => 'First language string',
+	'C' => [
+		1 => 'Singular',
+		2 => 'Plural',
+	],
 ));
