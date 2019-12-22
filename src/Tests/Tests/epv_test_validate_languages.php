@@ -128,22 +128,24 @@ class epv_test_validate_languages extends BaseTest
 						/** @var Array_ $array */
 						$array = $expr->args[$i]->value;
 
-						if (!($array instanceof Array_))
+						if ($array instanceof Array_)
 						{
-							throw new Error(sprintf('Expected argument %d of array_merge() to be %s, got %s', $i + 1, Array_::class, get_class($array)), $array->getLine());
+							foreach ($array->items as $item)
+							{
+								/** @var ArrayItem $item */
+								if ($item->key instanceof String_)
+								{
+									$keys[] = $item->key->value;
+								}
+								else
+								{
+									$this->output->addMessage(OutputInterface::NOTICE, 'Language key is not a string value in ' . substr($filename, strlen($this->basedir)) . ' on line ' . $item->key->getLine());
+								}
+							}
 						}
-
-						foreach ($array->items as $item)
+						else
 						{
-							/** @var ArrayItem $item */
-							if ($item->key instanceof String_)
-							{
-								$keys[] = $item->key->value;
-							}
-							else
-							{
-								$this->output->addMessage(OutputInterface::NOTICE, 'Language key is not a string value in ' . substr($filename, strlen($this->basedir)) . ' on line ' . $item->key->getLine());
-							}
+							$this->output->addMessage(OutputInterface::ERROR, sprintf('Expected argument %d of array_merge() to be %s, got %s on line %d', $i + 1, Array_::class, get_class($array), $array->getLine()));
 						}
 					}
 				}
