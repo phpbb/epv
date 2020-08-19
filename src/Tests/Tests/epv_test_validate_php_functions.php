@@ -31,6 +31,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
@@ -175,12 +176,24 @@ class epv_test_validate_php_functions extends BaseTest
 	private function checkInPhpBB(array $stmt)
 	{
 		$ok = true;
+
+		foreach ($stmt as $key => $statement)
+		{
+			if ($statement instanceof Declare_)
+			{
+				unset($stmt[$key]);
+			}
+		}
+
+		// Re-index from 0
+		$stmt = array_values($stmt);
+
 		// Lets see if there is just a namespace + class
 		if (sizeof($stmt) == 1 && $stmt[0] instanceof Namespace_)
 		{
 			foreach ($stmt[0]->stmts as $st)
 			{
-				if ($st instanceof Class_ || $st instanceof Interface_ || $st instanceof Use_)
+				if ($st instanceof Class_ || $st instanceof Interface_ || $st instanceof Use_ || $st instanceof Declare_)
 				{ // Statement is a class, interface or a Use classname.
 					continue;
 				}
@@ -230,7 +243,6 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		if (!($nodes[0] instanceof Namespace_))
 		{
-			$err = false;
 			foreach ($nodes as $node)
 			{
 				// Check if there is a class.
@@ -238,14 +250,11 @@ class epv_test_validate_php_functions extends BaseTest
 				if ($node instanceof Class_ || $node instanceof InterfaceTest)
 				{
 					$this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, 'All files with a class or an interface should have a namespace');
-					$err = true;
 					break;
 				}
 			}
 
 			$this->parseNode($nodes);
-
-			return;
 		}
 		else
 		{
