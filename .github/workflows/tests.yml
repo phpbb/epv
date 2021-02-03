@@ -14,13 +14,10 @@ jobs:
         strategy:
             matrix:
                 include:
-#                    - php: '7.0'
-#                    - php: '7.1'
                     - php: '7.2'
                     - php: '7.3'
                     - php: '7.4'
-#                    - php: '8.0'
-#                    - php: '8.1'
+                    - php: '8.0'
 
         name: PHP ${{ matrix.php }}
 
@@ -45,7 +42,6 @@ jobs:
               uses: php-actions/composer@v5
               with:
                   php_version: ${{ matrix.php }}
-                  version: 1
                   args: --prefer-source
 
             - name: Run tests
