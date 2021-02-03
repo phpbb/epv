@@ -1,0 +1,44 @@
+name: Tests
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    mysql-tests:
+        runs-on: ubuntu-18.04
+        strategy:
+            matrix:
+                include:
+#                    - php: '7.0'
+#                    - php: '7.1'
+                    - php: '7.2'
+                    - php: '7.3'
+                    - php: '7.4'
+#                    - php: '8.0'
+#                    - php: '8.1'
+
+        name: PHP ${{ matrix.php }}
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, mysqli, sqlite, pdo_sqlite, intl, gd, exif, iconv, sqlsrv, pdo_sqlsrv, ldap
+                  coverage: none
+
+            - name: Setup EPV
+              run: php composer.phar install --dev --no-interaction --prefer-source
+
+            - name: Run tests
+              run: |
+                  bin/phpunit
+                  src/EPV.php run --debug --github="nickvergessen/phpbb-ext-acme-demo"
