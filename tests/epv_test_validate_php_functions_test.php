@@ -1,4 +1,10 @@
 <?php
+
+use Phpbb\Epv\Output\OutputInterface;
+use Phpbb\Epv\Files\FileLoader;
+use Phpbb\Epv\Tests\Mock\Output;
+use Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions;
+
 /**
  *
  * EPV :: The phpBB Forum Extension Pre Validator.
@@ -8,7 +14,7 @@
  *
  */
 
-class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
+class epv_test_validate_php_functions_test extends PHPUnit_Framework_TestCase
 {
 	public static function setUpBeforeClass()
 	{
@@ -17,163 +23,163 @@ class epv_test_validate_php_functions extends PHPUnit_Framework_TestCase
 
     public function test_usage_of_enable_globals() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(1))
+        $output->expects(self::once())
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals.php')
+            ->with(OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/enable_globals.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_enable_globals2() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(0))
+        $output->expects(self::exactly(0))
             ->method('addMessage')
              ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/enable_globals2.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_enable_globals3() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(1))
+        $output->expects(self::once())
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals3.php')
+            ->with(OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals3.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/enable_globals3.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_addslashes() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(1))
+        $output->expects(self::once())
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::ERROR, 'Using addslashes on line 8 in tests/testFiles/addslashes.php')
+            ->with(OutputInterface::ERROR, 'Using addslashes on line 8 in tests/testFiles/addslashes.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/addslashes.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_evals() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(1))
+        $output->expects(self::exactly(1))
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::FATAL, 'The use of eval() is not allowed for security reasons on line 8 in tests/testFiles/eval.php')
+            ->with(OutputInterface::FATAL, 'The use of eval() is not allowed for security reasons on line 8 in tests/testFiles/eval.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/eval.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_no_inphpbb() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(1))
+        $output->expects(self::exactly(1))
             ->method('addMessage')
-            ->with(\Phpbb\Epv\Output\OutputInterface::WARNING, 'IN_PHPBB is not defined in tests/testFiles/no_in_phpbb.php')
+            ->with(OutputInterface::WARNING, 'IN_PHPBB is not defined in tests/testFiles/no_in_phpbb.php')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/no_in_phpbb.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_wrong_in_phpbb() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(2))
+        $output->expects(self::exactly(2))
             ->method('addMessage')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/in_phpbb_wrong.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_wrong_in_phpbb2() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(5))
+        $output->expects(self::exactly(5))
             ->method('addMessage')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/in_phpbb_wrong2.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_namespace() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(2))
+        $output->expects(self::exactly(2))
             ->method('addMessage')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/no_namespace.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_var_test() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(0))
+        $output->expects(self::exactly(0))
             ->method('addMessage')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/var_test.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_of_var_test2() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(0))
+        $output->expects(self::exactly(0))
             ->method('addMessage')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/var_test2.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     public function test_usage_variable() {
         $output = $this->getOutputMock();
-        $output->expects($this->exactly(0))
+        $output->expects(self::exactly(0))
             ->method('addMessage')
         ;
 
         $file = $this->getLoader()->loadFile('tests/testFiles/variable_function.php');
 
-        $tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+        $tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
         $tester->validateFile($file);
     }
 
     private function getLoader()
     {
-        return $file = new \Phpbb\Epv\Files\FileLoader(new \Phpbb\Epv\Tests\Mock\Output(), false, '.', '.');
+		return new FileLoader(new Output(), false, '.', '.');
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|OutputInterface
      */
     function getOutputMock()
     {
-        return $this->getMock('Phpbb\Epv\Output\OutputInterface');
+        return $this->createMock(OutputInterface::class);
     }
 }

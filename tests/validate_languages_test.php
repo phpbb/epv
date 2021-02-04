@@ -21,10 +21,10 @@ class validate_languages_test extends PHPUnit_Framework_TestCase
 
 	public function test_languages() {
 		/** @var OutputInterface|PHPUnit_Framework_MockObject_MockObject $output */
-		$output = $this->getMock('Phpbb\Epv\Output\OutputInterface');
+		$output = $this->createMock(OutputInterface::class);
 
 		$output
-			->expects($this->exactly(2))
+			->expects(self::exactly(2))
 			->method('addMessage')
 			->withConsecutive(
 			 	[OutputInterface::NOTICE, 'Language en_incomplete is missing the language file additional.php'],
