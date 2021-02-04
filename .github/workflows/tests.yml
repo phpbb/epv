@@ -9,7 +9,7 @@ on:
             - master
 
 jobs:
-    mysql-tests:
+    php-tests:
         runs-on: ubuntu-18.04
         strategy:
             matrix:
