@@ -46,4 +46,4 @@ jobs:
             - name: Run tests
               run: |
                   bin/phpunit
-                  src/EPV.php run --debug --github="nickvergessen/phpbb-ext-acme-demo"
+                  src/EPV.php run --debug --github="phpbb/phpbb-ext-acme-demo"
