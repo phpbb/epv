@@ -27,8 +27,8 @@ class validate_directory_structure_test extends PHPUnit_Framework_TestCase {
 	public function test_license() {
 		$output = $this->getOutputMock();
 		$output->expects(self::never())
-		       ->method('addMessage')
-		       ->with(OutputInterface::ERROR, 'Missing required license.txt file')
+		   ->method('addMessage')
+		   ->with(OutputInterface::ERROR, 'Missing required license.txt file')
 		;
 		$output->expects(self::never())
 			->method('addMessage')
@@ -43,7 +43,7 @@ class validate_directory_structure_test extends PHPUnit_Framework_TestCase {
 	public function test_composer() {
 		$output = $this->getOutputMock();
 		$output->expects(self::never())
-		       ->method('addMessage')
+		   ->method('addMessage')
 		;
 
 		$tester = new epv_test_validate_directory_structure(false, $output, '/a/b/epv/test', 'epv/test', false, '/a/b/');
