@@ -249,7 +249,7 @@ class epv_test_validate_php_functions extends BaseTest
 				// Check if there is a class, interface or trait, there should be a namespace.
 				if ($node instanceof Class_ || $node instanceof InterfaceTest || $node instanceof Trait_)
 				{
-					$this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, 'All files with a class, interface or trait, then they should have a namespace');
+					$this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, 'All files with a class, interface or trait should have a namespace');
 					break;
 				}
 			}
