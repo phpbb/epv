@@ -34,12 +34,12 @@ class file_loader_test extends PHPUnit_Framework_TestCase {
 		$typePhp = static::$loader->loadFile('tests/testFiles/test.php');
 		$typeMigration = static::$loader->loadFile('tests/testFiles/migrations/test.php');
 
-		$this->assertTrue($type instanceof PHPFile);
-		$this->assertTrue($typePhp instanceof PHPFile);
-		$this->assertFalse($typePhp instanceof MigrationFile);
-		$this->assertFalse($typePhp instanceof LangFile);
-		$this->assertTrue($typeMigration instanceof PHPFileInterface); // It extends from the interface!
-		$this->assertTrue($typeMigration instanceof MigrationFile, 'type is migration file');
+		self::assertInstanceOf(PHPFile::class, $type);
+		self::assertInstanceOf(PHPFile::class, $typePhp);
+		self::assertNotInstanceOf(MigrationFile::class, $typePhp);
+		self::assertNotInstanceOf(LangFile::class, $typePhp);
+		self::assertInstanceOf(PHPFileInterface::class, $typeMigration); // It extends from the interface!
+		self::assertInstanceOf(MigrationFile::class, $typeMigration, 'type is migration file');
 	}
 
 	public function test_file_yml()
@@ -48,22 +48,22 @@ class file_loader_test extends PHPUnit_Framework_TestCase {
 		$invalidImportYml = static::$loader->loadFile('tests/testFiles/invalid_import.yml');
 		$emptyImportYml = static::$loader->loadFile('tests/testFiles/empty_import.yml');
 
-		$this->assertTrue($validYml instanceof YmlFile);
-		$this->assertTrue($invalidImportYml instanceof YmlFile);
-		$this->assertTrue($emptyImportYml instanceof YmlFile);
+		self::assertInstanceOf(YmlFile::class, $validYml);
+		self::assertInstanceOf(YmlFile::class, $invalidImportYml);
+		self::assertInstanceOf(YmlFile::class, $emptyImportYml);
 	}
 
 	public function test_file_invalid_yml()
 	{
-		$this->setExpectedException(Exception::class);
+		$this->expectException(Exception::class);
 		$invalidYml = static::$loader->loadFile('tests/testFiles/invalid.yml');
-		$this->assertNull($invalidYml);
+		self::assertNull($invalidYml);
 	}
 
 	public function test_file_empty_yml()
 	{
-		$this->setExpectedException(Exception::class);
+		$this->expectException(Exception::class);
 		$emptyYml = static::$loader->loadFile('tests/testFiles/empty.yml');
-		$this->assertNull($emptyYml);
+		self::assertNull($emptyYml);
 	}
 }
