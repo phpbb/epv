@@ -32,6 +32,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
@@ -193,8 +194,8 @@ class epv_test_validate_php_functions extends BaseTest
 		{
 			foreach ($stmt[0]->stmts as $st)
 			{
-				if ($st instanceof Class_ || $st instanceof Interface_ || $st instanceof Use_ || $st instanceof Declare_)
-				{ // Statement is a class, interface or a Use classname.
+				if ($st instanceof Class_ || $st instanceof Interface_ || $st instanceof Use_ || $st instanceof Declare_ || $st instanceof Trait_)
+				{ // Statement is a class, interface, trait or a Use classname.
 					continue;
 				}
 				$ok = false;
@@ -228,7 +229,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 		else
 		{
-			$this->output->writelnIfDebug(sprintf('Did not find IN_PHPBB, but php file contains a namespace with just classes or is a test file.', $this->file->getSaveFilename()));
+			$this->output->writelnIfDebug(sprintf('Did not find IN_PHPBB, but php file contains a namespace with just classes, interfaces, traits or is a test file.', $this->file->getSaveFilename()));
 		}
 	}
 
@@ -245,11 +246,10 @@ class epv_test_validate_php_functions extends BaseTest
 		{
 			foreach ($nodes as $node)
 			{
-				// Check if there is a class.
-				// If there is a class, there should be a namespace.
-				if ($node instanceof Class_ || $node instanceof InterfaceTest)
+				// Check if there is a class, interface or trait, there should be a namespace.
+				if ($node instanceof Class_ || $node instanceof InterfaceTest || $node instanceof Trait_)
 				{
-					$this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, 'All files with a class or an interface should have a namespace');
+					$this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, 'All files with a class, interface or trait should have a namespace');
 					break;
 				}
 			}
