@@ -1,4 +1,10 @@
 <?php
+
+use Phpbb\Epv\Files\FileLoader;
+use Phpbb\Epv\Output\OutputInterface;
+use Phpbb\Epv\Tests\Mock\Output;
+use Phpbb\Epv\Tests\Tests\epv_test_validate_sql_queries;
+
 /**
  *
  * EPV :: The phpBB Forum Extension Pre Validator.
@@ -16,16 +22,16 @@ class validate_sql_queries_test extends PHPUnit_Framework_TestCase
 	}
 
 	public function test_insecure_sql_query() {
-		$output = $this->getMock('Phpbb\Epv\Output\OutputInterface');
-		$output->expects($this->once())
+		$output = $this->createMock(OutputInterface::class);
+		$output->expects(self::once())
 			->method('addMessage')
-			->with(\Phpbb\Epv\Output\OutputInterface::WARNING, 'Found potential SQL injection on line 5 in tests/testFiles/sql_injection.php')
+			->with(OutputInterface::WARNING, 'Found potential SQL injection on line 5 in tests/testFiles/sql_injection.php')
 		;
 
-		$file_loader = new \Phpbb\Epv\Files\FileLoader(new \Phpbb\Epv\Tests\Mock\Output(), false, '.', '.');
+		$file_loader = new FileLoader(new Output(), false, '.', '.');
 		$file = $file_loader->loadFile('tests/testFiles/sql_injection.php');
 
-		$tester = new \Phpbb\Epv\Tests\Tests\epv_test_validate_sql_queries(false, $output, '/a/b/', 'epv/test', false, '/a/');
+		$tester = new epv_test_validate_sql_queries(false, $output, '/a/b/', 'epv/test', false, '/a/');
 		$tester->validateFile($file);
 	}
 }

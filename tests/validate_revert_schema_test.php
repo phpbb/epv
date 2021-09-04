@@ -22,12 +22,12 @@ class validate_revert_schema_test extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @param string $file
+	 * @param string   $file
 	 * @param callable $configure
 	 */
 	private function validateFile($file, $configure) {
 		/** @var OutputInterface $output */
-		$output = $this->getMock('Phpbb\Epv\Output\OutputInterface');
+		$output = $this->createMock(OutputInterface::class);
 		$configure($output);
 
 		$file_loader = new FileLoader(new Output(), false, '.', '.');

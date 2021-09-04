@@ -1,0 +1,49 @@
+name: Tests
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    php-tests:
+        runs-on: ubuntu-18.04
+        strategy:
+            matrix:
+                include:
+                    - php: '7.2'
+                    - php: '7.3'
+                    - php: '7.4'
+
+        name: PHP ${{ matrix.php }}
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, intl, iconv
+                  coverage: none
+
+            - name: Cache Composer dependencies
+              uses: actions/cache@v2
+              with:
+                  path: /tmp/composer-cache
+                  key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+            - name: Install Composer dependencies
+              uses: php-actions/composer@v5
+              with:
+                  php_version: ${{ matrix.php }}
+                  args: --prefer-source
+
+            - name: Run tests
+              run: |
+                  bin/phpunit
+                  src/EPV.php run --debug --github="phpbb/phpbb-ext-acme-demo"

@@ -57,14 +57,14 @@ class php_exporter_test extends \PHPUnit_Framework_TestCase
 		$exporter->set_current_event($name, $line);
 		$vars = $exporter->get_vars_from_array(false);
 
-		$this->assertEquals($expected_name, $name);
-		$this->assertEquals($expected_vars, $vars);
-		$this->assertEquals(sizeof($expected_errors), sizeof($output->messages));
+		self::assertEquals($expected_name, $name);
+		self::assertEquals($expected_vars, $vars);
+		self::assertSameSize($expected_errors, $output->messages);
 
-		for ($i = 0; $i < sizeof($expected_errors); $i++)
+		for ($i = 0, $iMax = count($expected_errors); $i < $iMax; $i++)
 		{
-			$this->assertEquals($output->messages[$i]['type'], $expected_errors[$i]['type']);
-			$this->assertEquals($output->messages[$i]['message'], sprintf($expected_errors[$i]['message'], $expected_name));
+			self::assertEquals($output->messages[$i]['type'], $expected_errors[$i]['type']);
+			self::assertEquals($output->messages[$i]['message'], sprintf($expected_errors[$i]['message'], $expected_name));
 		}
 	}
 }
