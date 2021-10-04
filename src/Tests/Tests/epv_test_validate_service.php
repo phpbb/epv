@@ -80,7 +80,7 @@ class epv_test_validate_service extends BaseTest
 		{
 			$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in service names in %s. Current service name: %s', $file->getSaveFilename(), $service));
 		}
-		if ($service !== '_defaults' && strpos($service, $vendor) !== 0)
+		else if ($service !== '_defaults' && strpos($service, $vendor) !== 0)
 		{
 			$this->output->addMessage(Output::WARNING, sprintf('The service name should start with vendor.namespace (which is %s) but started with %s in %s', $vendor, $service, $file->getSaveFilename()));
 		}
