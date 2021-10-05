@@ -65,9 +65,10 @@ class validate_service_test extends PHPUnit_Framework_TestCase
 	public function services_bad_data()
 	{
 		return [
-			['badname1', OutputInterface::ERROR],   // services name starts with phpbb.
+			['badname1', OutputInterface::ERROR],   // service name starts with phpbb.
 			['badname2', OutputInterface::FATAL],   // service name starts with core.
 			['badname3', OutputInterface::WARNING], // service name does not match vendor.package
+			['badname4', OutputInterface::WARNING], // service name case does not match vendor.package
 		];
 	}
 
@@ -79,7 +80,7 @@ class validate_service_test extends PHPUnit_Framework_TestCase
 		$this->validateConfig($config, function($output) use ($expected) {
 			/** @var PHPUnit_Framework_MockObject_MockObject $output */
 			$output
-				->expects($this->atMost(4))
+				->expects($this->exactly(4))
 				->method('addMessage')
 				->with($expected)
 			;

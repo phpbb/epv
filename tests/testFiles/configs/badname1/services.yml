@@ -11,7 +11,7 @@ services:
             - '@template'
             - '@user'
 
-    phpbb.test.helper.packager:
+    Phpbb.test.helper.packager:
         class: epv\test\helper\packager
         arguments:
             - '@service_container'

@@ -1,5 +1,5 @@
 services:
-    core.test.controller:
+    EPV.test.controller:
         class: epv\test\controller\main
         arguments:
             - '@config'
@@ -11,18 +11,18 @@ services:
             - '@template'
             - '@user'
 
-    Core.test.helper.packager:
+    EPV.test.helper.packager:
         class: epv\test\helper\packager
         arguments:
             - '@service_container'
             - '%core.root_path%'
 
-    core.test.helper.validator:
+    EPV.test.helper.validator:
         class: epv\test\helper\validator
         arguments:
             - '@language'
 
-    core.test.listener:
+    EPV.test.listener:
         class: epv\test\event\main_listener
         arguments:
             - '@controller.helper'
