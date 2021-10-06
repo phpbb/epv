@@ -39,7 +39,7 @@ class validate_service_test extends PHPUnit_Framework_TestCase
 		$tester->validateFile($file);
 	}
 
-	public function services_good_data()
+	public function good_service_names_data()
 	{
 		return [
 			['simple'],
@@ -48,9 +48,9 @@ class validate_service_test extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @dataProvider services_good_data
+	 * @dataProvider good_service_names_data
 	 */
-	public function test_services_good1($config)
+	public function test_good_service_names($config)
 	{
 		$this->validateConfig($config, function($output)
 		{
@@ -62,20 +62,19 @@ class validate_service_test extends PHPUnit_Framework_TestCase
 		});
 	}
 
-	public function services_bad_data()
+	public function bad_service_names_data()
 	{
 		return [
 			['badname1', OutputInterface::ERROR],   // service name starts with phpbb.
 			['badname2', OutputInterface::FATAL],   // service name starts with core.
 			['badname3', OutputInterface::WARNING], // service name does not match vendor.package
-			['badname4', OutputInterface::WARNING], // service name case does not match vendor.package
 		];
 	}
 
 	/**
-	 * @dataProvider services_bad_data
+	 * @dataProvider bad_service_names_data
 	 */
-	public function test_services_with_phpbb($config, $expected)
+	public function test_bad_service_names($config, $expected)
 	{
 		$this->validateConfig($config, function($output) use ($expected) {
 			/** @var PHPUnit_Framework_MockObject_MockObject $output */

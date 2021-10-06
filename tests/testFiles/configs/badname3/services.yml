@@ -17,12 +17,12 @@ services:
             - '@service_container'
             - '%core.root_path%'
 
-    foo.bar.helper.validator:
+    EPV.test.helper.validator:
         class: epv\test\helper\validator
         arguments:
             - '@language'
 
-    foo.bar.listener:
+    epv.TEST.listener:
         class: epv\test\event\main_listener
         arguments:
             - '@controller.helper'
