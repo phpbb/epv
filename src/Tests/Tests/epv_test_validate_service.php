@@ -72,15 +72,15 @@ class epv_test_validate_service extends BaseTest
 	{
 		$vendor = str_replace('/', '.', $this->namespace);
 
-		if (strtolower(substr($service, 0, 6)) == 'phpbb.')
+		if (stripos($service, 'phpbb.') === 0)
 		{
 			$this->output->addMessage(Output::ERROR, sprintf('The phpbb vendorname should only be used for official extensions in service names in %s. Current service name: %s', $file->getSaveFilename(), $service));
 		}
-		else if (strtolower(substr($service, 0, 5)) == 'core.')
+		else if (stripos($service, 'core.') === 0)
 		{
-			$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in event names in %s. Current event name: %s', $file->getSaveFilename(), $service));
+			$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in service names in %s. Current service name: %s', $file->getSaveFilename(), $service));
 		}
-		if (substr($service, 0, strlen($vendor)) != $vendor)
+		else if ($service !== '_defaults' && strpos($service, $vendor) !== 0)
 		{
 			$this->output->addMessage(Output::WARNING, sprintf('The service name should start with vendor.namespace (which is %s) but started with %s in %s', $vendor, $service, $file->getSaveFilename()));
 		}

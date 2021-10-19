@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+
+    epv.test.controller:
+        class: epv\test\controller\main
+
+    epv.test.helper.packager:
+        class: epv\test\helper\packager
+
+    epv.test.helper.validator:
+        class: epv\test\helper\validator
+
+    epv.test.listener:
+        class: epv\test\event\main_listener
+        tags: ['event.listener']

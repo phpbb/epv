@@ -1,0 +1,31 @@
+services:
+    phpbb.test.controller:
+        class: epv\test\controller\main
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@language'
+            - '@request'
+            - '@epv.test.helper.packager'
+            - '@epv.test.helper.validator'
+            - '@template'
+            - '@user'
+
+    Phpbb.test.helper.packager:
+        class: epv\test\helper\packager
+        arguments:
+            - '@service_container'
+            - '%core.root_path%'
+
+    phpbb.test.helper.validator:
+        class: epv\test\helper\validator
+        arguments:
+            - '@language'
+
+    phpbb.test.listener:
+        class: epv\test\event\main_listener
+        arguments:
+            - '@controller.helper'
+            - '@template'
+        tags:
+            - { name: event.listener }

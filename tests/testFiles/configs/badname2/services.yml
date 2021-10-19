@@ -1,0 +1,31 @@
+services:
+    core.test.controller:
+        class: epv\test\controller\main
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@language'
+            - '@request'
+            - '@epv.test.helper.packager'
+            - '@epv.test.helper.validator'
+            - '@template'
+            - '@user'
+
+    Core.test.helper.packager:
+        class: epv\test\helper\packager
+        arguments:
+            - '@service_container'
+            - '%core.root_path%'
+
+    core.test.helper.validator:
+        class: epv\test\helper\validator
+        arguments:
+            - '@language'
+
+    core.test.listener:
+        class: epv\test\event\main_listener
+        arguments:
+            - '@controller.helper'
+            - '@template'
+        tags:
+            - { name: event.listener }
