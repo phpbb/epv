@@ -79,7 +79,7 @@ class epv_test_validate_languages extends BaseTest
 			}
 		}
 
-		if (!array_key_exists('en', $langs))
+		if (!empty($langs) && !array_key_exists('en', $langs))
 		{
 			$this->output->addMessage(OutputInterface::FATAL, sprintf("English language pack is missing"));
 		}
