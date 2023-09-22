@@ -543,6 +543,7 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		$warn_array = array(
 			'exec'             => Output::ERROR,
+			'shell_exec'	   => Output::ERROR,
 			'system'           => Output::ERROR,
 			'passthru'         => Output::ERROR,
 			'getenv'           => Output::ERROR,
