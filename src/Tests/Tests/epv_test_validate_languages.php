@@ -68,7 +68,7 @@ class epv_test_validate_languages extends BaseTest
 
 		foreach ($files as $file)
 		{
-			if (preg_match('#^' . preg_quote($this->basedir) . 'language/([a-z_]+?)/(.+\.php)$#', $file, $matches) === 1)
+			if (preg_match('#^' . preg_quote($this->basedir) . 'language[\/\\\\]([a-z_]+?)[\/\\\\](.+\.php)$#', $file, $matches) === 1)
 			{
 				$language = $matches[1]; // language, e.g. "en"
 				$relative_filename = $matches[2]; // file name relative to language's base dir, e.g. "info_acp_ext.php"
