@@ -1,7 +1,7 @@
 Extension Pre-Validator
 =======================
 
-[![Build Status](https://github.com/phpbb/epv/workflows/Tests/badge.svg)](https://github.com/phpbb/epv/actions)
+[![Build Status](https://github.com/phpbb/epv/actions/workflows/tests.yml/badge.svg)](https://github.com/phpbb/epv/actions)
 
 This repository contains the extension pre-validator, used for pre validating extensions when submittion to the database at phpBB.com.
 
