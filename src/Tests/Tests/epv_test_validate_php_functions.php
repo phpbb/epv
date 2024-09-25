@@ -267,11 +267,11 @@ class epv_test_validate_php_functions extends BaseTest
 	}
 
 	/**
-	 * Run validations on a Array of nodes. If a key contains a object or array, it will recursivly call
+	 * Run validations on a Array of nodes. If a key contains a object or array, it will recursively call
 	 * parseNode on these objects or arrays.
 	 *
-	 * Because the structure of a php is dynamicly, and we (ofcourse) don't want to run this twice to discover the number
-	 * of tests (Due to slowness), we dynamicly increase the maximum progress. In a perfect world, we would do a testrun
+	 * Because the structure of a php is dynamically, and we (of course) don't want to run this twice to discover the number
+	 * of tests (Due to slowness), we dynamically increase the maximum progress. In a perfect world, we would do a testrun
 	 * first, and after that the real test.
 	 *
 	 * @param array $nodes
@@ -320,15 +320,15 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 	}
 
-	/**
-	 * Check if the current node checks for IN_PHPBB, and
-	 * exits if it isnt defined.
-	 *
-	 * If IN_PHPBB is found, but there is no exit as first statement, it will not set IN_PHPBB, but will add a notice
-	 * instead for the user.  The other nodes will be send back to parseNode.
-	 *
-	 * @param \PHPParser_Node_Stmt_If $node if node that checks possible for IN_PHPBB
-	 */
+    /**
+     * Check if the current node checks for IN_PHPBB, and
+     * exits if it isn't defined.
+     *
+     * If IN_PHPBB is found, but there is no exit as first statement, it will not set IN_PHPBB, but will add a notice
+     * instead for the user.  The other nodes will be send back to parseNode.
+     *
+     * @param \PhpParser\Node\Stmt\If_ $node if node that checks possible for IN_PHPBB
+     */
 	private function checkInDefined(If_ $node)
 	{
 		$cond = $node->cond;
@@ -382,7 +382,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
         $this->validateEval($node);
 	}
-	
+
 	/**
 	 * Validate method calls to classes.
 	 * @param Node $node Node to validate
@@ -401,7 +401,7 @@ class epv_test_validate_php_functions extends BaseTest
 		if ($name !== null)
 		{
 			$this->validateEnableGlobals($name, $node);
-		}		
+		}
 	}
 
     /**
@@ -432,14 +432,14 @@ class epv_test_validate_php_functions extends BaseTest
     }
 
     /**
-     * Valdiate the use of enable_globals.
+     * Validate the use of enable_globals.
      *
      * @param $name
      * @param Node $node
      */
 	private function validateEnableGlobals($name, Node $node)
 	{
-		if ($name == 'enable_super_globals') 
+		if ($name == 'enable_super_globals')
 		{
 			$this->addMessage(Output::FATAL, sprintf('The use of enable_super_globals() is not allowed for security reasons on line %s', $node->getAttribute('startLine')));
 		}
@@ -454,7 +454,7 @@ class epv_test_validate_php_functions extends BaseTest
     }
 
 	/**
-	 * Valdiate the use of deprecated functions.
+	 * Validate the use of deprecated functions.
 	 *
 	 * @param                 $name
 	 * @param Node $node
