@@ -228,7 +228,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 		else
 		{
-			$this->output->writelnIfDebug(sprintf('Did not find IN_PHPBB, but php file contains a namespace with just classes, interfaces, traits or is a test file.', $this->file->getSaveFilename()));
+			$this->output->writelnIfDebug(sprintf('Did not find IN_PHPBB, but php file %s contains a namespace with just classes, interfaces, traits or is a test file.', $this->file->getSaveFilename()));
 		}
 	}
 
