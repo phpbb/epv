@@ -36,7 +36,6 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\InterfaceTest;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\ParserFactory;
@@ -247,7 +246,7 @@ class epv_test_validate_php_functions extends BaseTest
 			foreach ($nodes as $node)
 			{
 				// Check if there is a class, interface or trait, there should be a namespace.
-				if ($node instanceof Class_ || $node instanceof InterfaceTest || $node instanceof Trait_)
+				if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Trait_)
 				{
 					$this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, 'All files with a class, interface or trait should have a namespace');
 					break;
@@ -334,10 +333,10 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		$cond = $node->cond;
 
-		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name == 'defined' && $cond->expr->args[0]->value->value == 'IN_PHPBB')
+		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name->parts[0] == 'defined' && $cond->expr->args[0]->value->value == 'IN_PHPBB')
 		{
 
-			if ($node->stmts[0] instanceof Node\Expr\Exit_)
+			if ($node->stmts[0]->expr instanceof Node\Expr\Exit_)
 			{
 				// Found IN_PHPBB
 				$this->in_phpbb = true;
