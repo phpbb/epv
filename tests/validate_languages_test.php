@@ -11,16 +11,17 @@
 
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\Tests\epv_test_validate_languages;
+use PHPUnit\Framework\TestCase;
 
-class validate_languages_test extends PHPUnit_Framework_TestCase
+class validate_languages_test extends TestCase
 {
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		require_once('./tests/Mock/Output.php');
 	}
 
 	public function test_languages() {
-		/** @var OutputInterface|PHPUnit_Framework_MockObject_MockObject $output */
+		/** @var OutputInterface|PHPUnit\Framework\MockObject\MockObject\MockObject $output */
 		$output = $this->createMock(OutputInterface::class);
 
 		$output

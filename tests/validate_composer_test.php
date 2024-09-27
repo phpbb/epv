@@ -5,6 +5,7 @@ use Phpbb\Epv\Files\Type\ComposerFile;
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\Mock\Output;
 use Phpbb\Epv\Tests\Tests\epv_test_validate_composer;
+use PHPUnit\Framework\TestCase;
 
 /**
  *
@@ -15,9 +16,9 @@ use Phpbb\Epv\Tests\Tests\epv_test_validate_composer;
  *
  */
 
-class validate_composer_test extends PHPUnit_Framework_TestCase
+class validate_composer_test extends TestCase
 {
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		require_once('./tests/Mock/Output.php');
 	}
