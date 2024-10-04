@@ -24,7 +24,7 @@ class epv_test_validate_php_functions_test extends TestCase
 
 	public function test_usage_of_enable_globals() {
 		$output = $this->getOutputMock();
-		$output->expects(self::once())
+		$output->expects(self::exactly(2))
 			->method('addMessage')
 			->with(OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals.php')
 		;
@@ -62,7 +62,7 @@ class epv_test_validate_php_functions_test extends TestCase
 
 	public function test_usage_of_addslashes() {
 		$output = $this->getOutputMock();
-		$output->expects(self::once())
+		$output->expects(self::exactly(2))
 			->method('addMessage')
 			->with(OutputInterface::ERROR, 'Using addslashes on line 8 in tests/testFiles/addslashes.php')
 		;
