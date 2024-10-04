@@ -12,12 +12,12 @@
     "require": {
         "php": ">=7.2",
         "ext-json": "*",
-        "symfony/yaml": "^3.0|^4.0|^5.0",
-        "symfony/console": "^3.0|^4.0|^5.0",
-        "symfony/finder": "^3.0|^4.0|^5.0",
-        "symfony/process": "^3.0|^4.0|^5.0",
+        "symfony/yaml": "^5.0",
+        "symfony/console": "^5.0",
+        "symfony/finder": "^5.0",
+        "symfony/process": "^5.0",
         "nikic/php-parser": "~4.0",
-        "gitonomy/gitlib": "0.1.*@dev",
+        "gitonomy/gitlib": "^1.3",
         "sensiolabs/ansi-to-html": "~1.1",
         "composer/composer": "^1.5"
     },
