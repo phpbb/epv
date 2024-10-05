@@ -26,7 +26,7 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
@@ -36,13 +36,13 @@ jobs:
                   coverage: none
 
             - name: Cache Composer dependencies
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               with:
                   path: /tmp/composer-cache
                   key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
             - name: Install Composer dependencies
-              uses: php-actions/composer@v5
+              uses: php-actions/composer@v6
               with:
                   php_version: ${{ matrix.php }}
                   args: --prefer-source
