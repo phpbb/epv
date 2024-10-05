@@ -2,6 +2,7 @@
 
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure;
+use PHPUnit\Framework\TestCase;
 
 /**
  *
@@ -12,7 +13,7 @@ use Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure;
  *
  */
 
-class validate_directory_structure_test extends PHPUnit_Framework_TestCase {
+class validate_directory_structure_test extends TestCase {
 	public function test_missing_license() {
 		$output = $this->getOutputMock();
 		$output->expects(self::once())
@@ -86,7 +87,7 @@ class validate_directory_structure_test extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @return \PHPUnit_Framework_MockObject_MockObject|OutputInterface
+	 * @return PHPUnit\Framework\MockObject\MockObject|OutputInterface
 	 */
 	function getOutputMock()
 	{

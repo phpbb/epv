@@ -13,10 +13,11 @@ use Phpbb\Epv\Files\Type\ServiceFile;
 use Phpbb\Epv\Tests\Mock\Output;
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\Tests\epv_test_validate_service;
+use PHPUnit\Framework\TestCase;
 
-class validate_service_test extends PHPUnit_Framework_TestCase
+class validate_service_test extends TestCase
 {
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		require_once('./tests/Mock/Output.php');
 	}
@@ -54,7 +55,7 @@ class validate_service_test extends PHPUnit_Framework_TestCase
 	{
 		$this->validateConfig($config, function($output)
 		{
-			/** @var PHPUnit_Framework_MockObject_MockObject $output */
+			/** @var PHPUnit\Framework\MockObject\MockObject $output */
 			$output
 				->expects($this->never())
 				->method('addMessage')
@@ -77,7 +78,7 @@ class validate_service_test extends PHPUnit_Framework_TestCase
 	public function test_bad_service_names($config, $expected)
 	{
 		$this->validateConfig($config, function($output) use ($expected) {
-			/** @var PHPUnit_Framework_MockObject_MockObject $output */
+			/** @var PHPUnit\Framework\MockObject\MockObject $output */
 			$output
 				->expects($this->exactly(4))
 				->method('addMessage')

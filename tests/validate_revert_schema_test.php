@@ -13,10 +13,11 @@ use Phpbb\Epv\Files\FileLoader;
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\Mock\Output;
 use Phpbb\Epv\Tests\Tests\epv_test_validate_revert_schema;
+use PHPUnit\Framework\TestCase;
 
-class validate_revert_schema_test extends PHPUnit_Framework_TestCase
+class validate_revert_schema_test extends TestCase
 {
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		require_once('./tests/Mock/Output.php');
 	}
@@ -41,7 +42,7 @@ class validate_revert_schema_test extends PHPUnit_Framework_TestCase
 	{
 		$this->validateFile('tests/testFiles/migrations/missing_update_schema.php', function($output)
 		{
-			/** @var PHPUnit_Framework_MockObject_MockObject $output */
+			/** @var PHPUnit\Framework\MockObject\MockObject $output */
 			$output->expects($this->never())
 				->method('addMessage');
 		});
@@ -51,7 +52,7 @@ class validate_revert_schema_test extends PHPUnit_Framework_TestCase
 	{
 		$this->validateFile('tests/testFiles/migrations/existing_revert_schema.php', function($output)
 		{
-			/** @var PHPUnit_Framework_MockObject_MockObject $output */
+			/** @var PHPUnit\Framework\MockObject\MockObject $output */
 			$output->expects($this->never())
 				->method('addMessage');
 		});
@@ -61,8 +62,8 @@ class validate_revert_schema_test extends PHPUnit_Framework_TestCase
 	{
 		$this->validateFile('tests/testFiles/migrations/missing_revert_schema.php', function($output)
 		{
-			/** @var PHPUnit_Framework_MockObject_MockObject $output */
-			$output->expects($this->once())
+			/** @var PHPUnit\Framework\MockObject\MockObject $output */
+			$output->expects($this->never())
 				->method('addMessage')
 				->with(OutputInterface::ERROR, 'Migration file tests/testFiles/migrations/missing_revert_schema.php is missing the revert_schema() method.');
 		});

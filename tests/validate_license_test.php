@@ -11,8 +11,9 @@
 
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\Tests\epv_test_validate_directory_structure;
+use PHPUnit\Framework\TestCase;
 
-class validate_license_test extends PHPUnit_Framework_TestCase
+class validate_license_test extends TestCase
 {
 	/**
 	 * @param string $license
@@ -33,7 +34,7 @@ class validate_license_test extends PHPUnit_Framework_TestCase
 	{
 		$this->validateLicense('gpl-2.0-skeleton-ext', function($output)
 		{
-			/** @var PHPUnit_Framework_MockObject_MockObject $output */
+			/** @var PHPUnit\Framework\MockObject\MockObject $output */
 			$output
 				->expects($this->never())
 				->method('addMessage')
@@ -45,7 +46,7 @@ class validate_license_test extends PHPUnit_Framework_TestCase
 	{
 		$this->validateLicense('gpl-2.0-with-appendix', function($output)
 		{
-			/** @var PHPUnit_Framework_MockObject_MockObject $output */
+			/** @var PHPUnit\Framework\MockObject\MockObject $output */
 			$output
 				->expects($this->never())
 				->method('addMessage')
@@ -57,7 +58,7 @@ class validate_license_test extends PHPUnit_Framework_TestCase
 	{
 		$this->validateLicense('gpl-3.0', function($output)
 		{
-			/** @var PHPUnit_Framework_MockObject_MockObject $output */
+			/** @var PHPUnit\Framework\MockObject\MockObject $output */
 			$output
 				->expects($this->once())
 				->method('addMessage')
@@ -70,7 +71,7 @@ class validate_license_test extends PHPUnit_Framework_TestCase
 	{
 		$this->validateLicense('apache-2.0', function($output)
 		{
-			/** @var PHPUnit_Framework_MockObject_MockObject $output */
+			/** @var PHPUnit\Framework\MockObject\MockObject $output */
 			$output
 				->expects($this->once())
 				->method('addMessage')
