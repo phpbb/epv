@@ -61,7 +61,7 @@ class FileLoader
 		$file = null;
 
 		$split = explode('.', basename($fileName));
-		$size  = sizeof($split);
+		$size  = count($split);
 
 		try
 		{
@@ -80,7 +80,7 @@ class FileLoader
 			else if ($size > 1)
 			{
 				// Try to load the file, the last part of $split contains the extension
-				$file = self::tryLoadFile($fileName, $split[sizeof($split) - 1]);
+				$file = self::tryLoadFile($fileName, $split[count($split) - 1]);
 			}
 			else // Blank filename?
 			{

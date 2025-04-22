@@ -189,7 +189,7 @@ class epv_test_validate_php_functions extends BaseTest
 		$stmt = array_values($stmt);
 
 		// Lets see if there is just a namespace + class
-		if (sizeof($stmt) == 1 && $stmt[0] instanceof Namespace_)
+		if (count($stmt) == 1 && $stmt[0] instanceof Namespace_)
 		{
 			foreach ($stmt[0]->stmts as $st)
 			{
@@ -259,7 +259,7 @@ class epv_test_validate_php_functions extends BaseTest
 		{
 			$this->parseNode($nodes[0]->stmts);
 
-			if (sizeof($nodes) > 1)
+			if (count($nodes) > 1)
 			{
 				$this->addMessage(Output::WARNING, 'Besides the namespace, there should be no other statements');
 			}
@@ -348,7 +348,7 @@ class epv_test_validate_php_functions extends BaseTest
 				// Also include a notice.
 				$this->addMessage(Output::NOTICE, 'IN_PHPBB check should exit if it is not defined');
 			}
-			if (sizeof($node->stmts) > 1)
+			if (count($node->stmts) > 1)
 			{
 				$this->addMessage(Output::WARNING, 'There should be no statements other than exit in the IN_PHPBB check');
 				unset($node->stmts[0]);

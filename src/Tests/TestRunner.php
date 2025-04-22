@@ -69,7 +69,7 @@ class TestRunner
 	 */
 	public function runTests()
 	{
-		if (sizeof($this->tests) == 0)
+		if (count($this->tests) == 0)
 		{
 			throw new TestException("TestRunner not initialised.");
 		}
@@ -110,7 +110,7 @@ class TestRunner
 					$linetest[] = $test;
 				}
 			}
-			if (sizeof($linetest))
+			if (count($linetest))
 			{
 				$linenr = 1;
 				foreach ($file->getLines() as $line)
@@ -143,7 +143,7 @@ class TestRunner
 			->exclude('vendor')
 			->in($this->directory);
 
-		if (sizeof($iterator) != 1)
+		if (count($iterator) != 1)
 		{
 			throw new TestException("Can't find the required composer.json file.");
 		}

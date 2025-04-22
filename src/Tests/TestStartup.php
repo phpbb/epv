@@ -169,7 +169,7 @@ class TestStartup
 			$this->output->writeln((string)$msg);
 		}
 
-		if (sizeof($this->output->getMessages()) == 0)
+		if (count($this->output->getMessages()) == 0)
 		{
 			$this->output->writeln("<success>No issues found </success>");
 		}
