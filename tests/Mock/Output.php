@@ -33,7 +33,7 @@ class Output implements OutputInterface
 	{
 	}
 
-	public function getVerbosity()
+	public function getVerbosity(): int
 	{
 	}
 
@@ -42,7 +42,7 @@ class Output implements OutputInterface
 
 	}
 
-	public function isDecorated()
+	public function isDecorated(): bool
 	{
 
 	}
@@ -114,7 +114,7 @@ class Output implements OutputInterface
 
 	}
 
-	public function getFormatter()
+	public function getFormatter(): OutputFormatterInterface
 	{
 
 	}
@@ -129,39 +129,39 @@ class Output implements OutputInterface
 
 	}
 
-    /**
-     * Returns whether verbosity is quiet (-q).
-     *
-     * @return bool true if verbosity is set to VERBOSITY_QUIET, false otherwise
-     */
-    public function isQuiet()
-    {
-    }
+	/**
+	 * Returns whether verbosity is quiet (-q).
+	 *
+	 * @return bool true if verbosity is set to VERBOSITY_QUIET, false otherwise
+	 */
+	public function isQuiet(): bool
+	{
+	}
 
-    /**
-     * Returns whether verbosity is verbose (-v).
-     *
-     * @return bool true if verbosity is set to VERBOSITY_VERBOSE, false otherwise
-     */
-    public function isVerbose()
-    {
-    }
+	/**
+	 * Returns whether verbosity is verbose (-v).
+	 *
+	 * @return bool true if verbosity is set to VERBOSITY_VERBOSE, false otherwise
+	 */
+	public function isVerbose(): bool
+	{
+	}
 
-    /**
-     * Returns whether verbosity is very verbose (-vv).
-     *
-     * @return bool true if verbosity is set to VERBOSITY_VERY_VERBOSE, false otherwise
-     */
-    public function isVeryVerbose()
-    {
-    }
+	/**
+	 * Returns whether verbosity is very verbose (-vv).
+	 *
+	 * @return bool true if verbosity is set to VERBOSITY_VERY_VERBOSE, false otherwise
+	 */
+	public function isVeryVerbose(): bool
+	{
+	}
 
-    /**
-     * Returns whether verbosity is debug (-vvv).
-     *
-     * @return bool true if verbosity is set to VERBOSITY_DEBUG, false otherwise
-     */
-    public function isDebug()
-    {
-    }
+	/**
+	 * Returns whether verbosity is debug (-vvv).
+	 *
+	 * @return bool true if verbosity is set to VERBOSITY_DEBUG, false otherwise
+	 */
+	public function isDebug(): bool
+	{
+	}
 }
