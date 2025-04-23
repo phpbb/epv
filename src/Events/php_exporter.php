@@ -299,7 +299,7 @@ class php_exporter
 		}
 		else
 		{
-			throw new \LogicException("Can not find '\$vars = array();'-line for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'. Are you using UNIX style linefeeds?", 1);
+			throw new \LogicException("Can not find '\$vars = array();'-line for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'. Are you using UNIX style linefeed?", 1);
 		}
 	}
 
