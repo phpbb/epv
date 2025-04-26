@@ -17,12 +17,16 @@ jobs:
                     - php: '7.2'
                     - php: '7.3'
                     - php: '7.4'
+                    - php: '8.0'
+                    - php: '8.1'
+                    - php: '8.2'
+                    - php: '8.3'
 
         name: PHP ${{ matrix.php }}
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
@@ -32,13 +36,13 @@ jobs:
                   coverage: none
 
             - name: Cache Composer dependencies
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               with:
                   path: /tmp/composer-cache
                   key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
             - name: Install Composer dependencies
-              uses: php-actions/composer@v5
+              uses: php-actions/composer@v6
               with:
                   php_version: ${{ matrix.php }}
                   args: --prefer-source

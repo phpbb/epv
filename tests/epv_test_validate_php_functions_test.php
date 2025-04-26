@@ -4,6 +4,7 @@ use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Files\FileLoader;
 use Phpbb\Epv\Tests\Mock\Output;
 use Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions;
+use PHPUnit\Framework\TestCase;
 
 /**
  *
@@ -14,16 +15,16 @@ use Phpbb\Epv\Tests\Tests\epv_test_validate_php_functions;
  *
  */
 
-class epv_test_validate_php_functions_test extends PHPUnit_Framework_TestCase
+class epv_test_validate_php_functions_test extends TestCase
 {
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		require_once('./tests/Mock/Output.php');
 	}
 
 	public function test_usage_of_enable_globals() {
 		$output = $this->getOutputMock();
-		$output->expects(self::once())
+		$output->expects(self::exactly(2))
 			->method('addMessage')
 			->with(OutputInterface::FATAL, 'The use of enable_super_globals() is not allowed for security reasons on line 7 in tests/testFiles/enable_globals.php')
 		;
@@ -61,7 +62,7 @@ class epv_test_validate_php_functions_test extends PHPUnit_Framework_TestCase
 
 	public function test_usage_of_addslashes() {
 		$output = $this->getOutputMock();
-		$output->expects(self::once())
+		$output->expects(self::exactly(2))
 			->method('addMessage')
 			->with(OutputInterface::ERROR, 'Using addslashes on line 8 in tests/testFiles/addslashes.php')
 		;
@@ -74,7 +75,7 @@ class epv_test_validate_php_functions_test extends PHPUnit_Framework_TestCase
 
 	public function test_usage_of_evals() {
 		$output = $this->getOutputMock();
-		$output->expects(self::exactly(1))
+		$output->expects(self::once())
 			->method('addMessage')
 			->with(OutputInterface::FATAL, 'The use of eval() is not allowed for security reasons on line 8 in tests/testFiles/eval.php')
 		;
@@ -87,7 +88,7 @@ class epv_test_validate_php_functions_test extends PHPUnit_Framework_TestCase
 
 	public function test_usage_of_no_inphpbb() {
 		$output = $this->getOutputMock();
-		$output->expects(self::exactly(1))
+		$output->expects(self::once())
 			->method('addMessage')
 			->with(OutputInterface::WARNING, 'IN_PHPBB is not defined in tests/testFiles/no_in_phpbb.php')
 		;
@@ -176,7 +177,7 @@ class epv_test_validate_php_functions_test extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @return \PHPUnit_Framework_MockObject_MockObject|OutputInterface
+	 * @return PHPUnit\Framework\MockObject\MockObject|OutputInterface
 	 */
 	function getOutputMock()
 	{

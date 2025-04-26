@@ -15,7 +15,7 @@ use Symfony\Component\Console\Application;
 class Cli extends Application
 {
 
-	protected function getDefaultCommands()
+	protected function getDefaultCommands(): array
 	{
 		$commands   = parent::getDefaultCommands();
 		$commands[] = new ValidateCommand();

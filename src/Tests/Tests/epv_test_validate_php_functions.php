@@ -36,7 +36,6 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\InterfaceTest;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\ParserFactory;
@@ -190,7 +189,7 @@ class epv_test_validate_php_functions extends BaseTest
 		$stmt = array_values($stmt);
 
 		// Lets see if there is just a namespace + class
-		if (sizeof($stmt) == 1 && $stmt[0] instanceof Namespace_)
+		if (count($stmt) == 1 && $stmt[0] instanceof Namespace_)
 		{
 			foreach ($stmt[0]->stmts as $st)
 			{
@@ -229,7 +228,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 		else
 		{
-			$this->output->writelnIfDebug(sprintf('Did not find IN_PHPBB, but php file contains a namespace with just classes, interfaces, traits or is a test file.', $this->file->getSaveFilename()));
+			$this->output->writelnIfDebug(sprintf('Did not find IN_PHPBB, but php file %s contains a namespace with just classes, interfaces, traits or is a test file.', $this->file->getSaveFilename()));
 		}
 	}
 
@@ -247,7 +246,7 @@ class epv_test_validate_php_functions extends BaseTest
 			foreach ($nodes as $node)
 			{
 				// Check if there is a class, interface or trait, there should be a namespace.
-				if ($node instanceof Class_ || $node instanceof InterfaceTest || $node instanceof Trait_)
+				if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Trait_)
 				{
 					$this->addMessage($this->isTest() ? Output::NOTICE : Output::ERROR, 'All files with a class, interface or trait should have a namespace');
 					break;
@@ -260,7 +259,7 @@ class epv_test_validate_php_functions extends BaseTest
 		{
 			$this->parseNode($nodes[0]->stmts);
 
-			if (sizeof($nodes) > 1)
+			if (count($nodes) > 1)
 			{
 				$this->addMessage(Output::WARNING, 'Besides the namespace, there should be no other statements');
 			}
@@ -268,11 +267,11 @@ class epv_test_validate_php_functions extends BaseTest
 	}
 
 	/**
-	 * Run validations on a Array of nodes. If a key contains a object or array, it will recursivly call
+	 * Run validations on a Array of nodes. If a key contains a object or array, it will recursively call
 	 * parseNode on these objects or arrays.
 	 *
-	 * Because the structure of a php is dynamicly, and we (ofcourse) don't want to run this twice to discover the number
-	 * of tests (Due to slowness), we dynamicly increase the maximum progress. In a perfect world, we would do a testrun
+	 * Because the structure of a php is dynamically, and we (of course) don't want to run this twice to discover the number
+	 * of tests (Due to slowness), we dynamically increase the maximum progress. In a perfect world, we would do a testrun
 	 * first, and after that the real test.
 	 *
 	 * @param array $nodes
@@ -321,23 +320,23 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 	}
 
-	/**
-	 * Check if the current node checks for IN_PHPBB, and
-	 * exits if it isnt defined.
-	 *
-	 * If IN_PHPBB is found, but there is no exit as first statement, it will not set IN_PHPBB, but will add a notice
-	 * instead for the user.  The other nodes will be send back to parseNode.
-	 *
-	 * @param \PHPParser_Node_Stmt_If $node if node that checks possible for IN_PHPBB
-	 */
+    /**
+     * Check if the current node checks for IN_PHPBB, and
+     * exits if it isn't defined.
+     *
+     * If IN_PHPBB is found, but there is no exit as first statement, it will not set IN_PHPBB, but will add a notice
+     * instead for the user.  The other nodes will be send back to parseNode.
+     *
+     * @param \PhpParser\Node\Stmt\If_ $node if node that checks possible for IN_PHPBB
+     */
 	private function checkInDefined(If_ $node)
 	{
 		$cond = $node->cond;
 
-		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name == 'defined' && $cond->expr->args[0]->value->value == 'IN_PHPBB')
+		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name->parts[0] == 'defined' && $cond->expr->args[0]->value->value == 'IN_PHPBB')
 		{
 
-			if ($node->stmts[0] instanceof Node\Expr\Exit_)
+			if ($node->stmts[0]->expr instanceof Node\Expr\Exit_)
 			{
 				// Found IN_PHPBB
 				$this->in_phpbb = true;
@@ -349,7 +348,7 @@ class epv_test_validate_php_functions extends BaseTest
 				// Also include a notice.
 				$this->addMessage(Output::NOTICE, 'IN_PHPBB check should exit if it is not defined');
 			}
-			if (sizeof($node->stmts) > 1)
+			if (count($node->stmts) > 1)
 			{
 				$this->addMessage(Output::WARNING, 'There should be no statements other than exit in the IN_PHPBB check');
 				unset($node->stmts[0]);
@@ -383,7 +382,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
         $this->validateEval($node);
 	}
-	
+
 	/**
 	 * Validate method calls to classes.
 	 * @param Node $node Node to validate
@@ -402,7 +401,7 @@ class epv_test_validate_php_functions extends BaseTest
 		if ($name !== null)
 		{
 			$this->validateEnableGlobals($name, $node);
-		}		
+		}
 	}
 
     /**
@@ -433,14 +432,14 @@ class epv_test_validate_php_functions extends BaseTest
     }
 
     /**
-     * Valdiate the use of enable_globals.
+     * Validate the use of enable_globals.
      *
      * @param $name
      * @param Node $node
      */
 	private function validateEnableGlobals($name, Node $node)
 	{
-		if ($name == 'enable_super_globals') 
+		if ($name == 'enable_super_globals')
 		{
 			$this->addMessage(Output::FATAL, sprintf('The use of enable_super_globals() is not allowed for security reasons on line %s', $node->getAttribute('startLine')));
 		}
@@ -455,7 +454,7 @@ class epv_test_validate_php_functions extends BaseTest
     }
 
 	/**
-	 * Valdiate the use of deprecated functions.
+	 * Validate the use of deprecated functions.
 	 *
 	 * @param                 $name
 	 * @param Node $node

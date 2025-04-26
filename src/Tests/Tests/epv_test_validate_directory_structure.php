@@ -170,8 +170,8 @@ class epv_test_validate_directory_structure extends BaseTest
 		$i = 0;
 		$j = 0;
 		$matches = 0;
-		$len1 = sizeof($bi1);
-		$len2 = sizeof($bi2);
+		$len1 = count($bi1);
+		$len2 = count($bi2);
 
 		while ($i < $len1 && $j < $len2)
 		{

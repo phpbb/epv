@@ -8,7 +8,7 @@
  *
  */
 
-namespace Phpbb\Events;
+namespace Phpbb\Epv\Events;
 
 /**
  * This filter ignores directories and files starting with a dot.

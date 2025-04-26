@@ -15,13 +15,14 @@ use Phpbb\Epv\Files\Type\PHPFile;
 use Phpbb\Epv\Files\Type\PHPFileInterface;
 use Phpbb\Epv\Files\Type\YmlFile;
 use Phpbb\Epv\Tests\Mock\Output;
+use PHPUnit\Framework\TestCase;
 
-class file_loader_test extends PHPUnit_Framework_TestCase {
+class file_loader_test extends TestCase {
 
 	/** @var FileLoader */
 	private static $loader;
 
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		require_once('./tests/Mock/Output.php');
 

@@ -11,11 +11,12 @@
 use Phpbb\Epv\Events\php_exporter;
 use Phpbb\Epv\Output\OutputInterface;
 use Phpbb\Epv\Tests\Mock\Output;
+use PHPUnit\Framework\TestCase;
 
-class php_exporter_test extends \PHPUnit_Framework_TestCase
+class php_exporter_test extends TestCase
 {
 
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		require_once('./tests/Mock/Output.php');
 	}
