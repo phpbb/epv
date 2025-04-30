@@ -63,7 +63,7 @@ class validate_revert_schema_test extends TestCase
 		$this->validateFile('tests/testFiles/migrations/missing_revert_schema.php', function($output)
 		{
 			/** @var PHPUnit\Framework\MockObject\MockObject $output */
-			$output->expects($this->never())
+			$output->expects($this->once())
 				->method('addMessage')
 				->with(OutputInterface::ERROR, 'Migration file tests/testFiles/migrations/missing_revert_schema.php is missing the revert_schema() method.');
 		});
