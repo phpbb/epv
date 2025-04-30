@@ -102,9 +102,9 @@ class epv_test_validate_revert_schema extends BaseTest
 	 */
 	protected function hasMethod($node, $methodName)
 	{
-		foreach ($node->stmts as $node)
+		foreach ($node->stmts as $method)
 		{
-			if ($node instanceof ClassMethod && $node->name === $methodName)
+			if ($method instanceof ClassMethod && $method->name->name === $methodName)
 			{
 				return true;
 			}
