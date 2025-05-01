@@ -42,4 +42,21 @@ class validate_languages_test extends TestCase
 			'tests/testFiles/language/en_incomplete/common.php',
 		]);
 	}
+
+	public function test_missing_en_languages() {
+		/** @var OutputInterface|PHPUnit\Framework\MockObject\MockObject\MockObject $output */
+		$output = $this->createMock(OutputInterface::class);
+
+		$output
+			->expects(self::once())
+			->method('addMessage')
+			->with(OutputInterface::FATAL, 'English language pack is missing')
+		;
+
+		$tester = new epv_test_validate_languages(false, $output, 'tests/testFiles/', 'epv/test', false, 'tests/testFiles/');
+		$tester->validateDirectory([
+			'tests/testFiles/language/en_us/common.php',
+			'tests/testFiles/language/en_us/additional.php',
+		]);
+	}
 }
