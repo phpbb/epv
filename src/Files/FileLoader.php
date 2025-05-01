@@ -119,6 +119,7 @@ class FileLoader
 				$file = basename($fileName);
 				$dir  = str_replace($file, '', $fileName);
 				$dir  = str_replace($this->basedir, '', $dir);
+				$dir  = str_replace('\\', '/', $dir);
 				$dir  = explode('/', trim($dir, '/'));
 				$dir  = array_map('strtolower', $dir);
 
