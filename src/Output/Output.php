@@ -162,7 +162,7 @@ class Output implements \Phpbb\Epv\Output\OutputInterface
 	 * @param                                $message string message
 	 * @param \Phpbb\Epv\Files\FileInterface $file    File the error happened in. When provided, this is displayed to the user
 	 */
-	public function addMessage($type, $message, FileInterface $file = null)
+	public function addMessage($type, $message, ?FileInterface $file = null)
 	{
 		switch ($type)
 		{

@@ -38,7 +38,7 @@ interface OutputInterface extends \Symfony\Component\Console\Output\OutputInterf
 	 *
 	 * @return
 	 */
-	public function addMessage($type, $message, FileInterface $file = null);
+	public function addMessage($type, $message, ?FileInterface $file = null);
 
 
 	/**
