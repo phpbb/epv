@@ -163,7 +163,7 @@ abstract class BaseTest implements TestInterface
 	 *
 	 * @return bool
 	 */
-	protected function isTest(FileInterface $file = null)
+	protected function isTest(?FileInterface $file = null)
 	{
 		if ($file == null)
 		{

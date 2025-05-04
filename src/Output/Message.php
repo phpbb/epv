@@ -26,7 +26,7 @@ class Message
 	 * @param                                $message string Message
 	 * @param \Phpbb\Epv\Files\FileInterface $file
 	 */
-	public function __construct($type, $message, FileInterface $file = null)
+	public function __construct($type, $message, ?FileInterface $file = null)
 	{
 		$this->type    = $type;
 		$this->message = $message;
