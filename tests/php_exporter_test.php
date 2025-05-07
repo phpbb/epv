@@ -38,10 +38,12 @@ class php_exporter_test extends TestCase
 			[17, './tests/events/invalid_name_long_single.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
 			[27, './tests/events/invalid_name_short_multi.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
 			[17, './tests/events/invalid_name_short_single.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
+			[7, './tests/events/invalid_name_simple.php', 'rxu.PostsMerging.posts_merging_end', [], $expected_errors],
 			[27, './tests/events/valid_name_long_multi.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
 			[17, './tests/events/valid_name_long_single.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
 			[27, './tests/events/valid_name_short_multi.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
 			[17, './tests/events/valid_name_short_single.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
+			[7, './tests/events/valid_name_simple.php', 'rxu.postsmerging.posts_merging_end', []],
 		];
 	}
 
@@ -56,7 +58,7 @@ class php_exporter_test extends TestCase
 
 		$name = $exporter->get_event_name($line, false);
 		$exporter->set_current_event($name, $line);
-		$vars = $exporter->get_vars_from_array(false);
+		$vars = $expected_vars ? $exporter->get_vars_from_array(false) : [];
 
 		self::assertEquals($expected_name, $name);
 		self::assertEquals($expected_vars, $vars);
