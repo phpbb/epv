@@ -189,27 +189,32 @@ class php_exporter
 		{
 			$regex = '#\$([a-z](?:[a-z0-9_]|->)*)';
 			$regex .= '->dispatch\(';
-			$regex .= '\'%s\'';
+			$regex .= '\'(?\'event1\'%1$s)\'';
 			$regex .= '\);#';
 		}
 		else
 		{
-			$regex = '#extract\(\$([a-z](?:[a-z0-9_]|->)*)';
+			$regex = '#(?:extract\(\$([a-z](?:[a-z0-9_]|->)*)';
 			$regex .= '->trigger_event\(';
-			$regex .= '\'%s\'';
-			$regex .= ', compact\(\$vars\)\)\);#';
+			$regex .= '\'(?\'event1\'%1$s)\'';
+			$regex .= ', compact\(\$vars\)\)\)|\$([a-z](?:[a-z0-9_]|->)*)';
+			$regex .= '->trigger_event\(';
+			$regex .= '\'(?\'event2\'%1$s)\'';
+			$regex .= '\));#';
 		}
 
 		$match = array();
-		preg_match(sprintf($regex, $this->preg_match_event_name()), $event_text_line, $match);
-		if (!isset($match[2]))
+		preg_match(sprintf($regex, $this->preg_match_event_name()), $event_text_line, $match, PREG_UNMATCHED_AS_NULL);
+		$event_name = $match['event1'] ?? $match['event2'] ?? null;
+		if (!$event_name)
 		{
 			$match = array();
-			preg_match(sprintf($regex, $this->preg_match_event_name_uppercase()), $event_text_line, $match);
+			preg_match(sprintf($regex, $this->preg_match_event_name_uppercase()), $event_text_line, $match, PREG_UNMATCHED_AS_NULL);
+			$event_name = $match['event1'] ?? $match['event2'] ?? null;
 
-			if (isset($match[2]))
+			if ($event_name)
 			{
-				$this->output->addMessage(Output::ERROR, sprintf('Event names should be all lowercase in %s for event %s', $this->current_clean_file, $match[2]));
+				$this->output->addMessage(Output::ERROR, sprintf('Event names should be all lowercase in %s for event %s', $this->current_clean_file, $event_name));
 			}
 			else
 			{
@@ -218,7 +223,7 @@ class php_exporter
 			}
 		}
 
-		return $match[2];
+		return $event_name;
 	}
 
 	/**
@@ -228,12 +233,12 @@ class php_exporter
 	 */
 	protected function preg_match_event_name()
 	{
-		return '([a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+)';
+		return '[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+';
 	}
 
 	protected function preg_match_event_name_uppercase()
 	{
-		return '([a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+)';
+		return '[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+';
 	}
 
 
