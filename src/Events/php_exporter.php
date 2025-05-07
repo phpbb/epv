@@ -197,7 +197,8 @@ class php_exporter
 			$regex = '#(?:extract\(\$([a-z](?:[a-z0-9_]|->)*)';
 			$regex .= '->trigger_event\(';
 			$regex .= '\'(?\'event1\'%1$s)\'';
-			$regex .= ', compact\(\$vars\)\)\)|\$([a-z](?:[a-z0-9_]|->)*)';
+			$regex .= ', compact\(\$vars\)\)\)';
+			$regex .= '|\$([a-z](?:[a-z0-9_]|->)*)';
 			$regex .= '->trigger_event\(';
 			$regex .= '\'(?\'event2\'%1$s)\'';
 			$regex .= '\));#';
