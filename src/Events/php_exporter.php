@@ -185,37 +185,19 @@ class php_exporter
 		$event_text_line = $this->file_lines[$event_line];
 		$event_text_line = ltrim($event_text_line, " \t");
 
-		if ($is_dispatch)
-		{
-			$regex = '#\$([a-z](?:[a-z0-9_]|->)*)';
-			$regex .= '->dispatch\(';
-			$regex .= '\'(?\'event1\'%1$s)\'';
-			$regex .= '\);#';
-		}
-		else
-		{
-			$regex = '#(?:extract\(\$([a-z](?:[a-z0-9_]|->)*)';
-			$regex .= '->trigger_event\(';
-			$regex .= '\'(?\'event1\'%1$s)\'';
-			$regex .= ', compact\(\$vars\)\)\)';
-			$regex .= '|\$([a-z](?:[a-z0-9_]|->)*)';
-			$regex .= '->trigger_event\(';
-			$regex .= '\'(?\'event2\'%1$s)\'';
-			$regex .= '\));#';
-		}
+		$event = $is_dispatch ? 'dispatch' : 'trigger_event';
+		$regex = '/->(?:' . $event . ')\(([\'"])%s\1/';
 
 		$match = array();
-		preg_match(sprintf($regex, $this->preg_match_event_name()), $event_text_line, $match, PREG_UNMATCHED_AS_NULL);
-		$event_name = $match['event1'] ?? $match['event2'] ?? null;
-		if (!$event_name)
+		preg_match(sprintf($regex, $this->preg_match_event_name()), $event_text_line, $match);
+		if (!isset($match[2]))
 		{
 			$match = array();
-			preg_match(sprintf($regex, $this->preg_match_event_name_uppercase()), $event_text_line, $match, PREG_UNMATCHED_AS_NULL);
-			$event_name = $match['event1'] ?? $match['event2'] ?? null;
+			preg_match(sprintf($regex, $this->preg_match_event_name_uppercase()), $event_text_line, $match);
 
-			if ($event_name)
+			if (isset($match[2]))
 			{
-				$this->output->addMessage(Output::ERROR, sprintf('Event names should be all lowercase in %s for event %s', $this->current_clean_file, $event_name));
+				$this->output->addMessage(Output::ERROR, sprintf('Event names should be all lowercase in %s for event %s', $this->current_clean_file, $match[2]));
 			}
 			else
 			{
@@ -224,7 +206,7 @@ class php_exporter
 			}
 		}
 
-		return $event_name;
+		return $match[2];
 	}
 
 	/**
@@ -234,12 +216,12 @@ class php_exporter
 	 */
 	protected function preg_match_event_name()
 	{
-		return '[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+';
+		return '([a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+)';
 	}
 
 	protected function preg_match_event_name_uppercase()
 	{
-		return '[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+';
+		return '([a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+)';
 	}
 
 
