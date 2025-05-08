@@ -119,10 +119,13 @@ class php_exporter
 					$event_line = $i;
 					$this->set_current_event($this->get_event_name($event_line, false), $event_line);
 
-					// Find variables of the event
-					$arguments = $this->get_vars_from_array();
-					$doc_vars  = $this->get_vars_from_docblock();
-					$this->validate_vars_docblock_array($arguments, $doc_vars);
+					// Find variables of the event if it has them
+					if (strpos($this->file_lines[$event_line], 'compact('))
+					{
+						$arguments = $this->get_vars_from_array();
+						$doc_vars  = $this->get_vars_from_docblock();
+						$this->validate_vars_docblock_array($arguments, $doc_vars);
+					}
 				}
 				else
 				{

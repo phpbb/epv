@@ -52,15 +52,16 @@ class php_exporter_test extends TestCase
 	/**
 	 * @dataProvider extension_data
 	 */
-	public function test_event_name($line, $content, $is_dispatch, $expected_name, $expected_vars, $expected_errors = [])
+	public function test_event_name($line, $file, $is_dispatch, $expected_name, $expected_vars, $expected_errors = [])
 	{
+		$content = file_get_contents($file);
 		$output   = new Output();
 		$exporter = new php_exporter($output, '');
-		$exporter->set_content(explode("\n", file_get_contents($content)));
+		$exporter->set_content(explode("\n", $content));
 
 		$name = $exporter->get_event_name($line, $is_dispatch);
 		$exporter->set_current_event($name, $line);
-		$vars = $expected_vars ? $exporter->get_vars_from_array(false) : [];
+		$vars = strpos($content, 'compact(') ? $exporter->get_vars_from_array(false) : [];
 
 		self::assertEquals($expected_name, $name);
 		self::assertEquals($expected_vars, $vars);
