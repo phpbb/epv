@@ -34,29 +34,31 @@ class php_exporter_test extends TestCase
 		];
 
 		return [
-			[27, './tests/events/invalid_name_long_multi.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
-			[17, './tests/events/invalid_name_long_single.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
-			[27, './tests/events/invalid_name_short_multi.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
-			[17, './tests/events/invalid_name_short_single.php', 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
-			[7, './tests/events/invalid_name_simple.php', 'rxu.PostsMerging.posts_merging_end', [], $expected_errors],
-			[27, './tests/events/valid_name_long_multi.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
-			[17, './tests/events/valid_name_long_single.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
-			[27, './tests/events/valid_name_short_multi.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
-			[17, './tests/events/valid_name_short_single.php', 'rxu.postsmerging.posts_merging_end', $expected_vars],
-			[7, './tests/events/valid_name_simple.php', 'rxu.postsmerging.posts_merging_end', []],
+			[27, './tests/events/invalid_name_long_multi.php', false, 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
+			[17, './tests/events/invalid_name_long_single.php', false, 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
+			[27, './tests/events/invalid_name_short_multi.php', false, 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
+			[17, './tests/events/invalid_name_short_single.php', false, 'rxu.PostsMerging.posts_merging_end', $expected_vars, $expected_errors],
+			[7, './tests/events/invalid_name_simple.php', false, 'rxu.PostsMerging.posts_merging_end', [], $expected_errors],
+			[7, './tests/events/invalid_name_simple_dispatch.php', true, 'rxu.PostsMerging.posts_merging_end', [], $expected_errors],
+			[27, './tests/events/valid_name_long_multi.php', false, 'rxu.postsmerging.posts_merging_end', $expected_vars],
+			[17, './tests/events/valid_name_long_single.php', false, 'rxu.postsmerging.posts_merging_end', $expected_vars],
+			[27, './tests/events/valid_name_short_multi.php', false, 'rxu.postsmerging.posts_merging_end', $expected_vars],
+			[17, './tests/events/valid_name_short_single.php', false, 'rxu.postsmerging.posts_merging_end', $expected_vars],
+			[7, './tests/events/valid_name_simple.php', false, 'rxu.postsmerging.posts_merging_end', []],
+			[7, './tests/events/valid_name_simple_dispatch.php', true, 'rxu.postsmerging.posts_merging_end', []],
 		];
 	}
 
 	/**
 	 * @dataProvider extension_data
 	 */
-	public function test_event_name($line, $content, $expected_name, $expected_vars, $expected_errors = [])
+	public function test_event_name($line, $content, $is_dispatch, $expected_name, $expected_vars, $expected_errors = [])
 	{
 		$output   = new Output();
 		$exporter = new php_exporter($output, '');
 		$exporter->set_content(explode("\n", file_get_contents($content)));
 
-		$name = $exporter->get_event_name($line, false);
+		$name = $exporter->get_event_name($line, $is_dispatch);
 		$exporter->set_current_event($name, $line);
 		$vars = $expected_vars ? $exporter->get_vars_from_array(false) : [];
 
