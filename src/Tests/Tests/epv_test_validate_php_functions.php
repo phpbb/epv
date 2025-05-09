@@ -29,6 +29,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Print_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Declare_;
@@ -333,7 +334,7 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		$cond = $node->cond;
 
-		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name->parts[0] == 'defined' && $cond->expr->args[0]->value->value == 'IN_PHPBB')
+		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name->getParts()[0] === 'defined' && $cond->expr->args[0]->value->value === 'IN_PHPBB')
 		{
 
 			if ($node->stmts[0]->expr instanceof Node\Expr\Exit_)
@@ -369,9 +370,9 @@ class epv_test_validate_php_functions extends BaseTest
 		{
 			$name = $this->getMethodName($node);
 		}
-		else if (isset($node->expr) && $node->expr instanceof FuncCall && isset($node->expr->name->parts) && is_array($node->expr->name->parts))
+		else if (isset($node->expr) && $node->expr instanceof FuncCall && $node->expr->name instanceof Name)
 		{
-			$name = (string)$node->expr->name->parts[0];
+			$name = $node->expr->name->getParts()[0];
 		}
 
 		if ($name !== null)
@@ -395,7 +396,7 @@ class epv_test_validate_php_functions extends BaseTest
         }
 		else if (isset($node->expr) && $node->expr instanceof Node\Expr\MethodCall && !($node->expr->name instanceof Variable) && !($node->expr->name instanceof PropertyFetch) && !($node->expr->name instanceof Concat))
 		{
-			$name = (string)$node->expr->name;
+			$name = $node->expr->name->name;
 		}
 
 		if ($name !== null)
@@ -424,10 +425,14 @@ class epv_test_validate_php_functions extends BaseTest
                 return $node->name->left->value . $node->name->right->value;
             }
         }
-        else
+        else if ($node->name instanceof Node\Identifier)
         {
-            return (string)$node->name;
+			return $node->name->name;
         }
+		else
+		{
+			return $node->name->getFirst();
+		}
         return null;
     }
 
