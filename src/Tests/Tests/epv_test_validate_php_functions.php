@@ -334,7 +334,7 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		$cond = $node->cond;
 
-		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name->getParts()[0] === 'defined' && $cond->expr->args[0]->value->value === 'IN_PHPBB')
+		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name->getFirst() === 'defined' && $cond->expr->args[0]->value->value === 'IN_PHPBB')
 		{
 
 			if ($node->stmts[0]->expr instanceof Node\Expr\Exit_)
@@ -372,7 +372,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 		else if (isset($node->expr) && $node->expr instanceof FuncCall && $node->expr->name instanceof Name)
 		{
-			$name = $node->expr->name->getParts()[0];
+			$name = $node->expr->name->getFirst();
 		}
 
 		if ($name !== null)
