@@ -432,6 +432,34 @@ class epv_test_validate_php_functions extends BaseTest
                 return $node->name->left->value . $node->name->right->value;
             }
         }
+		else if ($node->name instanceof Node\Scalar\Encapsed)
+		{
+			$encapsed = '';
+			foreach ($node->name->parts as $part)
+			{
+				if ($part instanceof Node\Scalar\EncapsedStringPart)
+				{
+					$encapsed .= $part->value;
+				}
+				else if ($part instanceof Variable)
+				{
+					$encapsed .= $part->name;
+				}
+				else if ($part instanceof PropertyFetch)
+				{
+					$encapsed .= $part->name->name;
+				}
+				else if ($part instanceof ArrayDimFetch)
+				{
+					$encapsed .= $part->var->name;
+				}
+				else
+				{
+					$encapsed .= $part->toString();
+				}
+			}
+			return $encapsed ?: null;
+		}
         else if ($node->name instanceof Node\Identifier)
         {
 			return $node->name->name;
