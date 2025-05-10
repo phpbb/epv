@@ -420,7 +420,7 @@ class epv_test_validate_php_functions extends BaseTest
      */
     private function getMethodName(Node $node)
     {
-        if ($node->name instanceof Variable || $node->name instanceof PropertyFetch || $node->name instanceof ArrayDimFetch)
+        if ($node->name instanceof Variable || $node->name instanceof PropertyFetch || $node->name instanceof ArrayDimFetch || $node->name instanceof Expr\Ternary)
         {
             return null; // This is a variable. We are going to ignore this. We do not want to track variable contents
         }
