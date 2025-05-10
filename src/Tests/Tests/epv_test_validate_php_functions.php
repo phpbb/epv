@@ -335,8 +335,8 @@ class epv_test_validate_php_functions extends BaseTest
 
 		if ($cond instanceof BooleanNot
 			&& $cond->expr instanceof FuncCall
-			&& $cond->expr->args[0]->value->value === 'IN_PHPBB'
 			&& $cond->expr->name->getFirst() === 'defined'
+			&& $cond->expr->args[0]->value->value === 'IN_PHPBB'
 		)
 		{
 
