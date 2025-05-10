@@ -394,7 +394,14 @@ class epv_test_validate_php_functions extends BaseTest
 		{
             $name = $this->getMethodName($node);
         }
-		else if (isset($node->expr) && $node->expr instanceof Node\Expr\MethodCall && !($node->expr->name instanceof Variable) && !($node->expr->name instanceof PropertyFetch) && !($node->expr->name instanceof Concat))
+		else if (
+			isset($node->expr)
+			&& $node->expr instanceof Node\Expr\MethodCall
+			&& !($node->expr->name instanceof Variable)
+			&& !($node->expr->name instanceof PropertyFetch)
+			&& !($node->expr->name instanceof Concat)
+			&& !($node->expr->name instanceof Node\Scalar\Encapsed)
+		)
 		{
 			$name = $node->expr->name->toString();
 		}
