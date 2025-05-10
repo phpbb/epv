@@ -396,7 +396,7 @@ class epv_test_validate_php_functions extends BaseTest
         }
 		else if (isset($node->expr) && $node->expr instanceof Node\Expr\MethodCall && !($node->expr->name instanceof Variable) && !($node->expr->name instanceof PropertyFetch) && !($node->expr->name instanceof Concat))
 		{
-			$name = $node->expr->name->name;
+			$name = $node->expr->name->toString();
 		}
 
 		if ($name !== null)
@@ -429,9 +429,13 @@ class epv_test_validate_php_functions extends BaseTest
         {
 			return $node->name->name;
         }
-		else
+		else if ($node->name instanceof Node\Name)
 		{
 			return $node->name->getFirst();
+		}
+		else
+		{
+			return $node->name->toString();
 		}
         return null;
     }
