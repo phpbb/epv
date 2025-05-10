@@ -9,7 +9,6 @@
  */
 namespace Phpbb\Epv\Tests\Tests;
 
-
 use Phpbb\Epv\Files\FileInterface;
 use Phpbb\Epv\Files\Type\LangFileInterface;
 use Phpbb\Epv\Files\Type\PHPFileInterface;
@@ -334,7 +333,11 @@ class epv_test_validate_php_functions extends BaseTest
 	{
 		$cond = $node->cond;
 
-		if ($cond instanceof BooleanNot && $cond->expr instanceof FuncCall && $cond->expr->name->getFirst() === 'defined' && $cond->expr->args[0]->value->value === 'IN_PHPBB')
+		if ($cond instanceof BooleanNot
+			&& $cond->expr instanceof FuncCall
+			&& $cond->expr->args[0]->value->value === 'IN_PHPBB'
+			&& $cond->expr->name->getFirst() === 'defined'
+		)
 		{
 
 			if ($node->stmts[0]->expr instanceof Node\Expr\Exit_)
@@ -397,12 +400,12 @@ class epv_test_validate_php_functions extends BaseTest
 		else if (
 			isset($node->expr)
 			&& $node->expr instanceof Node\Expr\MethodCall
-			&& method_exists($node->expr->name, 'toString')
-			&& !($node->expr->name instanceof Variable)
-			&& !($node->expr->name instanceof PropertyFetch)
-			&& !($node->expr->name instanceof Concat)
-			&& !($node->expr->name instanceof Node\Scalar\Encapsed)
-			&& !($node->expr->name instanceof Node\Expr\Ternary)
+			&& !($node->expr->name instanceof Variable
+				|| $node->expr->name instanceof PropertyFetch
+				|| $node->expr->name instanceof Concat
+				|| $node->expr->name instanceof Node\Scalar\Encapsed
+				|| $node->expr->name instanceof Node\Expr\Ternary
+			)
 		)
 		{
 			$name = $node->expr->name->toString();
@@ -420,7 +423,11 @@ class epv_test_validate_php_functions extends BaseTest
      */
     private function getMethodName(Node $node)
     {
-        if ($node->name instanceof Variable || $node->name instanceof PropertyFetch || $node->name instanceof ArrayDimFetch || $node->name instanceof Expr\Ternary)
+        if ($node->name instanceof Variable
+			|| $node->name instanceof PropertyFetch
+			|| $node->name instanceof ArrayDimFetch
+			|| $node->name instanceof Expr\Ternary
+		)
         {
             return null; // This is a variable. We are going to ignore this. We do not want to track variable contents
         }
