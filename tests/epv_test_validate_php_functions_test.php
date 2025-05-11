@@ -159,6 +159,18 @@ class epv_test_validate_php_functions_test extends TestCase
 		$tester->validateFile($file);
 	}
 
+	public function test_usage_of_var_test3() {
+		$output = $this->getOutputMock();
+		$output->expects(self::exactly(0))
+			->method('addMessage')
+		;
+
+		$file = $this->getLoader()->loadFile('tests/testFiles/var_test3.php');
+
+		$tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
+		$tester->validateFile($file);
+	}
+
 	public function test_usage_variable() {
 		$output = $this->getOutputMock();
 		$output->expects(self::exactly(0))
