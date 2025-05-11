@@ -397,8 +397,7 @@ class epv_test_validate_php_functions extends BaseTest
 		{
             $name = $this->getMethodName($node);
         }
-		else if (
-			isset($node->expr)
+		else if (isset($node->expr)
 			&& $node->expr instanceof Node\Expr\MethodCall
 			&& !($node->expr->name instanceof Variable
 				|| $node->expr->name instanceof PropertyFetch
@@ -423,24 +422,25 @@ class epv_test_validate_php_functions extends BaseTest
      */
     private function getMethodName(Node $node)
     {
-        if ($node->name instanceof Variable
-			|| $node->name instanceof PropertyFetch
-			|| $node->name instanceof ArrayDimFetch
-			|| $node->name instanceof Expr\Ternary
-		)
+        if ($node->name instanceof Variable || $node->name instanceof PropertyFetch || $node->name instanceof ArrayDimFetch)
         {
             return null; // This is a variable. We are going to ignore this. We do not want to track variable contents
         }
-        else if ($node->name instanceof Concat)
-        {
-            // Only test if both are a string
-            // This mean that if a user works around this test he can do so, but otherwise we will
-            // need to parse variables and stuff.
-            if ($node->name->left instanceof String_ && $node->name->right instanceof String_)
-            {
-                return $node->name->left->value . $node->name->right->value;
-            }
-        }
+
+		if ($node->name instanceof Concat)
+		{
+			// Only test if both are a string
+			// This mean that if a user works around this test he can do so, but otherwise we will
+			// need to parse variables and stuff.
+			if ($node->name->left instanceof String_ && $node->name->right instanceof String_)
+			{
+				return $node->name->left->value . $node->name->right->value;
+			}
+		}
+		else if ($node->name instanceof Expr\Ternary)
+		{
+			return $node->name->if;
+		}
 		else if ($node->name instanceof Node\Scalar\Encapsed)
 		{
 			$encapsed = '';
@@ -469,10 +469,10 @@ class epv_test_validate_php_functions extends BaseTest
 			}
 			return $encapsed ?: null;
 		}
-        else if ($node->name instanceof Node\Identifier)
-        {
+		else if ($node->name instanceof Node\Identifier)
+		{
 			return $node->name->name;
-        }
+		}
 		else if ($node->name instanceof Node\Name)
 		{
 			return $node->name->getFirst();
@@ -481,7 +481,7 @@ class epv_test_validate_php_functions extends BaseTest
 		{
 			return $node->name->toString();
 		}
-        return null;
+		return null;
     }
 
     /**
