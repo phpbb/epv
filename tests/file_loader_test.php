@@ -9,6 +9,7 @@
  */
 
 use Phpbb\Epv\Files\FileLoader;
+use Phpbb\Epv\Files\Type\ImageFile;
 use Phpbb\Epv\Files\Type\LangFile;
 use Phpbb\Epv\Files\Type\MigrationFile;
 use Phpbb\Epv\Files\Type\PHPFile;
@@ -66,5 +67,24 @@ class file_loader_test extends TestCase {
 		$this->expectException(Exception::class);
 		$emptyYml = static::$loader->loadFile('tests/testFiles/empty.yml');
 		self::assertNull($emptyYml);
+	}
+
+	public function test_file_image()
+	{
+		$images = [
+			'gif' => 'image.gif',
+			'png' => 'image.png',
+			'svg' => 'image.svg',
+			'jpg' => 'image.jpg',
+			'jpeg' => 'image.jpeg',
+			'webp' => 'image.webp'
+		];
+
+		foreach ($images as $image)
+		{
+			$img = static::$loader->loadFile('tests/testFiles/images/' . $image);
+			self::assertInstanceOf(ImageFile::class, $img);
+
+		}
 	}
 }
