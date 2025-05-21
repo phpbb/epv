@@ -140,12 +140,14 @@ class TestRunner
 		$iterator = $finder
 			->files()
 			->name('composer.json')
-			->exclude('vendor')
+			->exclude(['vendor', 'tests'])
 			->in($this->directory);
 
-		if (count($iterator) != 1)
+		$iteratorCount = count($iterator);
+
+		if ($iteratorCount !== 1)
 		{
-			throw new TestException("Can't find the required composer.json file.");
+			throw new TestException($iteratorCount === 0 ? 'Could not find the required composer.json file.' : 'Found multiple composer.json files.');
 		}
 
 		$composer = '';
