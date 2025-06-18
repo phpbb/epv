@@ -170,7 +170,7 @@ class TestRunner
 		{
 			throw new TestException('composer.json is unreadable or invalid json');
 		}
-		$this->namespace = $composer->name;
+		$this->namespace = $composer->name ?? '';
 	}
 
 	/**
