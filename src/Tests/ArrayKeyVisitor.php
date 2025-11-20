@@ -42,7 +42,7 @@ class ArrayKeyVisitor extends NodeVisitorAbstract
 			foreach ($node->items as $item)
 			{
 				/** @var ArrayItem $item */
-				if ($item->key instanceof String_)
+				if ($item instanceof ArrayItem && $item->key instanceof String_)
 				{
 					$this->keys[] = $item->key->value;
 				}
