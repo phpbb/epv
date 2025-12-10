@@ -77,7 +77,7 @@ class YmlFile extends BaseFile implements YmlFileInterface
 	 *
 	 * @return array
 	 */
-	public function getYaml()
+	public function getYaml(): array
 	{
 		return $this->yamlFile;
 	}
@@ -86,7 +86,7 @@ class YmlFile extends BaseFile implements YmlFileInterface
 	 * Get the file type for the specific file.
 	 * @return int
 	 */
-	function getFileType()
+	function getFileType(): int
 	{
 		return Type::TYPE_YML;
 	}

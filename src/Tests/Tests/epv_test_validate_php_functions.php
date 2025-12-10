@@ -113,7 +113,10 @@ class epv_test_validate_php_functions extends BaseTest
 		parent::__construct($debug, $output, $basedir, $namespace, $titania, $opendir);
 
 		$this->fileTypeFull   = Type::TYPE_PHP;
-		$this->parser         = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+		$factory = new ParserFactory();
+		$this->parser         = method_exists($factory, 'createForNewestSupportedVersion') 
+			? $factory->createForNewestSupportedVersion() 
+			: $factory->create(ParserFactory::PREFER_PHP7);
 	}
 
 	/**
@@ -335,7 +338,7 @@ class epv_test_validate_php_functions extends BaseTest
 
 		if ($cond instanceof BooleanNot
 			&& $cond->expr instanceof FuncCall
-			&& $cond->expr->name->getFirst() === 'defined'
+			&& (method_exists($cond->expr->name, 'getFirst') ? $cond->expr->name->getFirst() : $cond->expr->name->toString()) === 'defined'
 			&& $cond->expr->args[0]->value->value === 'IN_PHPBB'
 		)
 		{
@@ -375,7 +378,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 		else if (isset($node->expr) && $node->expr instanceof FuncCall && $node->expr->name instanceof Name)
 		{
-			$name = $node->expr->name->getFirst();
+			$name = method_exists($node->expr->name, 'getFirst') ? $node->expr->name->getFirst() : $node->expr->name->toString();
 		}
 
 		if ($name !== null)
@@ -475,7 +478,7 @@ class epv_test_validate_php_functions extends BaseTest
 		}
 		else if ($node->name instanceof Node\Name)
 		{
-			return $node->name->getFirst();
+			return method_exists($node->name, 'getFirst') ? $node->name->getFirst() : $node->name->toString();
 		}
 		else
 		{

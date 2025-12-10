@@ -17,7 +17,7 @@ class ServiceFile extends YmlFile implements ServiceFileInterface
 	 * Get the file type for the specific file.
 	 * @return int
 	 */
-	function getFileType()
+	function getFileType(): int
 	{
 		return Type::TYPE_YML | Type::TYPE_SERVICE;
 	}
