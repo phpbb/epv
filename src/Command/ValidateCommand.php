@@ -14,7 +14,6 @@ use Phpbb\Epv\Output\OutputFormatter;
 use Phpbb\Epv\Tests\Exception\TestException;
 use Phpbb\Epv\Tests\TestStartup;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ValidateCommand extends Command
 {
 
-	protected function configure()
+	protected function configure(): void
 	{
 		$this
 			->setName('run')
@@ -37,7 +36,7 @@ class ValidateCommand extends Command
 			->addOption('debug', null, InputOption::VALUE_NONE, "Run in debug");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$dir    = $input->getOption("dir");
 		$git    = $input->getOption('git');
