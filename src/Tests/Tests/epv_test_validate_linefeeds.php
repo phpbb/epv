@@ -53,14 +53,14 @@ class epv_test_validate_linefeeds extends BaseTest
 		$eola = array_keys($eols, max($eols));
 		$eol = implode("", $eola);
 
-		if ($eol == "\n") {
+		if ($eol === "\n") {
 			// Everything is good to go
 			return;
 		}
-		if ($eol == "\r\n") {
+		if ($eol === "\r\n") {
 			$this->addMessage(Output::FATAL, "Detected windows style newlines instead of UNIX newlines");
 		}
-		if ($eol == "\r") {
+		if ($eol === "\r") {
 			$this->addMessage(Output::FATAL, "Detected carriage return instead of UNIX newlines");
 		}
 	}

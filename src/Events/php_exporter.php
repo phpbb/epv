@@ -72,7 +72,7 @@ class php_exporter
 	 * @param string $name Name of the current event (used for error messages)
 	 * @param int    $line Line where the current event is placed in
 	 *
-	 * @return null
+	 * @return void
 	 */
 	public function set_current_event($name, $line)
 	{
@@ -85,7 +85,7 @@ class php_exporter
 	 *
 	 * @param array $content Array with the lines of the file
 	 *
-	 * @return null
+	 * @return void
 	 */
 	public function set_content($content)
 	{
@@ -109,10 +109,9 @@ class php_exporter
 		if (strpos($content, "dispatcher->trigger_event('") || strpos($content, "dispatcher->dispatch('"))
 		{
 			$this->set_content(explode("\n", $content));
-			for ($i = 0, $num_lines = count($this->file_lines); $i < $num_lines; $i++)
-			{
+			foreach ($this->file_lines as $i => $file_line) {
 				$event_line          = false;
-				$found_trigger_event = strpos($this->file_lines[$i], "dispatcher->trigger_event('");
+				$found_trigger_event = strpos($file_line, "dispatcher->trigger_event('");
 				$arguments           = array();
 				if ($found_trigger_event !== false)
 				{
@@ -129,7 +128,7 @@ class php_exporter
 				}
 				else
 				{
-					$found_dispatch = strpos($this->file_lines[$i], "dispatcher->dispatch('");
+					$found_dispatch = strpos($file_line, "dispatcher->dispatch('");
 					if ($found_dispatch !== false)
 					{
 						$event_line = $i;
@@ -288,10 +287,8 @@ class php_exporter
 
 			return $vars_array;
 		}
-		else
-		{
-			throw new \LogicException("Can not find '\$vars = array();'-line for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'. Are you using UNIX style linefeed?", 1);
-		}
+
+		throw new \LogicException("Can not find '\$vars = array();'-line for event '{$this->current_event}' in file '{$this->current_clean_file}:{$this->current_event_line}'. Are you using UNIX style linefeed?", 1);
 	}
 
 	/**
@@ -540,7 +537,7 @@ class php_exporter
 	 * @param array $vars_array    Variables found in the array line
 	 * @param array $vars_docblock Variables found in the doc block
 	 *
-	 * @return null
+	 * @return void
 	 * @throws \LogicException
 	 */
 	public function validate_vars_docblock_array($vars_array, $vars_docblock)

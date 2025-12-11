@@ -23,11 +23,11 @@ class epv_test_validate_event_names extends BaseTest
 		$this->directory = true;
 	}
 
-	public function validateDirectory(array $dirList)
+	public function validateDirectory(array $dirListing)
 	{
 		$exporter = new php_exporter($this->output, $this->opendir);
 
-		foreach ($dirList as $file)
+		foreach ($dirListing as $file)
 		{
 			try
 			{

@@ -44,15 +44,15 @@ class Message
 
 		switch ($this->type)
 		{
-			case Output::NOTICE:
+			case OutputInterface::NOTICE:
 				return "<noticeb>Notice:</noticeb><notice> $this->message{$file}</notice>";
-			case Output::WARNING:
+			case OutputInterface::WARNING:
 				return "<warningb>Warning:</warningb><warning> $this->message{$file}</warning>";
-			case Output::ERROR:
+			case OutputInterface::ERROR:
 				return "<errorb>Error:</errorb><error> $this->message{$file}</error>";
-			case Output::FATAL:
+			case OutputInterface::FATAL:
 				return "<fatalb>Fatal error:</fatalb><fatal> $this->message{$file}</fatal>";
-			case Output::DEBUG:
+			case OutputInterface::DEBUG:
 				return $this->message;
 		}
 	}

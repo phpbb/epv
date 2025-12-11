@@ -19,7 +19,7 @@ use Symfony\Component\Yaml\Yaml;
 class YmlFile extends BaseFile implements YmlFileInterface
 {
 	/** @var array */
-	protected $yamlFile;
+	protected mixed $yamlFile;
 
 	public function __construct($debug, $filename, $rundir)
 	{
@@ -92,7 +92,7 @@ class YmlFile extends BaseFile implements YmlFileInterface
 	 * Get the file type for the specific file.
 	 * @return int
 	 */
-	function getFileType(): int
+	public function getFileType(): int
 	{
 		return Type::TYPE_YML;
 	}

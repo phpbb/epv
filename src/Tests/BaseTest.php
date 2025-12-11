@@ -96,12 +96,12 @@ abstract class BaseTest implements TestInterface
 	}
 
 	/**
-	 * @param array $dirList
+	 * @param array $dirListing
 	 *
 	 * @return mixed|void
 	 * @throws Exception\TestException
 	 */
-	public function validateDirectory(array $dirList)
+	public function validateDirectory(array $dirListing)
 	{
 		throw new TestException("Test declared to be a directory listing test, but doesn't implement validateDirectory.");
 	}
@@ -151,9 +151,7 @@ abstract class BaseTest implements TestInterface
 	 */
 	public function __toString()
 	{
-		$string = 'Test: ' . $this->testName() . '. ';
-
-		return $string;
+		return 'Test: ' . $this->testName() . '. ';
 	}
 
 	/**
@@ -173,6 +171,6 @@ abstract class BaseTest implements TestInterface
 		$dir = str_replace($this->basedir, '', $file->getFilename());
 		$dir = explode("/", $dir);
 
-		return ($dir[0] == 'test' || $dir[0] == 'tests') && $dir[1] != 'testFiles';
+		return ($dir[0] === 'test' || $dir[0] === 'tests') && $dir[1] !== 'testFiles';
 	}
 }

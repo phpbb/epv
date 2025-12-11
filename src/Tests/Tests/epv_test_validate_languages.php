@@ -56,17 +56,17 @@ class epv_test_validate_languages extends BaseTest
 	}
 
 	/**
-	 * @param array $files
+	 * @param array $dirListing
 	 *
 	 * @return void
 	 */
-	public function validateDirectory(array $files)
+	public function validateDirectory(array $dirListing)
 	{
 		$langs = [];
 		$expected_keys = [];
 		$expected_files = [];
 
-		foreach ($files as $file)
+		foreach ($dirListing as $file)
 		{
 			if (preg_match('#^' . preg_quote($this->basedir, '/') . 'language[\/\\\\]([a-z_]+?)[\/\\\\](.+\.php)$#', $file, $matches) === 1)
 			{

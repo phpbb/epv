@@ -199,9 +199,9 @@ class TestStartup
 
 			foreach ($objects as $object)
 			{
-				if ($object != "." && $object != "..")
+				if ($object !== "." && $object !== "..")
 				{
-					if (filetype($dir . "/" . $object) == "dir")
+					if (filetype($dir . "/" . $object) === "dir")
 					{
 						$this->rrmdir($dir . "/" . $object);
 					}

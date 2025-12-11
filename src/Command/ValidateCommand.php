@@ -18,10 +18,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
 class ValidateCommand extends Command
 {
-
 	protected function configure(): void
 	{
 		$this
@@ -36,6 +34,11 @@ class ValidateCommand extends Command
 			->addOption('debug', null, InputOption::VALUE_NONE, "Run in debug");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @throws TestException
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$dir    = $input->getOption("dir");

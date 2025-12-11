@@ -80,7 +80,7 @@ class FileLoader
 			else if ($size > 1)
 			{
 				// Try to load the file, the last part of $split contains the extension
-				$file = self::tryLoadFile($fileName, $split[count($split) - 1]);
+				$file = $this->tryLoadFile($fileName, $split[count($split) - 1]);
 			}
 			else // Blank filename?
 			{
@@ -105,7 +105,7 @@ class FileLoader
 	 * @param $fileName
 	 * @param $extension
 	 *
-	 * @return BinaryFile|ComposerFile|CssFile|HTMLFile|JavascriptFile|JsonFile|PHPFile|PlainFile|XmlFile|YmlFile|ImageFile|null
+	 * @return BinaryFile|ComposerFile|CssFile|HTMLFile|JavascriptFile|JsonFile|LangFile|LockFile|MigrationFile|PHPFile|PlainFile|XmlFile|YmlFile|ImageFile|null
 	 */
 	private function tryLoadFile($fileName, $extension)
 	{
@@ -117,9 +117,7 @@ class FileLoader
 			case 'php':
 				// First, check if this file is a lang file.
 				$file = basename($fileName);
-				$dir  = str_replace($file, '', $fileName);
-				$dir  = str_replace($this->basedir, '', $dir);
-				$dir  = str_replace('\\', '/', $dir);
+				$dir  = str_replace(array($file, $this->basedir, '\\'), array('', '', '/'), $fileName);
 				$dir  = explode('/', trim($dir, '/'));
 				$dir  = array_map('strtolower', $dir);
 
@@ -140,21 +138,19 @@ class FileLoader
 				return new HTMLFile($this->debug, $fileName, $this->rundir);
 
 			case 'json':
-				if (strtolower(basename($fileName)) == 'composer.json')
+				if (strtolower(basename($fileName)) === 'composer.json')
 				{
 					return new ComposerFile($this->debug, $fileName, $this->rundir);
 				}
-				else
-				{
-					return new JsonFile($this->debug, $fileName, $this->rundir);
-				}
+
+				return new JsonFile($this->debug, $fileName, $this->rundir);
 
 			case 'yml':
-				if (strtolower(basename($fileName)) == 'services.yml')
+				if (strtolower(basename($fileName)) === 'services.yml')
 				{
 					return new ServiceFile($this->debug, $fileName, $this->rundir);
 				}
-				if (strtolower(basename($fileName)) == 'routing.yml')
+				if (strtolower(basename($fileName)) === 'routing.yml')
 				{
 					return new RoutingFile($this->debug, $fileName, $this->rundir);
 				}

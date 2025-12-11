@@ -66,11 +66,11 @@ class epv_test_validate_routing extends BaseTest
 	{
 		$vendor = str_replace('/', '_', $this->namespace);
 
-		if (strtolower(substr($route, 0, 6)) == 'phpbb.')
+		if (strtolower(substr($route, 0, 6)) === 'phpbb.')
 		{
 			$this->output->addMessage(Output::ERROR, sprintf('The phpbb vendorname should only be used for official extensions in route names in %s. Current service name: %s', $file->getSaveFilename(), $route));
 		}
-		else if (strtolower(substr($route, 0, 5)) == 'core.')
+		else if (strtolower(substr($route, 0, 5)) === 'core.')
 		{
 			$this->output->addMessage(Output::FATAL, sprintf('The core vendorname should not be used in route names in %s. Current route name: %s', $file->getSaveFilename(), $route));
 		}

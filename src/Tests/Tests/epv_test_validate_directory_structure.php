@@ -29,13 +29,13 @@ class epv_test_validate_directory_structure extends BaseTest
         $this->directory = true;
     }
 
-	public function validateDirectory(array $dirList, $validateLicenseContents = true)
+	public function validateDirectory(array $dirListing, $validateLicenseContents = true)
 	{
 		$files = array(
 			'license'  => false,
 			'composer' => false,
 		);
-		foreach ($dirList as $dir)
+		foreach ($dirListing as $dir)
 		{
 			switch (strtolower(basename($dir)))
 			{
@@ -72,11 +72,9 @@ class epv_test_validate_directory_structure extends BaseTest
 					{
 						$this->output->addMessage(Output::WARNING, 'The name of composer.json should be completely lowercase.');
 					}
-					$sp    = str_replace('\\', '/', $dir);
-					$sp    = str_replace(str_replace('\\', '/', $this->opendir), '', $sp);
-					$sp    = str_replace('/composer.json', '', $sp);
+					$sp    = str_replace(array('\\', str_replace('\\', '/', $this->opendir), '/composer.json'), array('/', '', ''), $dir);
 
-					if (!empty($sp) && $sp[0] == '/')
+					if (!empty($sp) && $sp[0] === '/')
 					{
 						// for some reason, there is a extra / on at least OS X
 						$sp = substr($sp, 1, strlen($sp));
