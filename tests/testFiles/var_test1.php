@@ -2,7 +2,7 @@
 
 namespace tests\testFiles;
 
-class var_test
+class var_test1
 {
 
     private $foo;

@@ -9,11 +9,159 @@
  */
 namespace Phpbb\Epv\Tests\Mock;
 
-// Runtime selection of Output implementation based on PHP version
-if (PHP_VERSION_ID >= 80000) {
-	require_once('./tests/Mock/OutputPhp8.php');
-	class_alias('\Phpbb\Epv\Tests\Mock\OutputPhp8', '\Phpbb\Epv\Tests\Mock\Output');
-} else {
-	require_once('./tests/Mock/OutputLegacy.php');
-	class_alias('\Phpbb\Epv\Tests\Mock\OutputLegacy', '\Phpbb\Epv\Tests\Mock\Output');
+
+use Phpbb\Epv\Files\FileInterface;
+use Phpbb\Epv\Output\OutputInterface;
+use Symfony\Component\Console\Formatter\OutputFormatterInterface;
+
+class Output implements OutputInterface
+{
+	public $progress = 0;
+	public $messages = array();
+
+	public function write(string|iterable $messages, bool $newline = false, int $options = self::OUTPUT_NORMAL): void
+	{
+	}
+
+	public function writeln(string|iterable $messages, int $options = self::OUTPUT_NORMAL): void
+	{
+	}
+
+	public function setVerbosity(int $level): void
+	{
+	}
+
+	public function getVerbosity(): int
+	{
+		return 0;
+	}
+
+	public function setDecorated(bool $decorated): void
+	{
+	}
+
+	public function isDecorated(): bool
+	{
+		return false;
+	}
+
+	public function setFormatter(OutputFormatterInterface $formatter): void
+	{
+	}
+
+	/**
+	 * Write a message to the output, but only if Debug is enabled.
+	 *
+	 * @param $message string|array $messages The message as an array of lines of a single string
+	 *
+	 * @throws \InvalidArgumentException When unknown output type is given
+	 */
+	public function writelnIfDebug($message)
+	{
+	}
+
+	/**
+	 * Add a new message to the output of the validator.
+	 *
+	 * @param                                $type    int message type
+	 * @param                                $message string message
+	 * @param \Phpbb\Epv\Files\FileInterface $file    File the error happened in. When provided, this is displayed to the user
+	 *
+	 * @throws \Exception
+	 * @internal param bool $skipError
+	 *
+	 */
+	public function addMessage($type, $message, ?FileInterface $file = null)
+	{
+		$this->messages[] = array('type' => $type, 'message' => $message);
+
+		if ($type == self::FATAL) {
+			throw new \Exception($message);
+		}
+	}
+
+	/**
+	 * Get all messages saved into the message queue.
+	 * @return array Array with messages
+	 */
+	public function getMessages()
+	{
+		return [];
+	}
+
+	/**
+	 * Get the amount of messages that were fatal.
+	 * @return int
+	 */
+	public function getFatalCount()
+	{
+		return 0;
+	}
+
+	/**
+	 * Get the count for a type;
+	 *
+	 * @param $type
+	 *
+	 * @return mixed
+	 */
+	public function getMessageCount($type)
+	{
+		return 0;
+	}
+
+	public function getFormatter(): OutputFormatterInterface
+	{
+
+	}
+
+	/**
+	 * Print the status of this specific test.
+	 *
+	 * @param $result The result for this specific test.
+	 */
+	public function printErrorLevel($result = null)
+	{
+
+	}
+
+	/**
+	 * Returns whether verbosity is quiet (-q).
+	 *
+	 * @return bool true if verbosity is set to VERBOSITY_QUIET, false otherwise
+	 */
+	public function isQuiet(): bool
+	{
+		return false;
+	}
+
+	/**
+	 * Returns whether verbosity is verbose (-v).
+	 *
+	 * @return bool true if verbosity is set to VERBOSITY_VERBOSE, false otherwise
+	 */
+	public function isVerbose(): bool
+	{
+		return false;
+	}
+
+	/**
+	 * Returns whether verbosity is very verbose (-vv).
+	 *
+	 * @return bool true if verbosity is set to VERBOSITY_VERY_VERBOSE, false otherwise
+	 */
+	public function isVeryVerbose(): bool
+	{
+		return false;
+	}
+
+	/**
+	 * Returns whether verbosity is debug (-vvv).
+	 *
+	 * @return bool true if verbosity is set to VERBOSITY_DEBUG, false otherwise
+	 */
+	public function isDebug(): bool
+	{
+		return false;
+	}
 }

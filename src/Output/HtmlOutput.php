@@ -9,9 +9,105 @@
  */
 namespace Phpbb\Epv\Output;
 
-// Runtime selection of HtmlOutput implementation based on PHP version
-if (PHP_VERSION_ID >= 80000) {
-    class_alias('\Phpbb\Epv\Output\HtmlOutputPhp8', '\Phpbb\Epv\Output\HtmlOutput');
-} else {
-    class_alias('\Phpbb\Epv\Output\HtmlOutputLegacy', '\Phpbb\Epv\Output\HtmlOutput');
+use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
+use Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class HtmlOutput implements OutputInterface
+{
+	const TYPE_HTML = 1;
+	const TYPE_BBCODE = 2;
+
+	private $buffer = "";
+	private $type;
+
+	public function __construct($type = self::TYPE_HTML)
+	{
+		$this->type = $type;
+	}
+
+	public function write(string|iterable $messages, bool $newline = false, int $options = self::OUTPUT_NORMAL): void
+	{
+		if (!is_array($messages))
+		{
+			$messages = array($messages);
+		}
+
+		foreach ($messages as $message)
+		{
+			$this->buffer .= $this->parse($message);
+			if ($newline)
+			{
+				$this->buffer .= "\n";
+			}
+		}
+	}
+
+	public function writeln(string|iterable $messages, int $options = self::OUTPUT_NORMAL): void
+	{
+		$this->write($messages, true, $options);
+	}
+
+	public function setVerbosity(int $level): void
+	{
+	}
+
+	public function getVerbosity(): int
+	{
+		return self::VERBOSITY_NORMAL;
+	}
+
+	public function setDecorated(bool $decorated): void
+	{
+	}
+
+	public function isDecorated(): bool
+	{
+		return false;
+	}
+
+	public function setFormatter(OutputFormatterInterface $formatter): void
+	{
+	}
+
+	public function getFormatter(): OutputFormatterInterface
+	{
+		return new OutputFormatter();
+	}
+
+	public function getBuffer()
+	{
+		if ($this->type == self::TYPE_HTML)
+		{
+			$formatter = new OutputFormatter(true);
+			$convertor = new AnsiToHtmlConverter();
+			return nl2br($convertor->convert($formatter->format($this->buffer)));
+		}
+		return $this->buffer;
+	}
+
+	private function parse($message)
+	{
+		return $message;
+	}
+
+	public function isQuiet(): bool
+	{
+		return false;
+	}
+
+	public function isVerbose(): bool
+	{
+		return false;
+	}
+
+	public function isVeryVerbose(): bool
+	{
+		return false;
+	}
+
+	public function isDebug(): bool
+	{
+		return false;
+	}
 }

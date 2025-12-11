@@ -141,7 +141,7 @@ class epv_test_validate_php_functions_test extends TestCase
 			->method('addMessage')
 		;
 
-		$file = $this->getLoader()->loadFile('tests/testFiles/var_test.php');
+		$file = $this->getLoader()->loadFile('tests/testFiles/var_test1.php');
 
 		$tester = new epv_test_validate_php_functions(false, $output, '/a/b/', 'epv/test', false, '/a/');
 		$tester->validateFile($file);
