@@ -29,6 +29,9 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
+            - name: Mark repo safe for git
+              run: git config --global --add safe.directory /github/workspace
+
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
@@ -41,6 +44,9 @@ jobs:
               with:
                   path: /tmp/composer-cache
                   key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+            - name: Delete composer.lock (library mode)
+              run: rm -f composer.lock
 
             - name: Install Composer dependencies
               uses: php-actions/composer@v6
