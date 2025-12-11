@@ -12,9 +12,9 @@ namespace Phpbb\Epv\Files;
 
 class Line implements LineInterface
 {
-	private $file;
-	private $lineNr;
-	private $line;
+	private FileInterface $file;
+	private int $lineNr;
+	private string $line;
 
 	/**
 	 * @param FileInterface $file
@@ -32,7 +32,7 @@ class Line implements LineInterface
 	 * Get the file for this specific line.
 	 * @return FileInterface
 	 */
-	public function getFile()
+	public function getFile(): FileInterface
 	{
 		return $this->file;
 	}
@@ -41,7 +41,7 @@ class Line implements LineInterface
 	 * Get the line number.
 	 * @return int
 	 */
-	public function getLineNr()
+	public function getLineNr(): int
 	{
 		return $this->lineNr;
 	}
@@ -50,8 +50,8 @@ class Line implements LineInterface
 	 * Get the actual code for this line.
 	 * @return string
 	 */
-	public function getLine()
+	public function getLine(): string
 	{
-		return $this->getLine();
+		return $this->line;
 	}
 }

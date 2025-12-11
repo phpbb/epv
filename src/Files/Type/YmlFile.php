@@ -41,6 +41,7 @@ class YmlFile extends BaseFile implements YmlFileInterface
 				$currentPathInfo = pathinfo($filename);
 				$dirname = $currentPathInfo['dirname'];
 
+				$imports = array();
 				foreach ($content['imports'] as $import)
 				{
 					if (isset($import['resource']))
@@ -58,11 +59,16 @@ class YmlFile extends BaseFile implements YmlFileInterface
 							$extraContent = array();
 						}
 
-						// Imports are at the top of the yaml file, so these should be loaded first.
-						// The values of the current yaml file will overwrite existing array values of the imports.
-						$content = array_replace_recursive($extraContent, $content);
+						// Collect all imports
+						$imports[] = $extraContent;
 					}
 				}
+
+				// Imports are at the top of the yaml file, so these should be loaded first.
+				// The values of the current yaml file will overwrite existing array values of the imports.
+				// Merge all imports and content in a single operation
+				$imports[] = $content;
+				$content = array_replace_recursive(...$imports);
 			}
 			$this->yamlFile = $content;
 		}
