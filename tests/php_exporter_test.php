@@ -21,7 +21,7 @@ class php_exporter_test extends TestCase
 		require_once('./tests/Mock/Output.php');
 	}
 
-	public function extension_data()
+	public static function extension_data()
 	{
 		$expected_vars = ['mode', 'subject', 'username', 'topic_type', 'poll', 'data', 'update_message', 'update_search_index', 'url'];
 		sort($expected_vars);

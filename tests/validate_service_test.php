@@ -40,7 +40,7 @@ class validate_service_test extends TestCase
 		$tester->validateFile($file);
 	}
 
-	public function good_service_names_data()
+	public static function good_service_names_data()
 	{
 		return [
 			['simple'],
@@ -63,7 +63,7 @@ class validate_service_test extends TestCase
 		});
 	}
 
-	public function bad_service_names_data()
+	public static function bad_service_names_data()
 	{
 		return [
 			['badname1', OutputInterface::ERROR],   // service name starts with phpbb.

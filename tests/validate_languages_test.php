@@ -24,13 +24,19 @@ class validate_languages_test extends TestCase
 		/** @var OutputInterface|PHPUnit\Framework\MockObject\MockObject\MockObject $output */
 		$output = $this->createMock(OutputInterface::class);
 
+		$expectedCalls = [
+			[OutputInterface::NOTICE, 'Language en_incomplete is missing the language file additional.php'],
+			[OutputInterface::WARNING, 'Language file en_incomplete/common.php is missing the language key B']
+		];
+
 		$output
 			->expects(self::exactly(2))
 			->method('addMessage')
-			->withConsecutive(
-			 	[OutputInterface::NOTICE, 'Language en_incomplete is missing the language file additional.php'],
-				[OutputInterface::WARNING, 'Language file en_incomplete/common.php is missing the language key B']
-			)
+			->willReturnCallback(function ($type, $message) use (&$expectedCalls) {
+				$expected = array_shift($expectedCalls);
+				self::assertSame($expected[0], $type);
+				self::assertSame($expected[1], $message);
+			})
 		;
 
 		$tester = new epv_test_validate_languages(false, $output, 'tests/testFiles/', 'epv/test', false, 'tests/testFiles/');
