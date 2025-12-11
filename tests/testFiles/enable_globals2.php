@@ -5,7 +5,7 @@ if (!defined('IN_PHPBB')) {
 }
 $a = 'enable';
 $b = '_super_globals';
-$request->{$a}{$b}();
+$request->{$a}[$b]();
 
 $enable_super_globals = 'enable_super_globals';
 
