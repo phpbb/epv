@@ -2479,16 +2479,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.4.45",
+            "version": "v5.4.54",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "a454d47278cc16a5db371fe73ae66a78a633371e"
+                "reference": "f27a7131106e8cb792d434e8faea7f3ffb615263"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/a454d47278cc16a5db371fe73ae66a78a633371e",
-                "reference": "a454d47278cc16a5db371fe73ae66a78a633371e",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/f27a7131106e8cb792d434e8faea7f3ffb615263",
+                "reference": "f27a7131106e8cb792d434e8faea7f3ffb615263",
                 "shasum": ""
             },
             "require": {
@@ -2534,7 +2534,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v5.4.45"
+                "source": "https://github.com/symfony/yaml/tree/v5.4.54"
             },
             "funding": [
                 {
@@ -2546,11 +2546,15 @@
                     "type": "github"
                 },
                 {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:11:13+00:00"
+            "time": "2026-08-30T06:09:20+00:00"
         }
     ],
     "packages-dev": [
